@@ -26,7 +26,7 @@
 		<div class="reveal">
 			<div class="slides">
 
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 					<script type="text/template">
 							# Reproducible Science and Jupyter Notebook
 							<!-- .slide: id="home" -->
@@ -40,7 +40,7 @@
 
 
 							
-							---
+							----
 
 
 							## Learning Objectives
@@ -54,7 +54,7 @@
 							(HPC)](https://info.gwdg.de/docs/doku.php?id=en:services:application_services:high_performance_computing:start)
 
 							
-							---
+							----
 
 
 							## So What Should be Open in Open science?
@@ -64,7 +64,7 @@
 							- In other **Reproducible**
 
 							
-							---
+							----
 
 
 
@@ -75,7 +75,7 @@
 							unless it is reproducible.
 
 							
-							---
+							----
 
 
 
@@ -86,7 +86,7 @@
 							pre and post pipelines.
 
 							
-							---
+							----
 
 
 
@@ -97,7 +97,7 @@
 							our work framework to support reproducible science.
 
 							
-							---
+							----
 
 
 
@@ -110,7 +110,7 @@
 
 
 							
-							---
+							----
 
 
 
@@ -120,7 +120,7 @@
 							and straightforward analysis project.
 
 							
-							---
+							----
 
 
 							## Still not Convinced?
@@ -132,7 +132,7 @@
 							1. And that this will produce the same result you had.
 
 							
-							---
+							----
 
 
 							## Final note in this matter?
@@ -143,7 +143,7 @@
 							and validate your findings.
 
 							
-							---
+							----
 
 
 
@@ -151,10 +151,12 @@
 
 							- First lets go over some technical prerequisites.
 							- Press on the left arrow to move to the new section
+
+							---
 					</script>
 				</section>
 
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 					<script type="text/template">
 							## General setup
 
@@ -162,7 +164,7 @@
 							asking to activate your account.
 
 
-							---
+							----
 
 
 
@@ -173,7 +175,7 @@
 							![](img/Tutorial_sign_in.png)
 
 
-							---
+							----
 
 
 
@@ -187,7 +189,7 @@
 
 
 
-							---
+							----
 
 
 
@@ -198,7 +200,7 @@
 							![](img/Tutorial_Spawn_my_virtual_env.png)
 
 
-							---
+							----
 
 
 
@@ -209,7 +211,7 @@
 							![](img/Tutorial_New_terminal.png)
 
 
-							---
+							----
 
 
 
@@ -220,7 +222,7 @@
 							![](img/Tutorial_Bash.png)
 
 
-							---
+							----
 
 
 
@@ -230,10 +232,11 @@
 							- Now lets use this terminal to go over some Bash basics
 							- Press on the left arrow to move to the new section
 
+							---
 					</script>
 				</section>
 
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 						<script type="text/template">
 							# Some bash Basics
 
@@ -243,7 +246,7 @@
 							- How to transfer files from and to the cluster
 							- Finally how to extend the cluster functionality using modules
 
-							---
+							----
 
 							# Intro
 
@@ -253,7 +256,7 @@
 							- If you want to extend your understanding you should consider taking [Learn bash the Hard
 							Way](https://www.educative.io/courses/master-the-sh-shell).
 
-							---
+							----
 
 							# Intro
 
@@ -266,7 +269,7 @@
 
 							- Finally here is a good [Cheat sheet](https://devhints.io/sh) to explore when trying to understand my functions
 
-							---
+							----
 
 							## bash Basics
 
@@ -277,7 +280,7 @@
 							echo --help # Open the help page of the command
 							```
 
-							---
+							----
 
 							## cd,pwd - Change directory and Print working directory
 
@@ -296,7 +299,7 @@
 							```
 
 
-							---
+							----
 
 							## mkdir - Create a directory
 
@@ -320,7 +323,7 @@
 							```
 
 
-							---
+							----
 
 							## echo
 
@@ -331,7 +334,7 @@
 							- Echo is also particularly useful for showing the values of environmental variables, which tell the shell how to behave
 							as a user works at the command line or in scripts.
 
-							---
+							----
 
 							## echo
 
@@ -351,7 +354,7 @@
 							# the cat command will read and output the files content
 							```
 
-							---
+							----
 
 							## cat — Read a file, create a file, and concatenate files
 
@@ -362,7 +365,7 @@
 							- Creating new files.
 
 
-							---
+							----
 
 							## cat
 
@@ -383,7 +386,7 @@
 							```
 
 
-							---
+							----
 
 							## Variables in sh
 
@@ -394,7 +397,7 @@
 							[link](https://sh.cyberciti.biz/guide/Perform_arithmetic_operations#Arithmetic_Expansion_in_sh_Shell) for examples.
 
 
-							---
+							----
 
 							## Variables - Examples
 
@@ -410,7 +413,7 @@
 
 
 
-							---
+							----
 
 							## ls — (List directory contents)
 
@@ -419,7 +422,7 @@
 							- Like almost all bash commands it can be extended by adding different options
 							- Let's review some useful ones
 
-							---
+							----
 
 							## ls — Examples
 
@@ -435,7 +438,7 @@
 
 
 
-							---
+							----
 
 							## cp,mv - copy, move or rename files and directories
 
@@ -457,7 +460,7 @@
 							ls -FR $output # list files in output again
 							```
 
-							---
+							----
 
 							## history
 
@@ -465,7 +468,7 @@
 							allows you to replay or reuse those commands instead of retyping them.
 
 
-							---
+							----
 
 							## history, pipe
 
@@ -474,7 +477,7 @@
 							further processing.
 							You can make it do so by using the pipe character '|'.
 
-							---
+							----
 
 							## history, pipe and grep
 
@@ -482,7 +485,7 @@
 							that match a regular expression. Its name comes from the ed command g/re/p, which has the same effect: doing a global
 							search with the regular expression and printing all matching lines.
 
-							---
+							----
 
 							## history, pipe and grep - Examples
 
@@ -501,7 +504,7 @@
 							# Will clear the history file
 							```
 
-							---
+							----
 
 							## rm - remove files and folders
 
@@ -509,7 +512,7 @@
 							- If you are new to bash then you should be very careful when using the rm command
 							- In linux once you delete the files you can not recover the contents of files and directory
 
-							---
+							----
 
 							## rm - Examples
 
@@ -526,7 +529,7 @@
 							# recursively delete contents and prompt before every removal
 							```
 
-							---
+							----
 
 							## du - disc usage
 
@@ -544,7 +547,7 @@
 							```
 
 
-							---
+							----
 
 							## Summary
 
@@ -555,9 +558,10 @@
 							- Time to make a cup of coffee and take a short break
 							- When done go to the advanced sh section
 
+							---
 						</script>
 				</section>
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 					<script type="text/template">
 							# Some Advanced Bash
 
@@ -568,7 +572,7 @@
 							- And how to transfer files from and to the cluster using rsync
 
 
-							---
+							----
 
 							<!-- .slide: id="alias" -->
 
@@ -580,7 +584,7 @@
 							- The format is simple and I will go over some of my favorite (Copy the ones you like)
 
 
-							---
+							----
 
 							## alias - examples
 
@@ -593,7 +597,7 @@
 							alias sr='sort -hr' # sort reverse.
 							```
 
-							---
+							----
 
 							## alias - examples (cont.)
 
@@ -606,7 +610,7 @@
 							alias dt='du -sh * | sr'
 							```
 
-							---
+							----
 
 							## alias - examples (cont.)
 
@@ -622,7 +626,7 @@
 							```
 
 
-							---
+							----
 
 							## .dotfile
 
@@ -639,7 +643,7 @@
 							(therefore handle with care).
 
 
-							---
+							----
 
 							## .profile
 
@@ -653,7 +657,7 @@
 							# will create the empty .profile and open a text editor
 							```
 
-							---
+							----
 
 							## .profile
 
@@ -661,7 +665,7 @@
 
 							![](/img/Tutorial_nano.png)
 
-							---
+							----
 
 							## .profile
 
@@ -676,7 +680,7 @@
 							fi
 							```
 
-							---
+							----
 
 							## .bashrc
 
@@ -689,7 +693,7 @@
 							nano ~/.bashrc
 							```
 
-							---
+							----
 
 							## .bashrc
 
@@ -704,7 +708,7 @@
 							fi
 							```
 
-							---
+							----
 
 							## .bash_aliases
 
@@ -721,7 +725,7 @@
 							echo "alias hg='history|grep'" >> ~/.bash_aliases
 							```
 
-							---
+							----
 
 							## ssh
 
@@ -735,7 +739,7 @@
 							and follow the instructions there.
 
 
-							---
+							----
 							<!-- .slide: id="ssh_login" -->
 
 							## ssh Key
@@ -755,7 +759,7 @@
 							```
 
 
-							---
+							----
 
 							<!-- .slide: id="rsync" -->
 
@@ -768,7 +772,7 @@
 							- Transfer it back and overwrite the previous copy
 
 
-							---
+							----
 
 							## rsync - pull a file from the remote server
 
@@ -782,7 +786,7 @@
 							cat .bash_aliases
 							```
 
-							---
+							----
 
 							## rsync - push a file to the remote server
 
@@ -797,7 +801,7 @@
 							ssh esoreq@gwdu101.gwdg.de "cat ~/.bash_aliases"
 							```
 
-							---
+							----
 
 							## Summary
 
@@ -812,10 +816,11 @@
 							framework we will cover shortly
 							- Time to take a short break and move to setting up version control
 
+							---
 					</script>
 				</section>
 
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 					<script type="text/template">
 # Basics of Version Control (VC)
 
@@ -826,7 +831,7 @@
 - As always [here](https://blog.scottlowe.org/2015/01/14/non-programmer-git-intro/) is a good introduction to git from a
 non-programmer point of view
 
----
+----
 
 ## Why do we need a VC system
 
@@ -836,7 +841,7 @@ non-programmer point of view
 - When we consider working on a project with collaborators this is impossible
 - Luckily enough this problem isn't uncommon and it is simple to solve using a process called version control
 
----
+----
 
 ## What does a VC do?
 
@@ -848,7 +853,7 @@ non-programmer point of view
 - Also [install GitHub](https://gist.github.com/derhuerst/1b15ff4652a867391f03) on your local computer.
 
 
----
+----
 
 ## What is a repository?
 
@@ -862,7 +867,7 @@ non-programmer point of view
 - When you create a new repository a hidden dot folder named .git is created where that data is stored.
 
 
----
+----
 
 ## Is git installed on the Cluster?
 
@@ -876,7 +881,7 @@ program
 - If you follow them to the letter I'm sure we will manage
 
 
----
+----
 
 ## Log onto the Cluster
 
@@ -887,7 +892,7 @@ program
 
 
 
----
+----
 
 ## Download git
 
@@ -905,7 +910,7 @@ tar -xzvf * # Expand the tar file (tarball)
 cd git-2.26.2/ # And goto the folder
 ```
 
----
+----
 
 ## Compiling git on the cluster
 
@@ -921,7 +926,7 @@ cd git-2.26.2/ # And goto the folder
 make && make install
 git --version # confirm that this worked
 ```
----
+----
 
 ## Generate a new rsa key
 
@@ -936,7 +941,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 	cat ~/.ssh/id_rsa.pub # Print your key and copy it
 	```
 
-	---
+	----
 
 	## Setting up ssh key access to Github
 
@@ -959,7 +964,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		ssh -T git@github.com
 		```
 
-		---
+		----
 
 		## Setting up cluster access to Github
 
@@ -969,7 +974,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		permissions for each token
 
 
-		---
+		----
 
 		## Creating an api token on Github
 
@@ -982,7 +987,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		- `Delete repositories`
 		- `repo`
 
-		---
+		----
 
 		## A small detour to talk about security and permissions
 
@@ -991,7 +996,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		- One way to do that is to separate between the configuration files and sensitive information
 		- In linux any file or folder will have permission settings
 
-		---
+		----
 
 		## Why are permissions important and useful?
 
@@ -1002,7 +1007,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		- But other than the creator of the data no one should have write access
 
 
-		---
+		----
 
 		## Basics of permissions
 
@@ -1018,10 +1023,10 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		| `MLNP` | Group name |
 		| `esoreq` | Owner name |
 		| `1` | Number of links |
-		| `-rw-------` | Permissions |
+		| `-rw---------` | Permissions |
 		| | |
 
-		---
+		----
 
 		## Basics of permissions
 
@@ -1036,7 +1041,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		- -rwx<span style="color:GOLD">rwx</span>rwx - File permission of the owner’s group
 		- -rwxrwx<span style="color:GOLD">rwx</span> - File permission of other users
 
-		---
+		----
 
 		## Changing permissions
 
@@ -1051,7 +1056,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		```
 		- rwx stand for r(ead),w(rite) and (e)x(ecute)
 		- and ugo stand for u(ser), g(roup) and o(ther)
-		---
+		----
 
 		## Changing permissions using the numeric mode
 
@@ -1065,7 +1070,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 		- Each representing the summation of privileges for each category (user, group, owner).
 
 
-		---
+		----
 
 		## Changing permissions using the numeric mode
 
@@ -1079,13 +1084,13 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 
 
 		```bash
-		chmod 750 [file_name] # -rwxr-x---
-		chmod 400 [file_name] # -r--------
+		chmod 750 [file_name] # -rwxr-x----
+		chmod 400 [file_name] # -r----------
 		```
 
 
 
-		---
+		----
 
 		## Back to practicals
 
@@ -1106,7 +1111,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 			```
 			- If all worked well you should have a working git on the cluster
 
-			---
+			----
 
 			## Creating your first repository
 
@@ -1116,7 +1121,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 			- And allows you to share your work with other people in your lab
 
 
-			---
+			----
 
 			## Initializing a git folder
 
@@ -1129,7 +1134,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 			git init $HOME/dotfiles/ # make a git initialized folder
 			```
 
-			---
+			----
 
 			## Add some content
 
@@ -1146,7 +1151,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 			echo "A repository for dot configuration files" >> Readme.md
 			```
 
-			---
+			----
 
 			## Create a remote repository
 
@@ -1162,7 +1167,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 			DATA='{"name":"dotfiles","private": true}' # create a JSON structure
 			curl -H "$AUTH" https://api.github.com/user/repos -d "$DATA"
 			```
-			---
+			----
 
 			## Git Basics - Working with Remotes
 
@@ -1174,7 +1179,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 			# Tell the folder where the remote repository is
 			git remote add origin git@github.com:<git_user_name>/dotfiles.git
 			```
-				---
+				----
 
 				## Let's add some files to our repository
 
@@ -1189,7 +1194,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 					git add --all # To add everything in your directory
 					```
 
-					---
+					----
 
 					## Let's commit and push files to the remote repository
 
@@ -1200,7 +1205,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 					repository
 
 
-					---
+					----
 
 					## Let's commit and push files to the remote repository
 
@@ -1217,7 +1222,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 					git push -u origin master
 					```
 
-					---
+					----
 
 					## Go to your new repository
 
@@ -1236,7 +1241,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 					- You should now have an updated .bash_aliases on your cluster
 
 
-					---
+					----
 
 					## Final step for this week
 
@@ -1246,7 +1251,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 					- See you online
 
 
-					---
+					----
 
 					## Congratulations you are the proud owner of a `dotfiles` repository
 
@@ -1255,12 +1260,13 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 					- After that we will revisit other important git commands and end this weeks material
 					- Take a well earned break and move forward when ready
 
+					---
 					</script>
 				</section>
 
 
 
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 					<script type="text/template">
 # Even More Advanced Bash
 
@@ -1271,7 +1277,7 @@ ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
 start
 
 
----
+----
 
 ## Conditionals
 
@@ -1291,7 +1297,7 @@ then
 [do something else ].
 ```
 
----
+----
 
 ## Conditionals
 
@@ -1307,7 +1313,7 @@ else
 fi
 ```
 
----
+----
 
 ## Conditionals
 
@@ -1326,7 +1332,7 @@ echo "Good night"
 fi
 ```
 
----
+----
 
 ## Let's unpack
 
@@ -1346,7 +1352,7 @@ fi
 | | |
 
 
----
+----
 
 ## Making this into a function is dead simple
 
@@ -1363,7 +1369,7 @@ fi;
 }
 ```
 
----
+----
 
 ## We can also add variables
 
@@ -1384,7 +1390,7 @@ fi;
 greeting "Your Name" # will add a name as a variable
 ```
 
----
+----
 
 ## .Bash_functions
 
@@ -1396,7 +1402,7 @@ will use often and convert it into a function.
 - Try to do this on your own and go to the next slide and see my example
 
 
----
+----
 
 ## .Bash_functions
 
@@ -1409,7 +1415,7 @@ if [ -f ~/.bash_functions ]; then
 fi
 ```
 
----
+----
 
 ## No let's go over some of my most useful functions
 
@@ -1423,7 +1429,7 @@ cd $1
 }
 ```
 
----
+----
 
 ## function sp - step up
 
@@ -1447,7 +1453,7 @@ fi;
 }
 ```
 
----
+----
 
 ## function pull - simplify git pull
 
@@ -1465,7 +1471,7 @@ fi
 }
 ```
 
----
+----
 
 ## function push - simplify git push
 
@@ -1483,7 +1489,7 @@ fi
 }
 ```
 
----
+----
 
 ## function commit - simplify git commit
 
@@ -1508,7 +1514,7 @@ fi
 }
 ```
 
----
+----
 
 ## function remote - simplify git remote
 
@@ -1524,7 +1530,7 @@ echo "Give username and repository name"
 fi
 }
 ```
----
+----
 
 ## function newRepo - simplify new git repository creation
 
@@ -1546,7 +1552,7 @@ fi
 }
 ```
 
----
+----
 
 ## function delRepo - simplify git repository deletion
 
@@ -1563,7 +1569,7 @@ rm -rf ~/github/$1
 fi
 }
 ```
----
+----
 
 ## function clone - simplify git repository cloning
 
@@ -1589,7 +1595,7 @@ fi
 }
 ```
 
----
+----
 
 ## Can anybody push files to my repository on github?
 
@@ -1603,7 +1609,7 @@ summary](https://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/)
 
 
 
----
+----
 
 ## Summary
 
@@ -1612,10 +1618,10 @@ summary](https://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/)
 - This is a good opportunity to go over the various commands and see that you understood everything
 - Also on a personal note, please make note for anything that isn't clear so I can learn from your experience
 - When you are ready press on the right arrow for the final section and your home assignment
-
+---
 					</script>
 				</section>
-				<section data-markdown data-separator-vertical="---">
+				<section data-markdown data-separator-vertical="----">
 					<script type="text/template">
 # Summary and home assignment
 - We went on quite a ride this week
@@ -1623,7 +1629,7 @@ summary](https://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/)
 - Also your cluster account should be looking good
 - The last thing we want to do is gain access to the course shared space
 
----
+----
 
 # Collaborating with version control
 
@@ -1636,7 +1642,7 @@ necessary for our needs
 functionality to either join or host such a repository
 
 
----
+----
 
 # Collaborating using a shared local space
 
@@ -1645,7 +1651,7 @@ functionality to either join or host such a repository
 - Now cd into `/scratch/systemAI/course_2020`
 - This will be our course space
 
----
+----
 
 # Creating a symbolic link
 
@@ -1653,7 +1659,7 @@ functionality to either join or host such a repository
 - But it contains some hierarchy
 - We will start by creating a symbolic link to the folder on your home directory
 
----
+----
 
 # Creating a symbolic link
 
@@ -1668,7 +1674,7 @@ ln -s {source-path} {symbolic-name}
 - And in it create a symlink to the course material
 - Go to the next slide **AFTER** you did this
 
----
+----
 
 # Creating a symbolic link
 
@@ -1684,7 +1690,7 @@ target=~/jupyterhub-gwdg/learning/systemAI_2020
 ln -s $source $target
 ```
 
----
+----
 
 # Home assignment
 
@@ -1694,7 +1700,7 @@ before our meeting.
 1. Upload (using <a href="#/rsync">rsync</a>) to that folder your portrait as
 1. Finally navigate to your folder and use the web interface to create a text file named <yourname>_profile.md
 
-	---
+	----
 
 	# _profile.md
 
@@ -1708,7 +1714,7 @@ before our meeting.
 	1. What is your academic background
 
 
-	---
+	----
 
 	# That's it for this HPC boot camp week
 	<div class="centered_image">
