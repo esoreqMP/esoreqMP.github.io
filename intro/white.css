@@ -1,0 +1,59 @@
+body {
+    margin: 1%;
+    padding: 1%;
+    background-color: rgb(255, 255, 255);
+    background: rgb(255, 255, 255);
+}
+
+div {
+    background: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    font-family: "muli",  sans-serif;
+    font-size: 1rem;
+    font-weight: 200;
+    color: #061928;
+    text-align: justify;
+    text-justify: inter-word;
+    max-width: 700px;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 20px;
+    color: #5D89C7;
+    font-family: "Arbutus+Slab", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-transform: capitalize;
+    text-shadow: none;
+    word-wrap: break-word
+}
+
+h1 { 
+    font-size: 2.5rem;
+    color: rgb(93, 137, 199);
+
+}
+h2 {
+    color: rgb(73, 114, 172);
+    font-size: 2rem
+}
+h3 {
+    color: rgb(57, 98, 156);
+    font-size: 1.4rem
+}
+
+h4 {
+    color: rgb(51, 88, 141);
+    font-size: 1.3rem
+}
+h5 {
+     color: rgb(10, 29, 54);
+    font-size: 1.1rem
+}

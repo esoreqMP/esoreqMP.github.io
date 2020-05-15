@@ -1,0 +1,325 @@
+body {
+  margin: 0;
+  font-size: 28px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+  background-color: #f1f1f1;
+  padding: 30px;
+  text-align: center;
+}
+
+#navbar {
+  overflow: hidden;
+  background-color: #333;
+}
+
+#navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+#navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+#navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.content {
+  padding: 16px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
+
+.con1 {
+    width: 80%;
+    height: 80%;
+    background: #444;
+    color: #fff;
+}
+
+/*the navigation bar*/
+.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #696969;
+    display: table;
+    width: 100%;
+}
+
+.navli {
+    display: inline;
+    font-size: 20px;
+    display: table-cell;
+    text-align: center;
+}
+
+.nava:link {
+    color: white;
+}
+
+.nava:hover {
+    color: #bb183e;
+}
+
+.nava:active {
+    color: #880624;
+}
+
+.nava:visited {
+    color: white;
+}
+/*main header*/
+h1 {
+    color: #1b3772;
+    background-color: #FFFFFF;
+    text-align: left;
+    font-size: 35px;
+
+}
+
+/*sub headings*/
+h2 {
+    color: #6f80ad;
+    text-align: left;
+    font-size: 25px;
+    text-indent: 0px;
+    background-color: #FFFFFF;
+    /*border: 1px solid #DADADA;*/
+
+}
+
+/*foldable headings*/
+h5 {
+    color: #1b3772;
+    text-align: left;
+    font-size: 25px;
+    text-indent: 0px;
+    background-color: #FFFFFF;
+    /*border: 1px solid #DADADA;*/
+
+}
+
+h5:hover {
+    color: #ba1a3d;
+}
+
+/*style for command line code*/
+h3 {
+
+    text-align: left;
+    font-size: 25px;
+    font-weight: 800;
+    text-indent: 20px;
+    background-color: #FAFAFA;
+    border: 1px solid #BABABA;
+}
+
+h3 p {
+    /*display: list-item;         
+    list-style-type: circle;      
+    list-style-position: inside;*/
+    background-color: #FAFAFA;
+}
+
+/*style for functions and scripts*/
+h4 {
+
+    text-align: left;
+    font-size: 20px;
+    font-weight: 500;
+    text-indent: 20px;
+    background-color: #FAFAFA;
+    border: 1px solid #BABABA;
+    color: #003000
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    background-color: #fff;
+    position: fixed !important;
+    z-index: 1;
+    overflow: auto
+}
+
+.resp-container {
+    position: fixed;
+    overflow: hidden;
+    padding-left: 250px;
+}
+
+
+.resp-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+h4 p {
+    /*display: list-item;         
+    list-style-type: circle;      
+    list-style-position: inside;*/
+}
+
+/*style for links at ends of pages*/
+.endlink:link {
+    color: #006900;
+}
+
+.endlink:hover {
+    color: #009900;
+}
+
+.endlink:active {
+    color: #00FF00;
+}
+
+/*common style for information text*/
+p {
+    font-size: 18px;
+    background-color: #FFFFFF;
+}
+
+/*the iframe, which contains most of the tutorial text*/
+iframe {
+    border: 1px solid #696969;
+}
+
+/*colour for matlab code*/
+.code {
+    color: #995303;
+}
+
+/*colour for comments in matlab code*/
+.comm {
+    color: #009900;
+}
+
+/*style for the matlab code in functions and scripts*/
+.func {
+    background: #EFEFEF;
+    color: #000060;
+
+}
+
+/* style for something that I have forgotten :-( */
+.colourstrip {
+    width: 100%;
+    height: 2px;
+    border-style: solid;
+    border-color: white;
+    background-color: white;
+}
+
+
+/*style for list/navigation items*/
+ul {
+    list-style-type: square;
+    color: #303030;
+    text-align: left;
+    font-size: 20px;
+    text-indent: 20px;
+    background-color: #FAFAFA;
+    border: 1px solid #696969;
+}
+
+ul ul {
+    list-style-type: square;
+    color: #303030;
+    text-align: left;
+    font-size: 15px;
+    text-indent: 15px;
+    border: 0px;
+}
+
+/*the navigation bar*/
+.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #696969;
+    display: table;
+    width: 100%;
+}
+
+.navli {
+    display: inline;
+    font-size: 20px;
+    display: table-cell;
+    text-align: center;
+}
+
+.nava:link {
+    color: white;
+}
+
+.nava:hover {
+    color: #bb183e;
+}
+
+.nava:active {
+    color: #880624;
+}
+
+.nava:visited {
+    color: white;
+}
+
+
+/*hyperlinks*/
+a {
+    text-decoration: none;
+}
+
+a:link {
+    color: #303030;
+}
+
+/* visited link */
+a:visited {
+    color: #303030;
+}
+
+/* mouse over link */
+a:hover {
+    color: #da4566;
+}
+
+/* selected link */
+a:active {
+    color: #00FF00;
+}
+
+/*style for tables*/
+table {
+    text-align: left;
+}
+
+/*image border*/
+img {
+    padding: 1px;
+    border: 1px solid #999999;
+}
