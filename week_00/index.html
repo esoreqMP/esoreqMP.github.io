@@ -153,49 +153,1575 @@
 							- Press on the left arrow to move to the new section
 					</script>
 				</section>
-<!-- 
-				<section data-markdown="../content/_index.md" data-separator="//section//" data-separator-vertical="
+
+				<section data-markdown data-separator-vertical="---">
+					<script type="text/template">
+							## General setup
+
+							I'm assuming you have an activated user account on the HPC. If not please send an e-mail to [hpc@gwdg.de](hpc@gwdg.de)
+							asking to activate your account.
+
+
 							---
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
+
+
+							## Check HPC by spawning a session
+
+							Make sure you have VPN on. And go over to the [HPC hub](https://jupyter-hpc.gwdg.de/hub/) and sign in.
+
+							![](img/Tutorial_sign_in.png)
+
+
+							---
+
+
+
+							## Check HPC by spawning a session
+
+							### Start your server.
+							![](img/Tutorial_Start_my_server.png)
+							<!-- <p align="center">
+							<img src="/img/Tutorial_Start_my_server.png">
+							</p> -->
+
+
+
+							---
+
+
+
+							## Check HPC by spawning a session
+
+							### And spawn a hub session.
+
+							![](img/Tutorial_Spawn_my_virtual_env.png)
+
+
+							---
+
+
+
+							## Lets create a new BASH terminal
+
+							### Open the new drop menu and select terminal
+
+							![](img/Tutorial_New_terminal.png)
+
+
+							---
+
+
+
+							## Lets create a new BASH terminal
+
+							### You should have something that looks like this
+
+							![](img/Tutorial_Bash.png)
+
+
+							---
+
+
+
+							## Great !!
+
+							- Hopefully everything worked for you.
+							- Now lets use this terminal to go over some Bash basics
+							- Press on the left arrow to move to the new section
+
+					</script>
 				</section>
-				<section data-markdown="../content/home/Prerequisites.md" data-separator="//section//" data-separator-vertical="
+
+				<section data-markdown data-separator-vertical="---">
+						<script type="text/template">
+							# Some bash Basics
+
+							- In this section we will cover how to create custom commands (aliases), allowing you to create shortcuts for a single
+							command or a group of commands.
+							- We will also learn how to configure your personal home account on the cluster
+							- How to transfer files from and to the cluster
+							- Finally how to extend the cluster functionality using modules
+
 							---
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
+							# Intro
+
+							- The bash Shell (Bourne Again SHell), is a command-line interface (CLI). Lets go over the most popular commands, and
+							learn how to use them.
+
+							- If you want to extend your understanding you should consider taking [Learn bash the Hard
+							Way](https://www.educative.io/courses/master-the-sh-shell).
+
+							---
+
+							# Intro
+
+							- However, for our needs the basics we will cover this week should be enough
+
+							- If you just want to know more on a specific issue here are some websites that can be useful:
+							- [sh-shell-command-cheat-sheet](https://www.educative.io/blog/sh-shell-command-cheat-sheet)
+							- [TecMint](https://www.tecmint.com/)
+							- [Advanced sh-Scripting Guide](https://www.tldp.org/LDP/abs)
+
+							- Finally here is a good [Cheat sheet](https://devhints.io/sh) to explore when trying to understand my functions
+
+							---
+
+							## bash Basics
+
+							- Lets go over some important commands and how to use them.
+							- Almost all commands in bash will have some help option (try it!)
+
+							```bash
+							echo --help # Open the help page of the command
+							```
+
+							---
+
+							## cd,pwd - Change directory and Print working directory
+
+							### Examples
+
+							```bash
+							cd Mail # change the directory
+							pwd # print the current directory.
+							cd / # change directory to the root directory
+							cd ~ # change directory to your home directory
+							cd dir_root/dir_branch/dir_leaf # goto leaf dir
+							cd .. # go back one level
+							cd "dir name"
+							# if for some reason you created a folder name with spaces
+							# (DONT!!!) this is how you call it
+							```
+
+
+							---
+
+							## mkdir - Create a directory
+
+							The mkdir command in UNIX allows users to create directories aka folders.
+
+							### Examples
+
+							```bash
+							mkdir ~/sandbox
+							# create a folder named sandbox in your home directory
+							cd ~/sandbox
+							mkdir dir_1 dir_2
+							# create multiple directories
+							mkdir -p dir_root/dir_branch/dir_leaf
+							# create Folder structure
+							ls -R dir_root/ # confirm using ls
+							mkdir -p dir_root/{dir_b}/{dir_l1,dir_l2}
+							# This supports complex assignments
+							mkdir -vp dir_root/{dir_b1,dir_b2}/{dir_l1,dir_l2}
+							# v verbosely report terminal assignments
+							```
+
+
+							---
+
+							## echo
+
+							- Prints text to the terminal window
+							- The most basic process in any programming language is the ability to out put information.
+							- The echo command prints text to the terminal window and is typically used in shell scripts and batch files to output
+							status text to the screen or a computer file.
+							- Echo is also particularly useful for showing the values of environmental variables, which tell the shell how to behave
+							as a user works at the command line or in scripts.
+
+							---
+
+							## echo
+
+							### Examples
+
+							```bash
+							cd ~/sandbox
+							echo Some text to print out
+							# any string after the command will be printed
+							echo *
+							# Will Print all the files/folder using echo command
+							echo *.jpeg
+							# Will Print all the files of a specific kind
+							echo "Some text to add to a file" > file
+							# Use redirect operator > to store output to file
+							cat file
+							# the cat command will read and output the files content
+							```
+
+							---
+
+							## cat — Read a file, create a file, and concatenate files
+
+							Cat (short for “concatenate“) is one of the more versatile commands and serves three main functions:
+
+							- Displaying files
+							- Combining multiple files
+							- Creating new files.
+
+
+							---
+
+							## cat
+
+							### Examples
+
+							```bash
+							cat file
+							# Displaying Contents of a File
+							cat > file_2
+							# Allows to write text interactively
+							cat file_2 > file
+							# It is possible to redirect > to output like echo
+							# However the above command overwrites the file contents
+							cat file file_1 file_2
+							# We can also view contents of multiple files
+							cat file_1 >> file
+							# file_1 content will be appended at the end of file
+							```
+
+
+							---
+
+							## Variables in sh
+
+							- A variable is a temporary store for a piece of information.
+							- Essentially, all bash variables are character strings, however, depending on context, it is possible to run arithmetic
+							operations and comparisons on variables.
+							- As we are not going to write fancy bash scripts I will not go over arithmetics, however, check this
+							[link](https://sh.cyberciti.biz/guide/Perform_arithmetic_operations#Arithmetic_Expansion_in_sh_Shell) for examples.
+
+
+							---
+
+							## Variables - Examples
+
+							```bash
+							a = 10 # spaces are not allowed in variable assignment
+							a=10 # This will assign the string 10 to a
+							b=a # Assign the string a to b
+							echo $a # use the $ sign to call
+							b=$a # assign a to b
+							let a+=10 # Add ten to a
+							echo $a $b # confirm
+							```
+
+
+
+							---
+
+							## ls — (List directory contents)
+
+							- Probably the most common command. The **ls** command allows you to quickly view all files within the specified
+							directory.
+							- Like almost all bash commands it can be extended by adding different options
+							- Let's review some useful ones
+
+							---
+
+							## ls — Examples
+
+							```bash
+							ls # list files and directories in bare format
+							ls -a # List all files including hidden file
+							ls -F # Will distinguish folders from files
+							ls -l # Shows additional content
+							ls -lh # human readable format.
+							ls -R # Recursively list Sub-Directories
+							ls -1 # Force output to one column
+							```
+
+
+
+							---
+
+							## cp,mv - copy, move or rename files and directories
+
+							### Examples
+
+							```bash
+							cd ~ # make sure we are home
+							output=dir_root/dir_branch/dir_leaf
+							# make a variable to store path
+							cp file $output # copy file to path
+							mv file_1 $output # move file_1 to output
+							ls $output # list files in output
+							mv file $output/file_renamed
+							# move file to output and rename it
+							mv -t dir dir_1 dir_2
+							# move folders to --target-directory (long form of -t)
+							cp -R dir $output
+							# recursively copy folder content to path
+							ls -FR $output # list files in output again
+							```
+
+							---
+
+							## history
+
+							The GNU history command keeps a list of all the other commands that have been run from that terminal session, then
+							allows you to replay or reuse those commands instead of retyping them.
+
+
+							---
+
+							## history, pipe
+
+							A pipe is a form of redirection (transfer of standard output to some other destination) that is used in Linux and other
+							Unix-like operating systems to send the output of one command/program/process to another command/program/process for
+							further processing.
+							You can make it do so by using the pipe character '|'.
+
+							---
+
+							## history, pipe and grep
+
+							Global regular expression print (grep for short) is a command-line utility for searching plain-text data sets for lines
+							that match a regular expression. Its name comes from the ed command g/re/p, which has the same effect: doing a global
+							search with the regular expression and printing all matching lines.
+
+							---
+
+							## history, pipe and grep - Examples
+
+							```bash
+							history # will print out all the commands you made
+							echo $HISTTIMEFORMAT
+							# HISTTIMEFORMAT controls how history is printed
+							# %Y-%m-%d %H:%M:%S = Year month day hour minute second
+							export HISTTIMEFORMAT=''
+							# we can remove the formating to have only the commands
+							history | more
+							# The | symbol stands for piped commands
+							history | grep ls
+							# Will return any command with ls
+							history -c
+							# Will clear the history file
+							```
+
+							---
+
+							## rm - remove files and folders
+
+							- As the name suggests rm command is used to delete or remove files and directories
+							- If you are new to bash then you should be very careful when using the rm command
+							- In linux once you delete the files you can not recover the contents of files and directory
+
+							---
+
+							## rm - Examples
+
+							```bash
+							rm file_2 # delete file
+							mkdir dir_empty
+							rm dir_empty
+							# will fail
+							rm -d dir_empty
+							# delete folder if it's empty
+							rm -r dir
+							# recursively delete folder and it's contents
+							rm -ir dir_root
+							# recursively delete contents and prompt before every removal
+							```
+
+							---
+
+							## du - disc usage
+
+							- The du command, is used to command estimates file_path space usage.
+
+							### Examples
+
+							```bash
+							du -sh ~
+							# Human readable format home directory space usage.
+							du -sh -- *
+							# cumulative disk usage of all non-hidden directories
+							du -hs $(ls -A)
+							# Will include dotfiles (normally hidden from you)
+							```
+
+
+							---
+
+							## Summary
+
+							- These are the most common commands you are likely to use
+							- However, during the course we will learn additional ones
+							- This is a good opportunity to go over the various commands and see that you understood everything
+							- Also on a personal note, please make note for anything that isn't clear so I can learn from your experience
+							- Time to make a cup of coffee and take a short break
+							- When done go to the advanced sh section
+
+						</script>
 				</section>
-				<section data-markdown="../content/home/Bash.md" data-separator="//section//" data-separator-vertical="
+				<section data-markdown data-separator-vertical="---">
+					<script type="text/template">
+							# Some Advanced Bash
+
+							- In this section we will cover how to create custom commands (aliases), allowing you to create shortcuts for a single
+							command or a group of commands.
+							- We will also learn how to configure your personal home account on the cluster
+							- How to log on the cluster using the terminal
+							- And how to transfer files from and to the cluster using rsync
+
+
 							---
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
+							<!-- .slide: id="alias" -->
+
+							## alias
+
+							- A shell alias is a shortcut to reference a command. It can be used to avoid typing long commands or as a means to
+							correct incorrect input. For common patterns it can reduce keystrokes and improve efficiency.
+							- Think about complex commands that you use a lot, or even simple commands with common used options.
+							- The format is simple and I will go over some of my favorite (Copy the ones you like)
+
+
+							---
+
+							## alias - examples
+
+							```bash
+							alias # list all current aliases
+							alias rm='rm -i' # Will ask permission before deleting files.
+							alias cp='cp -i' # Will ask permission before overwriting files.
+							alias mv='mv -i' # Will ask permission before overwriting files.
+							alias cpv='rsync -ah --info=progress2' # a fancy copy
+							alias sr='sort -hr' # sort reverse.
+							```
+
+							---
+
+							## alias - examples (cont.)
+
+							```bash
+							alias mkdir='mkdir -p'
+							alias h='history'
+							alias hg='history|grep'
+							alias ..='cd ..'
+							alias du='du -kh'
+							alias dt='du -sh * | sr'
+							```
+
+							---
+
+							## alias - examples (cont.)
+
+							```bash
+							alias ls='ls -h --color'
+							alias ll="ls -lv --group-directories-first"
+							alias lm='ll | more' # Pipe through 'more'
+							alias lr='ll -R' # Recursive ls.
+							alias la='ll -A' # Show hidden files.
+							alias lx='ll -XB' # Sort by extension.
+							alias lk='ll -Sr | sr' # Sort by size, biggest first.
+							alias lt='ll -tr | sr' # Sort by date, most recent first.
+							```
+
+
+							---
+
+							## .dotfile
+
+							- If you followed so far you should be able to do the following:
+
+							```bash
+							cd ~ # go to home dir
+							ls # list files
+							la # use our new flashy alias to list files
+							```
+
+							- The two list should be different, with the latter containing dotfiles, that are normally hidden.
+							- Dotfiles are used by different programs to store important information that dramatically changes your system
+							(therefore handle with care).
+
+
+							---
+
+							## .profile
+
+							- A *.profile* file stores user specific environment and startup programs configurations and is loaded each time a shell
+							is created.
+							- In the GWDG HPC you don't have a .profile file by default.
+							- Let's create it and add into it some crucial code.
+
+							```bash
+							nano ~/.profile
+							# will create the empty .profile and open a text editor
+							```
+
+							---
+
+							## .profile
+
+							- This should look like this
+
+							![](/img/Tutorial_nano.png)
+
+							---
+
+							## .profile
+
+							- Copy and paste this piece of code and close and save using CTRL+X
+
+							```bash
+							if [ -f /etc/bashrc ]; then
+							. /etc/bashrc # --> source global /etc/bashrc, if present.
+							fi
+							if [ -f . ~/.bashrc ]; then
+							. ~/.bashrc # --> source local ~/.bashrc, if present.
+							fi
+							```
+
+							---
+
+							## .bashrc
+
+							- What we just did was to tell the cluster to source (i.e. load into memory) both global (/etc/bashrc) and local .bashrc
+							files every time a bash shell is created.
+
+							- Lets open our local .bashrc file and add some functionality to it.
+
+							```bash
+							nano ~/.bashrc
+							```
+
+							---
+
+							## .bashrc
+
+							- So now we are going to create a conditional statement that will source some files to memory
+							- The conditional statement below will only run if the file exists
+							- Using a dot before a file is shorthand to source command
+
+							```bash
+							export PATH=$HOME/bin:$PATH # Add local bin to $PATH
+							if [ -f ~/.bash_aliases ]; then
+							. ~/.bash_aliases # --> source local aliases if present.
+							fi
+							```
+
+							---
+
+							## .bash_aliases
+
+							- We already know what aliases are.
+							- However, it is important to understand that the aliases you created will only exist as long as the shell is open.
+							- For them to be present any time you log on to the cluster we need to source them every time.
+							- The code we just wrote will source the file .bash_aliases if it exists whenever you open a shell.
+							- So let's create this file and append two aliases
+							- Feel free to use nano and copy over as many aliases if you like
+
+							```bash
+							touch ~/.bash_aliases # create the file
+							echo "alias ls='ls -h --color'" >> ~/.bash_aliases
+							echo "alias hg='history|grep'" >> ~/.bash_aliases
+							```
+
+							---
+
+							## ssh
+
+							- To verify that this works we need to exit the terminal or alternatively open a new one.
+							- We could just use the web interface to spawn a new terminal
+							- Alternatively we could use Secure Shell (ssh) to log on to the cluster from our personal computer
+							- This is important as some times we would like to copy data to and from the cluster and the simplest way to achieve
+							that is by using a terminal.
+							- Go over to [CONNECT WITH
+							SSH](https://info.gwdg.de/docs/doku.php?id=en:services:application_services:high_performance_computing:connect_with_ssh)
+							and follow the instructions there.
+
+
+							---
+							<!-- .slide: id="ssh_login" -->
+
+							## ssh Key
+
+							- To simplify connectivity between computers we use an Rivest–Shamir–Adleman (rsa) key which creates a two key system to
+							allow secure data transmission (and avoid needing a password)
+
+							```bash
+							# On your personal computer generate your rsa
+							ssh-keygen -t rsa
+							# Copy it over to the cluster
+							ssh-copy-id <user_id>@gwdu101.gwdg.de
+							# Check by login in
+							ssh <user_id>@gwdu101.gwdg.de
+							# And log out
+							logout
+							```
+
+
+							---
+
+							<!-- .slide: id="rsync" -->
+
+							## rsync
+
+							- Rsync is a fast and extraordinarily versatile file copying tool.
+							- We are going to learn how to use it with the following steps:
+							- Copy to your personal computer your .bash_aliases file
+							- Edit it locally (using any software you like)
+							- Transfer it back and overwrite the previous copy
+
+
+							---
+
+							## rsync - pull a file from the remote server
+
+							- Lets copy our file from the cluster - this is called pulling a file
+							- Open a terminal in your personal computer, create and goto your own sandbox folder
+
+							```bash
+							mkdir ~/sandbox
+							cd ~/sandbox
+							rsync <user_id>@gwdu101.gwdg.de:.bash_aliases .bash_aliases
+							cat .bash_aliases
+							```
+
+							---
+
+							## rsync - push a file to the remote server
+
+							- Add a new alias to your file
+							- Then push the file to your home directory and overwrite to old one
+							- The push syntax is identical to the pull with the source and destination flipped
+							- We will confirm by passing a command to the cluster using ssh
+
+							```bash
+							echo "alias la='ll -A'" >> .bash_aliases
+							rsync .bash_aliases <user_id>@gwdu101.gwdg.de:.bash_aliases
+							ssh esoreq@gwdu101.gwdg.de "cat ~/.bash_aliases"
+							```
+
+							---
+
+							## Summary
+
+
+							- In this section we covered more advanced topics
+							- We learned to log on to the cluster using ssh
+							- We created aliases to simplify our workflow
+							- And learned to copy from and to the cluster
+							- As you progress in your understanding you will find that interacting with the cluster is most
+							efficient via the terminal.
+							- However, in terms of reproducibility (and especially for beginners) it is better to use the Jupyter
+							framework we will cover shortly
+							- Time to take a short break and move to setting up version control
+
+					</script>
 				</section>
-				<section data-markdown="../content/home/Bash_advanced.md" data-separator="//section//" data-separator-vertical="
-							---
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
+				<section data-markdown data-separator-vertical="---">
+					<script type="text/template">
+# Basics of Version Control (VC)
+
+- In this section we will cover what is Version Control
+- Why we need it
+- We will also learn how to install git as our VC system
+- And how to create our first repository to store important configuration files
+- As always [here](https://blog.scottlowe.org/2015/01/14/non-programmer-git-intro/) is a good introduction to git from a
+non-programmer point of view
+
+---
+
+## Why do we need a VC system
+
+- Up until now we covered how to work on the cluster, and how to move files from and to the cluster
+- However, this kind of behavior requires you to constantly keep both sides (cluster and home computer) in sync
+- If you also have a Desktop computer tracking what changed and when becomes very hard
+- When we consider working on a project with collaborators this is impossible
+- Luckily enough this problem isn't uncommon and it is simple to solve using a process called version control
+
+---
+
+## What does a VC do?
+
+- Version control is a system that simplifies managing and tracking changes made to content of a project
+- In this course we will learn how to use a tool called global information tracker (git for short)
+- And will rely on the service of [GitHub](https://en.wikipedia.org/wiki/GitHub) as our online repositories providers.
+- This is because it is free of charge and easy to learn and use.
+- If you don't have an account please press on [join GitHub](https://github.com/join) and follow the instructions
+- Also [install GitHub](https://gist.github.com/derhuerst/1b15ff4652a867391f03) on your local computer.
+
+
+---
+
+## What is a repository?
+
+- A repository is a central location in which data is stored and managed.
+- Git can be viewed as a method to control, manage and document a projects evolution
+- Project evolution is composed of
+- Files (i.e. content)
+- Directories (i.e. hierarchy)
+- Changes across time (i.e. history)
+- Users (i.e. contribution)
+- When you create a new repository a hidden dot folder named .git is created where that data is stored.
+
+
+---
+
+## Is git installed on the Cluster?
+
+- Well the short answer is no!
+- We will have to install it ourselves
+- Unfortunately this is not as simple as setting it on your personal computer
+- This is because we don't have administrator rights on the cluster
+- However we can use a process called compilation that will allow us to use open-source code to create a functional
+program
+- As most of you are lacking advanced programmatic skills (at the moment) I made the instructions as clear as I could.
+- If you follow them to the letter I'm sure we will manage
+
+
+---
+
+## Log onto the Cluster
+
+- In order to install things we need to be on the cluster
+- So open a terminal on your personal computer
+- And use ssh to connect to the cluster
+- <a href="#/ssh_login">This is how we did it previously</a>
+
+
+
+---
+
+## Download git
+
+- We will create a temporary folder on our home directory
+- Then we will use `wget` to download a compressed snapshot of the recent version of the git program (tar ball)
+- We will use tar (a compression program similar to zip) to uncompress the tar ball
+- Finally we will go in the directory
+
+```bash
+mkdir ~/src # create a src dir
+cd ~/src # go into it
+# Download a version of GitHub
+wget https://github.com/git/git/archive/v2.26.2.tar.gz
+tar -xzvf * # Expand the tar file (tarball)
+cd git-2.26.2/ # And goto the folder
+```
+
+---
+
+## Compiling git on the cluster
+
+- Compiling a program can be a frustrating experience
+- However, in this case this is highly unlikely
+- We use a process that is called `make` which will build the software specifically for the install location you want
+- In our case we are compiling to the bin folder in your home directory
+- The following `make install` will install the program in that location
+- Notice the use of double & to chain commands
+- Running this will take a while and spit many words
+
+```bash
+make && make install
+git --version # confirm that this worked
+```
+---
+
+## Generate a new rsa key
+
+- Now we need to generate a new rsa key
+- Previously we generated an rsa key from our home computer to simplify the login process to the cluster
+- We will now use the same process to simplify interaction to and from GitHub
+
+```bash
+ssh-keygen -t rsa -b 4096 -C <the_email@you_used_on_github.com>
+	eval "$(ssh-agent -s)" # Start the ssh-agent in the background.
+	ssh-add ~/.ssh/id_rsa # Add your SSH private key to the ssh-agent
+	cat ~/.ssh/id_rsa.pub # Print your key and copy it
+	```
+
+	---
+
+	## Setting up ssh key access to Github
+
+	Now you need to go over to this
+	[LINK](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account) and
+	follow the instructions to the letter.
+
+
+	```bash
+	cd ~
+	rm -rf src # Delete the src folder
+	# Add some information to you account
+	git config --global user.name "Your git user Name"
+	git config --global user.email "<your mail>@mpi-mail.mpg.de"
+		# Open ~/.ssh/config
+		nano ~/.ssh/config
+		# Copy the following line to the TOP of the file
+		IgnoreUnknown AddKeysToAgent,UseKeychain
+		# Now check your connection to your GitHub repository
+		ssh -T git@github.com
+		```
+
+		---
+
+		## Setting up cluster access to Github
+
+		- We are almost ready to use git and GitHub
+		- We only need to setup the cluster to enable us to create and delete repositories from the command line
+		- To do this we need to generate a token which is a way to extend normal passwords by associating different
+		permissions for each token
+
+
+		---
+
+		## Creating an api token on Github
+
+		- Please follow this
+		[link](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+		) to create a personal access token for the command line
+		- Or alternatively go [here](https://github.com/settings/tokens) if you don't need the tutorial to generate a
+		new token
+		- Make sure to tick the following boxes:
+		- `Delete repositories`
+		- `repo`
+
+		---
+
+		## A small detour to talk about security and permissions
+
+		- The token you just created is a scary thing as it allows anyone with it to delete your repositories
+		- You should treat it and any password on the cluster with care
+		- One way to do that is to separate between the configuration files and sensitive information
+		- In linux any file or folder will have permission settings
+
+		---
+
+		## Why are permissions important and useful?
+
+		- Permissions control who can have access to a file or folder
+		- And more importantly what kind of access is granted
+		- A good example is experimental raw data
+		- We will want many people to have read access
+		- But other than the creator of the data no one should have write access
+
+
+		---
+
+		## Basics of permissions
+
+		- Using `ls -l ~/.bashrc` give the following :
+		![](/img/Tutorial_bashrc_permissions.png)
+		- Let's unpack the bottom line from right to left
+
+
+		| :-- | :-- |
+		| `/usr/users/esoreq/.bashrc` | full path name |
+		| `May 12 08:43` | The **last** modification time |
+		| `172` | File size in bytes |
+		| `MLNP` | Group name |
+		| `esoreq` | Owner name |
+		| `1` | Number of links |
+		| `-rw-------` | Permissions |
+		| | |
+
+		---
+
+		## Basics of permissions
+
+		- Permission settings are grouped in a string of characters (-, r, w, x)
+		- The characters r, w, and x stand for **read**, **write**, and **execute**.
+		classified into four sections:
+		- <span style="color:GOLD">-</span>rwxrwxrwx - File type has three possibilities:
+		- regular file (–)
+		- a directory (d)
+		- or a link (i)
+		- -<span style="color:GOLD">rwx</span>rwxrwx - File permission of the user (owner)
+		- -rwx<span style="color:GOLD">rwx</span>rwx - File permission of the owner’s group
+		- -rwxrwx<span style="color:GOLD">rwx</span> - File permission of other users
+
+		---
+
+		## Changing permissions
+
+		- Any Linux user, will at some point need to modify the permission settings of a file/directory.
+		- This can be done using the `chmod` command.
+		- The basic syntax is:
+
+		```bash
+		chmod [permission] [file_name]
+		# one way that is the simplest to remember
+		chmod u=rwx,g=rwx,o=rwx [file_name]
+		```
+		- rwx stand for r(ead),w(rite) and (e)x(ecute)
+		- and ugo stand for u(ser), g(roup) and o(ther)
+		---
+
+		## Changing permissions using the numeric mode
+
+		- Instead of letters, the numeric format represents privileges with numbers:
+		- r(ead) has the value of 4
+		- w(rite) has the value of 2
+		- (e)x(ecute) has the value of 1
+		- no permission has the value of 0
+		- Privileges are summed up and depicted by one number.
+		- The permission is compressed to three (3) numbers
+		- Each representing the summation of privileges for each category (user, group, owner).
+
+
+		---
+
+		## Changing permissions using the numeric mode
+
+		- Therefore, the possibilities are:
+		- 7 = read, write, and execute permission
+		- 6 = read and write privileges
+		- 5 = read and execute privileges
+		- 4 = read privileges
+		- And in practice the basic syntax changes to:
+
+
+
+		```bash
+		chmod 750 [file_name] # -rwxr-x---
+		chmod 400 [file_name] # -r--------
+		```
+
+
+
+		---
+
+		## Back to practicals
+
+		- To have our passwords protected we will create a personal folder
+		- Make sure only we have access to it
+		- Create a file called passwords
+		- Append our github token into it
+		- And add a line to our bashrc file to source this variable on login
+
+		```bash
+		GIT_TOKEN=<the token>
+			mkdir ~/personal && cd ~/personal
+			chmod 700 ~/personal # Only you will have access
+			touch passwords
+			echo "GIT_TOKEN=$GIT_TOKEN" >> passwords
+			echo ". ~/personal/passwords" >> ~/.bashrc
+			. ~/.bashrc
+			```
+			- If all worked well you should have a working git on the cluster
+
+			---
+
+			## Creating your first repository
+
+			- Let's create a repository that stores the various configuration files we just created
+			- This is not solely for the experience of creating a repository,
+			- It is useful to have when moving from one position to another
+			- And allows you to share your work with other people in your lab
+
+
+			---
+
+			## Initializing a git folder
+
+			- The `git init` function is used to create the hidden `.git` folder within your repository
+			- When we run `git init [foldername]` we create a new folder with the `.git` folder inside
+			- Alternatively we can initialize an existing folder by going into the folder and running `git init` without
+			any other options
+
+			```bash
+			git init $HOME/dotfiles/ # make a git initialized folder
+			```
+
+			---
+
+			## Add some content
+
+			- We will need to add some content (i.e. files and folders) into our repository
+			- Good practice is to always include a Readme.md markdown file
+			- Markdown is a rich text syntax that we will learn next week
+
+			```bash
+			# copy over your dot files
+			cp .bash_aliases .bashrc .profile .bash_profile ~/dotfiles/
+			ls -af dotfiles/.??* # confirm that they were copied
+			cd ~/dotfiles # goto the folder
+			touch Readme.md # create a readme file (good practice)
+			echo "A repository for dot configuration files" >> Readme.md
+			```
+
+			---
+
+			## Create a remote repository
+
+			- We now have a local folder with some files inside
+			- We want to have a matching repository on the GitHub site
+			- We could just use the web interface to manually create our dotfiles repository
+			- An alternative way would be to create it programmatically
+			- Go to this [link](https://developer.github.com/v3/guides/getting-started/#create-a-repository) to gain a
+			deeper understanding of this issue
+
+			```bash
+			AUTH="Authorization: token $GIT_TOKEN"
+			DATA='{"name":"dotfiles","private": true}' # create a JSON structure
+			curl -H "$AUTH" https://api.github.com/user/repos -d "$DATA"
+			```
+			---
+
+			## Git Basics - Working with Remotes
+
+			- Final required setup is to tell our local directory where it's remote counterpart is located
+			- Again to understand this concept further you can (but don't have to) go
+			[here](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes)
+
+			```bash
+			# Tell the folder where the remote repository is
+			git remote add origin git@github.com:<git_user_name>/dotfiles.git
+			```
+				---
+
+				## Let's add some files to our repository
+
+				- You should now have an empty repository on GitHub with a link resembling this `https://github.com/
+				<username>/dotfiles`
+					- Goto the link (change the user name to your git account) and confirm that it is empty
+					- We want to tell git which files to upload to the remote folder
+					- Let's add files with the `add` command
+
+					```bash
+					git add .bashrc # adding a single file
+					git add --all # To add everything in your directory
+					```
+
+					---
+
+					## Let's commit and push files to the remote repository
+
+					- Recall that git is much more than a method to backup files and structure of a project
+					- The more important aspect of git is tracking the **evolution** of the project
+					- Which mean that we can add a file or files multiple times
+					- Committing is the process of adding meta information about the current changes made to the
+					repository
+
+
+					---
+
+					## Let's commit and push files to the remote repository
+
+
+					- In practice, we want a short (50 char) sentence describing what changes you made to the content
+
+					```bash
+					# Make nano your default editor
+					echo "export EDITOR='nano'" >> ~/.bashrc
+					. ~/.bashrc
+					# Tell git we want to commit and add why
+					git commit -m "updating dotfiles on $(date -u)"
+					# Push our files to the web
+					git push -u origin master
+					```
+
+					---
+
+					## Go to your new repository
+
+					- Use the web interface to change one of your files
+					- One option is to add some of the aliases I showed you to the .bash_aliases file
+					- Here is a <a href="#/alias">link</a> to the relevant slide
+					- It is much easier to edit these kinds on the web (or on your local computer)
+					- Now we will pull the updated repository back to the cluster
+
+					```bash
+					cd ~/dotfiles
+					git status
+					git pull origin master
+					```
+
+					- You should now have an updated .bash_aliases on your cluster
+
+
+					---
+
+					## Final step for this week
+
+					- Please send me an email with the email you have on your github account
+					- This should be addressed to eyal.soreq@mpi-mail.mpg.de
+					- The topic should be add me as a collaborator to the course github
+					- See you online
+
+
+					---
+
+					## Congratulations you are the proud owner of a `dotfiles` repository
+
+					- This was a cool but annoying process
+					- Next we will cover how to collaborate to a repository you don't own
+					- After that we will revisit other important git commands and end this weeks material
+					- Take a well earned break and move forward when ready
+
+					</script>
 				</section>
-				<section data-markdown="../content/home/github.md" data-separator="//section//" data-separator-vertical="
-							---
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
+
+
+				<section data-markdown data-separator-vertical="---">
+					<script type="text/template">
+# Even More Advanced Bash
+
+- In this section we will go over some more advanced Bash concepts
+- We will also cover how to create functions to automate things
+- I will share with you some functions I created to simplify my life in the gwdg cluster
+- If you want to expand your Bash skills [this](https://www.tldp.org/LDP/abs/html/abs-guide.html) is a good place to
+start
+
+
+---
+
+## Conditionals
+
+- We previously used the `IF` statement in our `.bashrc` file.
+- The most basic form of conditionals is:
+```bash
+if [condition is true] then [do something].
+```
+- We can extend this by adding `else`
+
+```bash
+if [condition is true]
+then
+[do something]
+else [condition is false]
+then
+[do something else ].
+```
+
+---
+
+## Conditionals
+
+- Using Bash syntax (i.e. the set of rules that defines the combinations of symbols that are considered to be a
+correctly structured and therefore usable code)
+- Our previous example will look like this:
+
+```bash
+if` [expression]; then
+[do something]
+else
+[do something else]
+fi
+```
+
+---
+
+## Conditionals
+
+- This can be extended even further using else if which allows us to add conditions and in fact create hierarchy.
+- Consider the following program
+- Try to understand this and goto the next slide for a breakdown
+
+```bash
+cTime=$(date +%H)
+if [ $cTime -gt 06 -a $cTime -le 12 ]; then
+echo "Good Morning"
+elif [ $cTime -gt 12 -a $cTime -le 18 ]; then
+echo "Good Afternoon"
+else
+echo "Good night"
+fi
+```
+
+---
+
+## Let's unpack
+
+| | |
+| :-- | :-- |
+| `cTime=$(date +%H)` | store the current hour in a variable |
+| `IF` | Start the conditional statement |
+| `$cTime -gt 06` | Check if time is greater than 6 |
+| `-a` | logical AND |
+| `$cTime -le 12` | less or equal to 12 |
+| `if true` | `echo "Good Morning"` |
+| `ELSE IF` | Another conditional statement |
+| `cTime > 12 & cTime <= 18` | Same as above | 
+| `if true` | `echo "Good Afternoon" ` | 
+| `ELSE` | `i.e. cTime> 18 &	cTime <= 6` | 
+| `if both are false` | `echo "Good Afternoon" ` | 
+| | |
+
+
+---
+
+## Making this into a function is dead simple
+
+```bash
+function greeting {
+cTime=$(date +%H)
+if [ $cTime -gt 06 -a $cTime -le 12 ]; then
+echo "Good Morning"
+elif [ $cTime -gt 12 -a $cTime -le 18 ]; then
+echo "Good Afternoon"
+else
+echo "Good night"
+fi;
+}
+```
+
+---
+
+## We can also add variables
+
+- The dollar $ sign with a number will capture variables that our function can use
+
+
+```bash
+function greeting {
+cTime=$(date +%H)
+if [ $cTime -gt 06 -a $cTime -le 12 ]; then
+echo "Good Morning $1"
+elif [ $cTime -gt 12 -a $cTime -le 18 ]; then
+echo "Good Afternoon $1"
+else
+echo "Good night $1"
+fi;
+}
+greeting "Your Name" # will add a name as a variable
+```
+
+---
+
+## .Bash_functions
+
+- Like the aliases we want to simplify our life (and reduce typing) by creating functions that take anything that we
+will use often and convert it into a function.
+- And we obviously want these functions to be there anytime we log into the cluster
+- Let's create a .Bash_functions file and make it load on login
+- Any useful function should go in this file
+- Try to do this on your own and go to the next slide and see my example
+
+
+---
+
+## .Bash_functions
+
+
+```bash
+touch ~/.Bash_functions # create a dot functions file
+# now add this to ~/.bashrc file to source when you login
+if [ -f ~/.bash_functions ]; then
+. ~/.bash_functions # --> source local functions if present.
+fi
+```
+
+---
+
+## No let's go over some of my most useful functions
+
+- Function mcd will create a directory and then immediately move into that directory.
+
+```bash
+# Create a directory and move into it
+function mcd {
+mkdir -p $1
+cd $1
+}
+```
+
+---
+
+## function sp - step up
+
+- This one will step up in the directory hierarchy the specified number of steps
+- Again try to see what and how I do things here
+
+```bash
+# Step up the folder tree $1 times
+function sp {
+if [ -z "$1" ]; then
+echo "You forgot to give a number!"
+elif [ $1 -eq $1 ]; then
+if [ $1 -gt 9 -o $1 -lt 1 ]; then
+echo "$1 is not a valid variable"
+else
+for i in $(seq 1 $1); do
+cd ..
+done;
+fi;
+fi;
+}
+```
+
+---
+
+## function pull - simplify git pull
+
+```bash
+# will go to a git folder pull an updated version and return to origin
+function pull {
+if [ ! -z "$1" ]; then
+origin=$PWD
+cd $1
+git pull origin master
+cd $origin
+else
+git pull origin master
+fi
+}
+```
+
+---
+
+## function push - simplify git push
+
+```bash
+# will go to a git folder push a committed folder and return to origin
+function push {
+if [ ! -z "$1" ]; then
+origin=$PWD
+cd $1
+git push origin master
+cd $origin
+else
+git push origin master
+fi
+}
+```
+
+---
+
+## function commit - simplify git commit
+
+```bash
+# will go to a git folder
+# Add all files, commit them and push to remote
+function commit {
+if [ ! -z "$1" ]; then
+origin=$PWD
+cd $1
+git add --all
+if [ ! -z "$2"] ; then
+git commit -m $2
+else
+git commit -m "routine update on $(date -u)"
+fi
+git push origin master
+cd $origin
+else
+echo "This functions requires some input"
+fi
+}
+```
+
+---
+
+## function remote - simplify git remote
+
+```bash
+# Create a new repository on GitHub
+# Syntax newRepo $repo_name $GIT_USER $GIT_TOKEN
+function remote {
+if [ ! -z "$1" -a ! -z "$2" ]; then
+REPO=git@github.com:$1/$2.git
+git remote add origin $REPO
+else
+echo "Give username and repository name"
+fi
+}
+```
+---
+
+## function newRepo - simplify new git repository creation
+
+```bash
+# Create a new repository on GitHub
+# Syntax newRepo $repo_name $GIT_USER $GIT_TOKEN
+function newRepo {
+if [ -z $1 -a -z $2 -a -z $3 ]; then
+echo "You need to give your repository a name"
+else
+mcd $1 # create and goto the folder
+git init # make a git initialized folder
+AUTH="Authorization: token $3"
+DATA=$(printf '{"name":"%s"}' $1)
+API="https://api.github.com/user/repos"
+curl -H "$AUTH" https://api.github.com/user/repos -d "$DATA"
+remote $2 $1
+fi
+}
+```
+
+---
+
+## function delRepo - simplify git repository deletion
+
+```bash
+# Delete a repository on GitHub
+# Syntax delRepo $repo_name $GIT_TOKEN $GIT_USER
+function delRepo {
+if [ -z $1 -a -z $2 -a -z $3 ]; then
+echo "You need to give your repository a name"
+else
+AUTH="Authorization: token $2"
+curl -X DELETE -H "$AUTH" https://api.github.com/repos/$3/$1
+rm -rf ~/github/$1
+fi
+}
+```
+---
+
+## function clone - simplify git repository cloning
+
+- A clone is a local copy of some remote repository
+- We want our clones to be in one tidy place
+- For me its a folder called github
+
+```bash
+# make sure all cloned repositories are stored in one neat place
+function clone {
+if [ -z $1 ]; then
+echo "You need to give a git url"
+else
+origin=$PWD
+if [ -z $2 ]; then
+cd ~/github
+else
+cd $2
+fi
+git clone $1
+cd $origin
+fi
+}
+```
+
+---
+
+## Can anybody push files to my repository on github?
+
+- Nobody can push directly to your repository if you are not already granting them write access
+- This is true even if your repository isn't private
+- A private repository simply means that only approved users can see on-line content
+- The process of contributing to a public repository in GitHub starts by forking the repository
+- For those interested [here is nice
+summary](https://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/)
+- In this course we will not require such process instead we will use a shared space on the cluster.
+
+
+
+---
+
+## Summary
+
+- Ok this almost sums up your introduction to bash and the cluster
+- During the course we will probably add a few more aliases and functions
+- This is a good opportunity to go over the various commands and see that you understood everything
+- Also on a personal note, please make note for anything that isn't clear so I can learn from your experience
+- When you are ready press on the right arrow for the final section and your home assignment
+
+					</script>
 				</section>
-				<section data-markdown="../content/home/Bash_functions.md" data-separator="//section//" data-separator-vertical="
-							---
+				<section data-markdown data-separator-vertical="---">
+					<script type="text/template">
+# Summary and home assignment
+- We went on quite a ride this week
+- You learned to do many things
+- Also your cluster account should be looking good
+- The last thing we want to do is gain access to the course shared space
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
+---
+
+# Collaborating with version control
+
+- While I advocated for using GitHub as collaboration hub in reality most of Neuroscience research done relies on large
+data-sets that contain sensitive information
+- Therefore, in this course we will be using a shared space on the cluster rather than a collaborative repository
+- It is also worth noting that using the collaborative part of GitHub requires additional work that I felt was not
+necessary for our needs
+- However for those who wish to explore this option further the web is full with examples and you have all the right
+functionality to either join or host such a repository
+
+
+---
+
+# Collaborating using a shared local space
+
+- What we will use instead is a shared space on our scratch disk
+- Please open a terminal on the [HPC Jupyter-hub](https://jupyter-hpc.gwdg.de/)
+- Now cd into `/scratch/systemAI/course_2020`
+- This will be our course space
+
+---
+
+# Creating a symbolic link
+
+- The shared space is empty now
+- But it contains some hierarchy
+- We will start by creating a symbolic link to the folder on your home directory
+
+---
+
+# Creating a symbolic link
+
+- A symbolic link, also known as a symlink or soft link, is a special type of file that points to another file or
+directory
+- Syntax is dead easy
+
+```bash
+ln -s {source-path} {symbolic-name}
+```
+- Goto your home directory create a folder called learning
+- And in it create a symlink to the course material
+- Go to the next slide **AFTER** you did this
+
+---
+
+# Creating a symbolic link
+
+- In order to use the jupyterhub with our shared space we will make a soft link to the course folder that will be
+accessible on the web interface
+- Jupyterhub has access to the jupyterhub-gwdg folder in your home directory
+- Creating a soft link to our course folder makes the entire folder tree accessible to the web interface
+
+```bash
+cd ~ && mkdir ~/jupyterhub-gwdg/learning
+source=/scratch/systemAI/course_2020
+target=~/jupyterhub-gwdg/learning/systemAI_2020
+ln -s $source $target
+```
+
+---
+
+# Home assignment
+
+1. Download (using <a href="#/rsync">rsync</a>) the pdf in the papers folder to your personal computer and read it
+before our meeting.
+1. Goto the week_00 folder under notebook and create a folder with your name
+1. Upload (using <a href="#/rsync">rsync</a>) to that folder your portrait as
+1. Finally navigate to your folder and use the web interface to create a text file named <yourname>_profile.md
+
+	---
+
+	# _profile.md
+
+	- In this file I want you to add the following information
+	1. Introduce yourself
+	1. Name
+	1. Hobbies
+	1. What is your favorite movie.
+	1. Why did you choose to enroll in this program
+	1. What is the most important skill you hope to learn in this course.
+	1. What is your academic background
+
+
+	---
+
+	# That's it for this HPC boot camp week
+	<div class="centered_image">
+		<img src="http://phdcomics.com/comics/archive/phd102402s.gif">
+	</div>
+
+	# Next week will be covering
+	# Python and Jupyter nootbook
+
+					</script>
 				</section>
-				<section data-markdown="../content/home/SymbolicLinks.md" data-separator="//section//" data-separator-vertical="
-							---
 
-"
-					data-separator-notes="^Note:" data-charset="iso-8859-15" >
-				</section> -->
+
 			</div>
 		</div>
 
