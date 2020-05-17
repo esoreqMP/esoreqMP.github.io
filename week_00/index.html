@@ -1332,11 +1332,13 @@ start
 ## Conditionals
 
 - We previously used the `IF` statement in our `.bashrc` file.
-- The most basic form of conditionals is:
+- The most basic form of conditionals is
+
 
 ```bash
 if [condition is true] then [do something].
 ```
+
 
 - We can extend this by adding `else`
 
@@ -1405,14 +1407,16 @@ fi
 
 ```bash
 function greeting {
-cTime=$(date +%H)
-if [ $cTime -gt 06 -a $cTime -le 12 ]; then
-echo "Good Morning"
-elif [ $cTime -gt 12 -a $cTime -le 18 ]; then
-echo "Good Afternoon"
-else
-echo "Good night"
-fi;
+	cTime=$(date +%H)
+	if [ $cTime -gt 06 -a $cTime -le 12 ]; 
+	then
+		echo "Good Morning"
+	elif [ $cTime -gt 12 -a $cTime -le 18 ]; 
+	then
+		echo "Good Afternoon"
+	else
+		echo "Good night"
+	fi;
 }
 ```
 ----
@@ -1424,14 +1428,14 @@ fi;
 
 ```bash
 function greeting {
-cTime=$(date +%H)
-if [ $cTime -gt 06 -a $cTime -le 12 ]; then
-echo "Good Morning $1"
-elif [ $cTime -gt 12 -a $cTime -le 18 ]; then
-echo "Good Afternoon $1"
-else
-echo "Good night $1"
-fi;
+	cTime=$(date +%H)
+	if [ $cTime -gt 06 -a $cTime -le 12 ]; then
+		echo "Good Morning $1"
+	elif [ $cTime -gt 12 -a $cTime -le 18 ]; then
+		echo "Good Afternoon $1"
+	else
+		echo "Good night $1"
+	fi;
 }
 greeting "Your Name" # will add a name as a variable
 ```
@@ -1467,8 +1471,8 @@ fi
 ```bash
 # Create a directory and move into it
 function mcd {
-mkdir -p $1
-cd $1
+	mkdir -p $1
+	cd $1
 }
 ```
 ----
@@ -1482,15 +1486,15 @@ cd $1
 # Step up the folder tree $1 times
 function sp {
 if [ -z "$1" ]; then
-echo "You forgot to give a number!"
+	echo "You forgot to give a number!"
 elif [ $1 -eq $1 ]; then
-if [ $1 -gt 9 -o $1 -lt 1 ]; then
-echo "$1 is not a valid variable"
-else
-for i in $(seq 1 $1); do
-cd ..
-done;
-fi;
+	if [ $1 -gt 9 -o $1 -lt 1 ]; then
+		echo "$1 is not a valid variable"
+	else
+		for i in $(seq 1 $1); do
+			cd ..
+		done;
+	fi;
 fi;
 }
 ```
@@ -1502,12 +1506,12 @@ fi;
 # will go to a git folder pull an updated version and return to origin
 function pull {
 if [ ! -z "$1" ]; then
-origin=$PWD
-cd $1
-git pull origin master
-cd $origin
+	origin=$PWD
+	cd $1
+	git pull origin master
+	cd $origin
 else
-git pull origin master
+	git pull origin master
 fi
 }
 ```
@@ -1519,12 +1523,12 @@ fi
 # will go to a git folder push a committed folder and return to origin
 function push {
 if [ ! -z "$1" ]; then
-origin=$PWD
-cd $1
-git push origin master
-cd $origin
+	origin=$PWD
+	cd $1
+	git push origin master
+	cd $origin
 else
-git push origin master
+	git push origin master
 fi
 }
 ```
@@ -1537,18 +1541,18 @@ fi
 # Add all files, commit them and push to remote
 function commit {
 if [ ! -z "$1" ]; then
-origin=$PWD
-cd $1
-git add --all
-if [ ! -z "$2"] ; then
-git commit -m $2
-else
-git commit -m "routine update on $(date -u)"
+	origin=$PWD
+	cd $1
+	git add --all
+	if [ ! -z "$2"] ; then
+		git commit -m $2
+	else
+		git commit -m "routine update on $(date -u)"
 fi
-git push origin master
-cd $origin
+	git push origin master
+	cd $origin
 else
-echo "This functions requires some input"
+	echo "This functions requires some input"
 fi
 }
 ```
@@ -1561,10 +1565,10 @@ fi
 # Syntax newRepo $repo_name $GIT_USER $GIT_TOKEN
 function remote {
 if [ ! -z "$1" -a ! -z "$2" ]; then
-REPO=git@github.com:$1/$2.git
-git remote add origin $REPO
+	REPO=git@github.com:$1/$2.git
+	git remote add origin $REPO
 else
-echo "Give username and repository name"
+	echo "Give username and repository name"
 fi
 }
 ```
@@ -1577,15 +1581,15 @@ fi
 # Syntax newRepo $repo_name $GIT_USER $GIT_TOKEN
 function newRepo {
 if [ -z $1 -a -z $2 -a -z $3 ]; then
-echo "You need to give your repository a name"
+	echo "You need to give your repository a name"
 else
-mcd $1 # create and goto the folder
-git init # make a git initialized folder
-AUTH="Authorization: token $3"
-DATA=$(printf '{"name":"%s"}' $1)
-API="https://api.github.com/user/repos"
-curl -H "$AUTH" https://api.github.com/user/repos -d "$DATA"
-remote $2 $1
+	mcd $1 # create and goto the folder
+	git init # make a git initialized folder
+	AUTH="Authorization: token $3"
+	DATA=$(printf '{"name":"%s"}' $1)
+	API="https://api.github.com/user/repos"
+	curl -H "$AUTH" https://api.github.com/user/repos -d "$DATA"
+	remote $2 $1
 fi
 }
 ```
@@ -1598,11 +1602,11 @@ fi
 # Syntax delRepo $repo_name $GIT_TOKEN $GIT_USER
 function delRepo {
 if [ -z $1 -a -z $2 -a -z $3 ]; then
-echo "You need to give your repository a name"
+	echo "You need to give your repository a name"
 else
-AUTH="Authorization: token $2"
-curl -X DELETE -H "$AUTH" https://api.github.com/repos/$3/$1
-rm -rf ~/github/$1
+	AUTH="Authorization: token $2"
+	curl -X DELETE -H "$AUTH" https://api.github.com/repos/$3/$1
+	rm -rf ~/github/$1
 fi
 }
 ```
@@ -1618,16 +1622,16 @@ fi
 # make sure all cloned repositories are stored in one neat place
 function clone {
 if [ -z $1 ]; then
-echo "You need to give a git url"
+	echo "You need to give a git url"
 else
-origin=$PWD
-if [ -z $2 ]; then
-cd ~/github
-else
-cd $2
-fi
-git clone $1
-cd $origin
+	origin=$PWD
+	if [ -z $2 ]; then
+		cd ~/github
+	else
+		cd $2
+	fi
+	git clone $1
+	cd $origin
 fi
 }
 ```
@@ -1652,10 +1656,10 @@ summary](https://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/)
 - Also on a personal note, please make note for anything that isn't clear so I can learn from your experience
 - When you are ready press on the right arrow for the final section and your home assignment
 ---
-					</script>
-				</section>
-				<section data-markdown data-separator-vertical="----">
-					<script type="text/template">
+</script>
+</section>
+<section data-markdown data-separator-vertical="----">
+<script type="text/template">
 # Summary and home assignment
 - We went on quite a ride this week
 - You learned to do many things
@@ -1753,8 +1757,8 @@ before our meeting.
 # Next week will be covering
 # Python and Jupyter nootbook
 
-					</script>
-				</section>
+</script>
+</section>
 
 
 			</div>
