@@ -6,7 +6,8 @@
 - And how to transfer files from and to the cluster using rsync
 
 
-//slide//
+---
+
 <!-- .slide: id="alias" -->
 
 ## alias 
@@ -16,7 +17,7 @@
 - The format is simple and I will go over some of my favorite (Copy the ones you like)  
 
 
-//slide//
+---
 
 ## alias - examples 
 
@@ -29,7 +30,7 @@ alias cpv='rsync -ah --info=progress2' # a fancy copy
 alias sr='sort -hr' # sort reverse.
 ```
 
-//slide//
+---
 
 ## alias - examples  (cont.)
 
@@ -42,7 +43,7 @@ alias du='du -kh'
 alias dt='du -sh * | sr'
 ```
 
-//slide//
+---
 
 ## alias - examples  (cont.)
 
@@ -58,7 +59,8 @@ alias lt='ll -tr  | sr'    #  Sort by date, most recent first.
 ```
 
 
-//slide//
+---
+
 ## .dotfile
 
 - If you followed so far you should be able to do the following: 
@@ -73,7 +75,8 @@ la # use our new flashy alias to list files
 - Dotfiles are used by different programs to store important information that dramatically changes your system (therefore handle with care). 
 
 
-//slide//
+---
+
 ## .profile 
 
 - A *.profile* file stores user specific environment and startup programs configurations and is loaded each time a shell is created. 
@@ -85,14 +88,16 @@ nano ~/.profile
 # will create the empty .profile and open a text editor
 ```
 
-//slide//
+---
+
 ## .profile 
 
 - This should look like this 
 
 ![](/img/Tutorial_nano.png)
 
-//slide//
+---
+
 ## .profile 
 
 - Copy and paste this piece of code and close and save using CTRL+X
@@ -106,7 +111,7 @@ if [ -f . ~/.bashrc ]; then
 fi    
 ```
 
-//slide//
+---
 
 ## .bashrc 
 
@@ -118,7 +123,7 @@ fi
 nano ~/.bashrc 
 ```
 
-//slide//
+---
 
 ## .bashrc 
 
@@ -133,7 +138,7 @@ if [ -f ~/.bash_aliases ]; then
 fi
 ```
 
-//slide//
+---
 
 ## .bash_aliases 
 
@@ -150,7 +155,7 @@ echo "alias ls='ls -h --color'" >> ~/.bash_aliases
 echo "alias hg='history|grep'" >> ~/.bash_aliases 
 ```
 
-//slide//
+---
 
 ## ssh
 
@@ -161,7 +166,7 @@ echo "alias hg='history|grep'" >> ~/.bash_aliases
 - Go over to [CONNECT WITH SSH](https://info.gwdg.de/docs/doku.php?id=en:services:application_services:high_performance_computing:connect_with_ssh) and follow the instructions there.
 
 
-//slide//
+---
 <!-- .slide: id="ssh_login" -->
 
 ## ssh Key
@@ -180,7 +185,8 @@ logout
 ```
 
 
-//slide//
+---
+
 <!-- .slide: id="rsync" -->
 
 ## rsync
@@ -192,7 +198,7 @@ logout
     - Transfer it back and overwrite the previous copy 
 
 
-//slide//
+---
 
 ## rsync - pull a file from the remote server
 
@@ -206,7 +212,7 @@ rsync <user_id>@gwdu101.gwdg.de:.bash_aliases .bash_aliases
 cat .bash_aliases
 ```
 
-//slide//
+---
 
 ## rsync - push a file to the remote server 
 
@@ -221,7 +227,7 @@ rsync .bash_aliases <user_id>@gwdu101.gwdg.de:.bash_aliases
 ssh  esoreq@gwdu101.gwdg.de "cat ~/.bash_aliases"
 ```
 
-//slide//
+---
 
 ## Summary 
 
