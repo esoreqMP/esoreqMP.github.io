@@ -5,7 +5,8 @@
 - Also your cluster account should be looking good
 - The last thing we want to do is gain access to the course shared space
 
-//slide//
+---
+
 # Collaborating with version control 
 
 - While I advocated for using GitHub as collaboration hub in reality most of Neuroscience research done relies on large data-sets that contain sensitive information 
@@ -14,7 +15,7 @@
 - However for those who wish to explore this option further the web is full with examples and you have all the right functionality to either join or host such a repository
 
 
-//slide//
+---
 
 # Collaborating using a shared local space  
 
@@ -23,7 +24,7 @@
 - Now cd into `/scratch/systemAI/course_2020`
 - This will be our course space 
 
-//slide//
+---
 
 # Creating a symbolic link 
 
@@ -31,7 +32,7 @@
 - But it contains some hierarchy
 - We will start by creating a symbolic link to the folder on your home directory  
 
-//slide//
+---
 
 # Creating a symbolic link 
 
@@ -45,7 +46,7 @@ ln -s {source-path} {symbolic-name}
 - And in it create a symlink to the course material 
 - Go to the next slide **AFTER** you did this 
 
-//slide//
+---
 
 # Creating a symbolic link 
 
@@ -60,7 +61,7 @@ target=~/jupyterhub-gwdg/learning/systemAI_2020
 ln -s  $source $target
 ```
 
-//slide//
+---
 
 # Home assignment 
 
@@ -69,7 +70,7 @@ ln -s  $source $target
 1. Upload (using <a href="#/rsync">rsync</a>) to that folder your portrait as 
 1. Finally navigate to your folder and use the web interface to create a text file named <yourname>_profile.md
 
-//slide//
+---
 
 # _profile.md
 
@@ -83,7 +84,7 @@ ln -s  $source $target
     1. What is your academic background 
 
 
-//slide//
+---
 
 # That's it for this HPC boot camp week 
 <div class="centered_image">

@@ -14,7 +14,8 @@ div {
     color: #061928;
     text-align: justify;
     text-justify: inter-word;
-    max-width: 700px;
+    max-width: 80%;
+    margin-left: 10%;
 }
 
 

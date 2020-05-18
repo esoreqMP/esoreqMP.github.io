@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/test.css">
+    <title>Artificial Intelligence & Intelligent Systems</title>
+</head>
+<body>
+
+
+<div class="box">
+  <div class="row header">
+    <div class="topnav">
+        <a class="button" onClick="updateframe('intro/index.html')">Intro</a>
+        <a class="button" onClick="updateframe('slides/week_00.html')">Week_00</a>
+    </div>
+  </div>
+  <div class="row content">
+     <iframe id="MainFrame" src="intro/index.html"></iframe>
+  </div>
+  <!-- <div class="row footer">
+    <p><b>footer</b> (fixed height)</p>
+  </div> -->
+</div>
+
+<script type="text/javascript">
+    var GF = document.getElementById("MainFrame");
+
+    function updateframe(target) {
+        GF.src = target;
+    }
+</script>
+
+</body>
