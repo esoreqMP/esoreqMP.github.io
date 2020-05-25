@@ -1162,9 +1162,31 @@ chmod 750 [file_name] # -rwxr-x---
 chmod 400 [file_name] # -r-------
 ```
 
+----
+## Default permissions 
+
+- In this course, we are going to create files programmatically. 
+- Sometimes this will be like in this example using the terminal.
+- Other times it will use the Python interface to do that. 
+- Regardless, it might be annoying to continually remember to change file permissions to allow collaborators access. 
 
 
-		
+----
+## Changing your default permissions 	
+
+- If you run umask in the ssh terminal, it will give a value of 0077 
+- The umask command is the way you define your default permissions 
+- The last three numbers are used to mask the ugo parameters 
+- This means that any file created will have `rwx` for the user, but no permissions for the g and o
+- We want to change that default behaviour to allow group members to have read control 
+
+```bash
+umask 027 # will change default to -rw-r-----
+touch ~/test && ls -l ~/test # test that this worked
+echo "umask 027" >> ~/.bashrc # make this work on login
+rm -f ~/test # remove the test file
+```
+
 ----
 
 ## Back to practicals
