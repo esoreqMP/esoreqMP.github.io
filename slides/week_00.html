@@ -187,6 +187,17 @@ If not please send an e-mail to [hpc@gwdg.de](hpc@gwdg.de) asking to activate yo
 
 							
 ----
+## GWDG Virtual private network (VPN)
+
+- VPN is a connection between two devices that makes it as if you were working within your institute 
+- To use the cluster you have to enable VPN the process is simple and is explained nicely in the gwdg support page 
+    - [Windows setup](https://info.gwdg.de/dokuwiki/doku.php?id=en:services:network_services:vpn:anyconnect)
+    - [Mac setup](https://info.gwdg.de/dokuwiki/doku.php?id=en:services:it_consulting:apple_consulting_center:mac_network:mac_vpn) 
+    - [Linux setup](https://info.gwdg.de/dokuwiki/doku.php?id=en:services:network_services:vpn:linux)
+
+
+							
+----
 
 
 
@@ -282,7 +293,7 @@ command or a group of commands.
 - The bash Shell (Bourne Again SHell), is a command-line interface (CLI). Lets go over the most popular commands, and
 learn how to use them.
 
-- If you want to extend your understanding you should consider taking <a href="https://www.educative.io/courses/master-the-sh-shell" :target="_PARENT">Learn bash the Hard Way</a>
+- If you want to extend your understanding you should consider taking <a href="https://linuxconfig.org/bash-scripting-tutorial" :target="_PARENT">Learn bash the Hard Way</a>
 
 ----
 
@@ -293,7 +304,7 @@ learn how to use them.
 - If you just want to know more on a specific issue here are some websites that can be useful:
 	- <a href="https://devhints.io/sh)" :target="_PARENT">sh-shell-command-cheat-sheet</a>
 	- <a href="https://www.tldp.org/LDP/abs" :target="_PARENT">TecMint</a>
-	- <a href="https://devhints.io/sh" :target="_PARENT">[Advanced sh-Scripting Guide</a>
+	- <a href="https://devhints.io/sh" :target="_PARENT">Advanced sh-Scripting Guide</a>
 
 
 							
@@ -426,7 +437,7 @@ cat file_1 >> file
 - A variable is a temporary store for a piece of information.
 - Essentially, all bash variables are character strings, however, depending on context, it is possible to run arithmetic
 operations and comparisons on variables.
-- As we are not going to write fancy bash scripts I will not go over arithmetics, however, check this <a href="https://sh.cyberciti.biz/guide/Perform_arithmetic_operations#Arithmetic_Expansion_in_sh_Shell)" :target="_PARENT">link</a>
+- As we are not going to write fancy bash scripts I will not go over arithmetics, however, check this <a href="https://bash.cyberciti.biz/guide/Perform_arithmetic_operations" :target="_PARENT">link</a>
 
 
 							
@@ -727,7 +738,7 @@ nano ~/.profile
 if [ -f /etc/bashrc ]; then
 . /etc/bashrc # --> source global /etc/bashrc, if present.
 fi
-if [ -f . ~/.bashrc ]; then
+if [ -f ~/.bashrc ]; then
 . ~/.bashrc # --> source local ~/.bashrc, if present.
 fi
 ```
@@ -1162,9 +1173,33 @@ chmod 750 [file_name] # -rwxr-x---
 chmod 400 [file_name] # -r-------
 ```
 
+----
+
+## Default permissions 
+
+- In this course, we are going to create files programmatically. 
+- Sometimes this will be like in this example using the terminal.
+- Other times it will use the Python interface to do that. 
+- Regardless, it might be annoying to continually remember to change file permissions to allow collaborators access. 
 
 
-		
+----
+<!-- .slide: id="umask" -->
+## Changing your default permissions 	
+
+- If you run umask in the ssh terminal, it will give a value of 0077 
+- The umask command is the way you define your default permissions 
+- The last three numbers are used to mask the ugo parameters 
+- This means that any file created will have `rwx` for the user, but no permissions for the g and o
+- We want to change that default behaviour to allow group members to have read control 
+
+```bash
+umask 027 # will change default to -rw-r-----
+touch ~/test && ls -l ~/test # test that this worked
+echo "umask 027" >> ~/.bashrc # make this work on login
+rm -f ~/test # remove the test file
+```
+
 ----
 
 ## Back to practicals
