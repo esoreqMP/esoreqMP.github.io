@@ -1,0 +1,2773 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sysAI.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown data-separator-vertical="----" data-separator="-s-">
+					<script type="text/template">
+
+<!-- .slide: id="intro_week_01"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">WEEK 01 <br> Jupyter and a big chunk of python</p>
+
+----
+# Welcome to week 01 of the course
+
+The next two weeks are not standard, in the sense that they should be viewed as resource weeks for the entire course. 
+This week focus is on introducing the basics of Jupyter notebook together with critical tools in Python. 
+Next week we will expand to more advanced Python tools as well as Data science-focused modules in the Python eco-system such as Numpy Matplotlib and pandas. 
+Once these two weeks are over you should have under your belt an impressive set of tools, and we can begin exploring the core concepts of the course using either basic mathematics of by building on two other popular Python module called sci-kit-learn and Statsmodels. 
+
+----
+
+# Learning Objectives
+
+At The End Of The Talk, You Should Be Able To: 
+
+- Know how to use Jupyter notebook (in a basic sense)
+- Understand how to write rich reports using Markdown
+- Be familiar with Python 3.x capabilities 
+
+----
+
+# Prerequisites 
+
+- This learning module assumes that you are using the Jupyter notebook on the HPC hub
+- It also assumes that you already have some working background in interpreted programming languages 
+- This is an **overview** of the programming capabilities of Python, not a programming course
+- For those with less experience, I suggest going over each section in detail 
+- Each section in this week refers to a slides column, always beginning with a white slide
+
+-s-
+
+
+<!-- .slide: id="intro_Jupyter"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Introduction to Jupyter</p>
+
+----
+
+# What is Jupyter notebook?
+
+- Jupyter notebook is a modern web-based open-source tool specifically designed to support data science projects. 
+- You can use Jupyter Notebooks to document workflows and to share code for data processing, analysis and visualization.
+
+----
+
+# Jupyter Notebook Overview
+
+In this course, we will create many notebooks, which are the best current way I know of to keep track of your work while documenting both code and thoughts. In this section, you will learn how using Jupyter Notebook can help you implement open reproducible science workflows and get familiar with the Jupyter Notebook interface to run and create new code and Markdown cells. You will also learn how to create new directories and files using Jupyter Notebook.
+----
+
+# At the end of this section, you will be able to:
+
+- List the components and functionality of Jupyter Notebook.
+- Launch and navigate the Jupyter Notebook dashboard.
+- Open, create and save Jupyter Notebook files.
+- Create, run and delete Markdown and Code cells.  
+- Understand the Markdown syntax and render Markdown text.
+----
+
+# Jupyter Notebook for Open Reproducible Science
+
+- The Jupyter Notebook file format (.ipynb ) is constructed from linearly stacked cells allowing you to construct a single project-oriented file that combines descriptive text, code blocks and code output in a single file. 
+
+- The code cells have output cells associated with them, allowing you to include plots, tables, and textual outputs to communicate your findings, within the notebook file. 
+
+- You can then export the notebook to a .pdf or .html that can then be shared with anyone.
+
+----
+
+# Key benefits of the Jupyter Notebook
+
+- **Human readable**: Using Jupyter, you can bridge ideas and concepts with methodology and results, creating a notebook that can be understood by different types of researchers. By adding Markdown text around your code, your project becomes more user-friendly and easier to understand. 
+- **Simple syntax:**  Markdown is simple to learn and use reducing the learning curve needed to produce well-documented Jupyter reports.
+- **Documenting your ideas:** Research is all about creating logical steps based on assumptions followed by tests. However, actual Research is messy, and many things will be left on your digital workbench. Forming the habit of documenting your workflow, making inline references when needed, and explaining the logical workflow, will be priceless to the future you. Just imagine changing or adapting specific parts of a study two years after it was created, without some comments.
+
+----
+
+
+# Key benefits of the Jupyter Notebook (cont.)
+
+- **Easy to Modify:** analyses contained within a Jupyter Notebook can be easily extended, improved or refined by adding or editing the workflow and rerunning the notebook.
+- **Simple to share:** Sharing your workflow with colleague or supervisor is in the core of the Jupyter DNA. A notebook can be shared using file-sharing services like Dropbox or Google Drive or more sophisticated approaches such as Github. This simplifies the process of validating, replicating, extending, refining and communicating your workflow.
+- **Flexible export formats:** Notebooks can be exported into various formats including HTML, PDF and slideshows.
+
+----
+
+# Jupyter Notebook types
+
+There are three kinds of notebooks you would want to create:  
+
+- **The lab** - a historical (and dated) record of your analysis
+- **The report** - a polished version of some study, intended for collaboration and review 
+- **The presentation** - a slideshow designed to communicate ideas with collaborators  
+
+All of the presentations in this course were created using Jupyter and some HTML and javascript sprinkled above.
+----
+
+# Jupyter Notebook modes 
+
+- There are two modes of action in Jupyter: *Command* and *Edit*.  
+- Command mode allows you to edit your notebook, but you cannot type in cells
+- to enter command mode you press the ESC button. 
+- A useful shortcut is the ESC + h which gives you a list of all the shortcuts. 
+- Pressing ENTER will transfer you to EDIT mode where you can interact with each cell in your notebook. 
+
+----
+# EDIT mode useful shortcuts
+
+When in EDIT mode, there are key commands that you should force yourself to use until it becomes natural.  
+
+
+| Mac  | Key | Function | 
+| :--  | :-- | :--      |
+|<font size="3">&#8677;</font>| TAB | code completion/indent |
+|<font size="3">&#8679;+&#8677;</font>| SHIFT+TAB | function help |
+|<font size="3">&#8984;+ /</font>| CMD + / | comment/uncomment |
+|<font size="3">&#8963;+&#8629;</font>| CTRL + ENTER | run current cell |
+|<font size="3">&#8679;+&#8629;</font>| SHIFT + ENTER | run current cell + select below|
+|<font size="3">&#8997;+&#8629;</font>| ALT + ENTER | run current cell + insert below|
+|<font size="3">&#8963;+&#8677;+ -</font>| CTRL + SHIFT + MINUS  |  Split cell at cursor |
+|<font size="3">&#8677;+s</font>| CMD + s  |  Save notebook |
+|<font size="3">d & d</font>| D + D (press the key twice)  |  Delete selected cells |
+
+----
+# COMMAND mode useful shortcuts
+
+The same goes to COMMAND shortcuts.  
+  
+| Key | Function | 
+| :-- | :-- |
+| Y | Change cell to code type |
+| M | Change cell to markdown type |
+| SHIFT + M | merge selected cells |
+| SHIFT + j | select cells |
+| c | copy selected cells |
+| x | cut selected cells |
+| v | paste selected cells |
+
+-s-
+
+<!-- .slide: id="intro_Markdown"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Markdown</p>
+
+----
+
+# What is Markdown
+
+- Markdown is the formating codes for creating publishable data science report using Jupyter. 
+- In this section, we will go over all the different ways to create a structured document using the Markdown syntax supported by Jupyter Notebook.
+
+----
+# Jupyter Notebook Markdown syntax
+
+- The underlying machinery that supports Jupyter rendering is HTML 
+- However, the main idea is not to use it for sophisticated web design but rather to speed up and simplify the processes of analytical investigation. 
+- As such Markdown syntax is minimal and sufficient
+- If (or when) you feel like you want to create something that isn't supported by the existing syntax you should probably use different software. 
+
+----
+
+# Jupyter Notebook Markdown syntax
+
+- The current setup supports, creating sophisticated formatting for your text and code with simple to remember the syntax. 
+- I recommend that you open your Jupyter notebook and begin experimenting with different options. 
+
+----
+# Cell Headers
+
+- Cell headers come in six sizes form h1-h6
+- They are defined using the pound sign # before the text 
+- The number of ## = h2 corresponds with the heading level <br />
+<br />
+
+```markdown
+# H1 The largest heading looks like this 
+## And this is H2 The second-largest heading
+###### Finally the smallest heading is H6
+```
+----
+
+# Styling text - **bold** *italic* and ~~strikethrough~~
+ 
+- Bold text is defined by either using two stars /*/* **before and after the text** 
+- Or by using the opening HTML tag `<b>` <b>and closeing tag</b> `</b>`
+- Italic uses one star \* before and after the *emphasized text*
+- Or by using `<i>` _HTML tag_ `</i>`
+- Two tildas `~~` before and after text create the ~~strikethrough effect~~
+- Or by using `<del>` <del>HTML tag</del>`</del>`
+
+----
+
+# Styling text - *indented quotes*
+
+Indenting can be initialized using Greater than and space `> ` before the text
+
+>There is no scientific study more vital to man than the study of his brain. Our entire view of the universe depends on it.
+
+> **Francis Crick (1916-2004)**
+
+----
+
+# HTML tags 
+
+- HTML tags are special words or letters surrounded by angle brackets, < and >. 
+- Jupyter relies on HTML to render everything, and as a byproduct, we can use native HTML components  
+- Styling text with tags is easy, you declare a region with a `<tag>` and close it like this `</tag>` 
+
+----
+
+# HTML tags (cont.)
+- For example Marked <mark>text</mark> is defined using `<mark>` tag. 
+- Adding css attributes such as <mark style="background-color:blue;color:white"> background-color or font color</mark> within the enclosed area is also an option. 
+- This is achieved using the inline css style attribute changing the tag to look like this `<mark style="background-color:blue;color:white">`. 
+
+----
+
+ # HTML tags (cont.)
+- In a similiar way text can be <small>small</small>, <ins>inserted</ins> using `<small>` and `<ins>`. 
+- It can be subscript<sub>text</sub> or Superscript<sup>text</sup> using `<sub>` and `<sup>`
+- This opens a whole world of options, that to be honest you will rarely use <span style="font-size:30px">&#128521;</span>, but can be fun. 
+
+----
+# Preformatted Text 
+
+- Sometimes you want the text to show up exactly as you write it.
+- Without Markdown tags doing their schtick 
+- This can be achieved by indent every line by at least four spaces (or one tab). 
+- Alternatively, you can make a code block using 3 or more tildes (~) or backticks (`) on a line before and after the text.
+
+----
+# code blocks and code highlighting
+
+- When you declare a code block, you can also add the type of language to enable syntax highlighting 
+
+For example `~~~python` 
+~~~python 
+def f(x):
+    #Returns the square root of x
+    return x**0.5
+~~~
+
+Or `~~~html` 
+~~~html 
+<hr style="border-top: 2px solid black;">
+~~~
+
+----
+
+# Creating Markdown bullet lists 
+
+To create a circular bullet point, simply use either `-`, `*` or `*` followed with either one or two spaces. Each bullet point must be on its line. To construct sub levels just press TAB to before a bullet using one of the methods described here. 
+- Main bullet point
+    * Sub bullet point
+        - Subsub bullet point
+
+```
+- Main bullet point
+    * Sub bullet point
+        - Subsub bullet point
+```
+
+----
+
+# Creating Markdown numbered lists 
+
+- To create a numbered list, enter 1. followed by a space, for example:
+1. Numbered item 1
+1. Numbered item 2
+    1. Numbered item A
+        1. Numbered item a
+        
+```
+1. Numbered item 1
+1. Numbered item 2
+    1. Numbered item A
+        1. Numbered item a
+```
+----
+# Finally, I am a sucker for to-do lists that start my notebooks. 
+
+- To start a checklist, use `- [ ]` followed by space, for example:
+- [ ]  this is not checked
+- Creating checked boxes simply replaces the space with x - like this `- [x]`
+- [x] but this is checked
+
+----
+
+## Hyperlinks and references 
+
+There are four different ways of adding a hyperlink in a cell. 
+The simplest is by declaring the link explicitly
+1. https://en.wikipedia.org/wiki/Hyperlink    
+
+----
+
+## Hyperlinks and references
+
+Another more subtle approach creates a name link pair
+1. [Hyperlink](https://en.wikipedia.org/wiki/Hyperlink)
+1. created like this:`[Hyperlink](https://en.wikipedia.org/wiki/Hyperlink)`   
+
+----
+
+## Hyperlinks and references
+
+Sometimes you would wish to reference[[1][Hyperlink]] within the text 
+1. Creating these references requires a name id pair `[[1][Hyperlink]]`
+1. And an invisible id link pair placed at the bottom of the cell
+1. `[Hyperlink]: https://en.wikipedia.org/wiki/Hyperlink "Wiki Hyperlink"`  
+
+[Hyperlink]: https://en.wikipedia.org/wiki/Hyperlink "Wiki Hyperlink."
+
+----
+
+## Hyperlinks and references
+
+Finally you can always use HTML tags to define a <a href="https://en.wikipedia.org/wiki/Hyperlink">Hyperlink</a>
+1. using this syntax 
+
+
+```html
+<a href="https://en.wikipedia.org/wiki/Hyperlink">Hyperlink</a>
+```
+
+----
+
+# Mathematical equations and LaTeX
+
+- Dealing with mathematical equations can be annoying. 
+- However, Jupyter embeds a powerful coding language that was designed specifically for this. 
+- With syntax that is as simple as the Markdown and HTML codes, we learned by now. 
+
+----
+
+# inline equations 
+- You can write inline formulas, enclosing the formula with \\$ signs. 
+- For example, consider the inline form of the Gaussian Normal Distribution
+
+```
+$P(x)=\frac{1}{{\sigma \sqrt {2\pi}}}e^{-(x-\mu)^2/2 \sigma^2}$. 
+```
+
+- Which will look like this : $P(x)=\frac{1}{{\sigma \sqrt {2\pi}}}e^{-(x-\mu)^2/2 \sigma^2}$. 
+
+----
+
+
+# display equations 
+
+- You can also write them in display mode by using two \\$ signs, for example.
+
+```
+$$P(x)=\frac{1}{{\sigma \sqrt {2\pi}}}e^{-(x-\mu)^2/2 \sigma^2}$$. 
+```
+
+- Which will look like this
+$$P(x)=\frac{1}{{\sigma \sqrt {2\pi}}}e^{-(x-\mu)^2/2 \sigma^2}$$
+----
+
+
+
+#### If you want to learn more  
+
+- Latex is a world on its own, and if you need it, you probably know some of it already. 
+- Here is an excellent tutorial designed explicitly for the LaTeX flavour supported by Jupyter [mathjax-basic](https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference) 
+- And a long list of all the commands available can be found [here](http://www.onemathematicalcat.org/MathJaxDocumentation/TeXSyntax.htm)
+
+----
+
+# Creating tables 
+
+- While you could use latex to create your tables, Markdown simplifies this. 
+- Tables are created using pipes | and hyphens -. 
+- Hyphens are used to create each column's header, while pipes separate each column. 
+- You must include a blank line before your table for it to correctly render.
+
+----
+
+# Simple table with heading 
+
+- So we can use all the things we learned up until now to control this table 
+- This means we can use inline latex and HTML tags
+- This tag created an HTML divider with CSS controlling the cell width
+
+```
+| latex | <div style="width:100px">rendering</div> | context | 
+| --- | --- | --- | 
+| '\sum^n_{i=1}\frac{(w^Tx(i)-y(i))^2}{n}'   | $\frac{1}{n}\sum^n_{i=1}(w^Tx(i)-y(i))^2$ | Mean Squared Error | 
+```
+
+----
+
+# Simple table with heading
+
+- So we can use all the things we learned up until now to control this table
+- This means we can use inline latex and HTML tags
+- This tag created an HTML divider with CSS controlling the cell width
+- Will render like this:
+
+| latex | <div style="width:150px">rendering</div> | context | 
+| --- | --- | --- | 
+| '\sum^n_{i=1}\frac{(w^Tx(i)-y(i))^2}{n}'   | $\frac{1}{n}\sum^n_{i=1}(w^Tx(i)-y(i))^2$ | Mean Squared Error | 
+
+----
+
+# Simple table with inline formatting 
+
+- markdown formattings will render within the table 
+- As will HTML tags 
+
+```
+| markdown | html   |
+| --- | --- |
+| **bold**   | <b>bold</b> |
+| *itealic*  | <i>itealics</i>  |
+| ~~deleted~~  | <del>deleted</del>  |
+```
+
+----
+
+# Simple table with inline formatting
+
+- markdown formattings will render within the table
+- As will HTML tags
+
+| markdown | html   |
+| --- | --- |
+| **bold**   | <b>bold</b> |
+| *itealic*  | <i>itealics</i>  |
+| ~~deleted~~  | <del>deleted</del>  |
+
+----
+
+# Table content can be aligned 
+
+- Content alignment is achieved by including colons :
+    - To the right ---: of the hyphens
+    - Left :--- of the hyphens
+    - Or using colons in both sides :---: will centre the content 
+
+```
+| latex  | rendering | context |
+| ---: | :---: |  :--- |
+| `$x_1$`  | $x_1$     | Subscripts    |
+| `$x^1$`     | $x^1$     | Superscripts      |
+| `$x_1^y$`     | $x_1^y$     | both      |
+| `$x_{1^y}$`     | $x_{1^y}$     | nested below     |
+| `$x^{y_1}$`     | $x^{y_1}$    | nested above      |
+| `$x^{CRTX}$`     | $x^{CRTX}$     | long words      |
+```
+----
+
+# Table content can be aligned
+
+- Content alignment is achieved by including colons :
+- To the right ---: of the hyphens
+- Left :--- of the hyphens
+- Or using colons in both sides :---: will centre the content
+
+| latex  | rendering | context |
+| ---: | :---: |  :--- |
+|  x_1  | $x_1$ | Subscripts |
+|  x^1  | $x^1$ | Superscripts |
+|  x_1^y  | $x_1^y$ | both |
+|  x_{1^y}  | $x_{1^y}$ | nested below |
+|  x^{y_1}  | $x^{y_1}$ | nested above |
+|  x^{CRTX}  | $x^{CRTX}$ | long words |
+
+----
+
+# Summary
+
+- This was quite a ride you were introduced to almost all of the markdown capabilities Jupyter has to offer 
+- As a summary assignment, please use this knowledge to go over last weeks assignment and add some structure to it 
+- You can do it using the notebook framework which will allow you to edit markdown files 
+
+-s-
+
+<!-- .slide: id="intro_python"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Introduction to Python</p>
+
+----
+
+#  Introduction to python
+
+- The main idea of this module that continues the previous module introducing Jupyter notebook is to touch on a baseline across all of you.  
+- We want to quickly go over most of Python 3.x functionality from it's basics to more advanced capabilities
+- For those with less experience, I suggest doing each section at a different time
+- In contrast, those with prior Python experience can just cruize over all of the slides and try to spot any mistakes 
+
+----
+
+# Why Python?
+
+- Python is a popular high-level, object-oriented, interpreted programming language created by a developer called Guido Van Rossum.
+- It is easy to learn and master, and its syntax is straightforward to both learn and read. 
+- In the context of Data Science in general and specifically in neuroscience it is quickly the new lingua franca of the field. 
+
+----
+
+# Some basic recommendations
+
+- Python projects can require complex development or implementation; in those cases, it is recommended to use some integrated development environment (IDE), for example, PyCharm. 
+- While the use of IDE is not discouraged, I feel that it isn't necessary for applied Data Science projects (as opposed to algorithm development, for example). 
+- Moreover, to strengthen the encoding of the language syntax, I recommend at the beginning to force yourself to use Jupyter lab or notebook interface only.
+- However, my current favourite tool is visual studio code, which has a nice Python and Jupyter built-in support.
+
+----
+
+# Module Recommendation
+
+- This module is self-paced and should be viewed side-by-side with an open notebook (if you have two screens even better). 
+- The idea is to familiarize yourself with using this framework and Python, making the writing process intuitive. 
+- All the slides you will go through were created using Jupyter, and all code snippets can be copied and pasted to your notebook. 
+- However, I urge you to avoid doing this. 
+- Instead, write the commands in your notebook and try to make your comments. 
+- Remember you are doing this for future you, who in six months will want to know how to do something trivial and having it in one (or more) notebooks that you created will be worth it  
+
+----
+
+# What this module will cover
+- This module is composed of several sections going over Python essentials such as: 
+    1. Python Basics (e.g. Syntax Essentials, Keywords, Variables, Data Types, Comments and Operators)
+    1. Python Data Structures (e.g. Lists, Tuples, Dictionaries and Sets)
+    1. Python Programming Fundamentals (Conditions, Loops and Functions)
+- The goal is to quickly give you a cheat sheet to start using Python as a data scientist.
+- Next week we will cover more advanced features, including specific modules for data science.
+
+-s-
+
+<!-- .slide: id="Python_Basics"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Python Basics</p>
+
+
+----
+# Syntax Essentials and Best Practices
+
+One of the trickiest things for Python newcomers to adapt to is the syntax. 
+In this opening section, I'll go over some syntax essentials as well as some formatting best practices.
+This will help you keep your code consistent and hopefully elegant.
+
+----
+# Syntax Essentials rules
+
+1. Code blocks are defined by indentation (can be either space or tab)
+1. One statement per line
+1. Python is case sensitive : $vara \neq  varA$
+1. Path specification uses forward slashes (regardless of OS): $~/user/home$
+1. There is no need to add a command terminator ;
+1. While you can combine two executable statements using a semicolon (;) ** DON'T** 
+1. String literals can be defined using single <'> double <"> or even triple <'''> quotes 
+1. It is considered good conduct to keep lines of code short 
+    1. Backslash \\ can be used to stack lines of code together
+    1. Expressions enclosed in brackets i.e. (), [] or {} don't need a backslash
+1. Comments in Python begin with a hash mark (#) and whitespace character and continue to the end of the line. 
+1. Keywords are protected and should not be used as variables
+
+----
+# One statement per line
+
+- If you put a line break in the wrong place, you will get an error message. 
+- To avoid that you should have one statement per line.
+- However, as with all rules, there are some exceptions some of which we will cover later in the course
+
+
+----
+
+# Explicit line joining 
+- Using a backslash \\, we can break long commands across many lines 
+
+
+```python
+print \
+('Multi. \
+ line command')
+```
+    Multi-line command
+
+----
+# Many commands in single line 
+- Using the semicolon \; we can achieve the opposite, i.e. to combine multiple commands in one line
+
+
+```python
+print('Multi');print('Line');print('Output')
+```
+
+    Multi
+    Line
+    Output
+
+----
+#  Implicit line joining
+
+- Expressions in parentheses, square brackets or curly braces can be split over more than one physical line without using backslashes. 
+
+
+```python
+brain_lobes = ['Frontal',
+               'Parietal',
+               'Occipital',
+               'Temporal']
+print(brain_lobes)
+```
+
+    ['Frontal', 'Parietal', 'Occipital', 'Temporal']
+
+----
+
+# Indentations for structure
+- In contrast to the closing statements we used in Bash (such as fi) Python uses indentations to understand the structure of your code.
+- So you should make sure to use indentations correctly and consistently.
+- This makes code more straightforward to read and ultimately understand 
+- Indentations can be created using either tabs or spaces (usually four spaces) 
+
+----
+# Python Keywords
+
+- Keywords are the reserved words in Python.
+- You cannot use a keyword as a variable name, function name or any other identifier. 
+- These 35 keywords are used to define the syntax and structure of the Python language.
+- To examine them you can run the following code 
+
+
+```python
+import keyword
+print(keyword.kwlist)
+```
+
+----
+# Case matters
+
+- Python is case sensitive. 
+- This means the **HELP** is not equal to **help**
+- Most of Python keywords are written with lowercase letters.
+- Notable exceptions to this rule are True and False boolean values and the **None** variable that all use a mixture of cases. 
+
+----
+# Use Comments
+
+>"Code is more often read than written."
+>> Guido van Rossum
+
+- It is important to add comments to your Python code. 
+- To do this use the # character, everything that comes after it won't be executed.
+
+
+```python
+print("This will run.")  # This won't run
+```
+
+----
+# Use Comments
+    
+>"Code tells you how; Comments tell you why."
+>>Jeff Atwood (aka Coding Horror)
+
+- Commenting your code serves multiple purposes, for example:
+    - Planning and Reviewing, i.e. outline of the desired functionality of some future code
+    - Code Description, i.e. explain the intent of specific sections of code
+    - Algorithmic description, i.e. explain how the algorithm works or how it's implemented within your code or even add a link to the source
+    - Tagging, i.e. label specific sections of your code where you need to take action, e.g. BUG, FIXME, TODO, UPGRADE.
+- Comments should be short, sweet, and to the point.
+
+----
+
+# Use Multiline Comments 
+
+- Multi-line comments can be either achieved primitively using multiple stacking of hashtags #
+
+
+```python
+# This 
+# is 
+# stacking 
+```
+
+- Alternatively, docstrings can be used by combining three commas 
+
+```python
+def some_function(arg1): 
+    '''Summary line. some_function will do some thing with arg1
+  
+    Extended description of the function. 
+    some_function will get arg1 and do things with it
+    some of the things are complex, and some are simple
+    some_function will then return some value.  
+    
+    Parameters: 
+    arg1: the thing we will do stuff to 
+  
+    Returns: 
+    Some value back 
+    '"
+```
+
+----
+
+# Variable Names
+
+> *Code is read much more often than it is written*
+>> Guido van Rossum 2001
+
+
+----
+
+# Variable Names
+
+1. Variable names should use lowercase.
+1. Variable names cannot:
+    - Start with a number
+    - Contain spaces
+    - Use any of these symbols :'",<>/?|\()!@#$%^&*~-+
+1. Avoid using the characters:
+    - 'l' (lowercase letter el)
+    - 'O' (uppercase letter oh)
+    - 'I' (uppercase letter eye)
+1. Avoid using Python basic keywords 
+
+----
+
+# Variable Names 
+
+1. short_names vs long_name
+1. long_names should be separated using the underscore symbol (_)
+1. This makes them readable 
+1. Remember that making variable names simple to understand minimizes the time spent on commenting 
+
+----
+
+# Use blank lines
+
+- Using blank lines is the simplest way to separate code blocks visually 
+- Even multiple blank lines to distinguish between different parts of the code. 
+- It won't affect the result of your script.
+
+----
+
+# Use white spaces 
+
+- Python allows white spaces in assignment 
+- This makes nicer looking code 
+
+----
+
+# Imports best practice 
+
+We will go over this in detail next week, but it should be stated. 
+
+- Use **import x** for importing packages and modules.
+- Use **from x import y** where x is the package prefix, and y is the module name with no prefix.
+- Use **from x import y as z** if two modules named y are to be imported or if y is an inconveniently long name.
+- Use **import y as z** only when z is a standard abbreviation (e.g., np for NumPy).
+
+----
+
+# Variables and Basic Data Types
+
+A variable implies change and is a way of referring to some space in your computer memory that is allocated by your computer program to store a specific type of information. In other words, it is a symbolic name for a physical address in memory that contains static or dynamic values. Python supports many different Data Types, and in contrast to other programming languages where you need to specify the data type of a variable, python will automatically find out the data type at the process of allocation.
+
+
+```python
+my_none_variable = None 
+my_bool_variable = True 
+my_int_variable = 1
+my_float_variable = 1.1
+my_complex_variable = 1.1+1j
+my_string_variable = 'STRING'
+```
+
+----
+
+# Variables Naming Styles
+
+1. lowercase/UPPERCASE
+    - single letter - b/B
+    - single name - var/VAR
+    - lower_with_underscores/UPPER_WITH_UNDERSCORES
+1. mixed cases
+    - CamelCase - capitalize all the starting letters
+    - mixedCase - initial lowercase character
+
+----
+
+# Introspective functions 
+
+- Introspection is the ability to interrogate objects at runtime.
+- Everything in python is an object. 
+- Every object in Python may have attributes and methods. 
+- By using introspection, we can dynamically examine python objects. 
+
+
+```python
+type(None) # This function returns the type of an object.
+dir(None) # This function return list of methods and attributes associated with that object.
+id(None) # This function returns a special id of an object representing a specific location in memory.
+help(None) # This function is used to find what other functions do
+print(None) # prints the specified message to the screen, or other standard output devices.
+```
+
+
+----
+
+# Variables are just skins to a place in memory
+
+- The id of a variable returns a unique integer representing the identity of an object
+- This is also the address of the object in memory
+- When you change the variable, you are creating a new object 
+
+
+```python
+some_var = None
+print(id(some_var))
+some_var = 'some different data'
+print(id(some_var))
+```
+
+    4305322280
+    4397182208
+
+
+----
+
+# Basic Data Types
+
+
+```python
+print(f'{type(my_none_variable)}')
+print(f'{type(my_bool_variable)}')
+print(f'{type(my_int_variable)}')
+print(f'{type(my_float_variable)}')
+print(f'{type(my_complex_variable)}')
+print(f'{type(my_string_variable)}')
+```
+
+----
+# Basic Data Types (output)
+
+    <class 'NoneType'>
+    <class 'bool'>
+    <class 'int'>
+    <class 'float'>
+    <class 'complex'>
+    <class 'str'>
+
+----
+
+# Immutable vs Mutable Objects
+
+- In Python, there are two types of objects:
+    - Immutable objects can't be changed
+    - Mutable objects can be changed
+    
+- All the basic data types are immutable!!!  
+
+​----
+
+
+# Basic Arithmetic operations on integers (whole numbers)
+
+- As we already saw, Python has various "types" of numbers (numeric literals).
+- It also has many different operators. 
+- Arithmetic Operators perform various arithmetic calculations on these.
+- Run these following examples
+
+
+​----
+
+
+# Basic Arithmetic operations on integers (whole numbers)
+
+```python
+x,y = 5,4
+print(f"+ Addition :\t{x}+{y}={x+y}") 
+print(f"- Substraction :\t {x}-{y}={x-y}")
+print(f"* Multiplication :\t {x}*{y}={x*y}")
+print(f"/ Division :\t {x}/{y}={x/y}")
+print(f"% Modulus :\t {x}%{y}={x%y}")
+print(f"** Exponent :\t {x}^{y}={x**y}")
+print(f"// Floor Division :\t {x}/{y}={x//y}")
+print(f"() Use parentheses to specify order:\t {x}*({x}/{y}-{y})={x*(x/y-y)}")
+```
+
+​----
+
+# Basic Arithmetic operations on integers (output)
+
+    + Addition :                             5+4=9
+    - Substraction :                         5-4=1
+    * Multiplication :                       5*4=20
+    / Division :                             5/4=1.25
+    % Modulus :                              5%4=1
+    ** Exponent :                            5^4=625
+    // Floor Division :                      5/4=1
+    () Use parentheses to specify order:     5*(5/4-4)=-13.75
+
+​----
+
+# Basic Arithmetic operations on floats 
+
+- Floating point numbers have a decimal point and/or use an exponential (e) to define the number.
+
+
+```python
+x,y,z = 5e-3,2e2,0.56e4
+print(x);print(y);print(z);
+```
+
+    0.005
+    200.0
+    5600.0
+
+​----
+
+# Basic Arithmetic operations on complex numbers
+
+- Python complex numbers are of type complex.
+- Every complex number contains one real part and one imaginary part.
+
+
+```python
+x,y = 1+1j, 2-2j
+print(f"Real Parts (x={x.real},y={y.real}) | Imaginary Parts = (x={x.imag},y={y.imag})") 
+```
+
+    Real Parts (x=1.0,y=2.0) | Imaginary Parts = (x=1.0,y=-2.0)
+
+​----
+
+# Basic Arithmetic operations on strings (SAY WHAT!?)
+
+- In general, you cannot perform mathematical operations on strings, even if the strings look like numbers.
+- However, some arithmetic operators do work on strings and open up some nice options. Let's explore this. 
+
+
+```python
+x,y = 'cere','bellum'
+print(f"+ Addition :                             {x}+{y}={x+y}") 
+print(f"* Multiplication :                       {x}*{3}={x*3}") 
+print(f"Combinations :                           {x}*{3}+{y}={x*3+y}")
+print(f"() Use parentheses to specify order:     {x}+(({x}+{y})*{2})={x+((x+y)*2)}")
+```
+
+​----
+
+# Basic Arithmetic operations on strings (output)
+
+- In general, you cannot perform mathematical operations on strings, even if the strings look like numbers.
+- However, some arithmetic operators do work on strings and open up some nice options. Let's explore this.
+
+    + Addition :                             cere+bellum=cerebellum
+    * Multiplication :                       cere*3=cerecerecere
+    Combinations :                           cere*3+bellum=cerecerecerebellum
+    () Use parentheses to specify order:     cere+((cere+bellum)*2)=cerecerebellumcerebellum
+
+
+​----
+
+# Basic Numeric Comparison Operators
+
+- Comparison operators are used to comparing two values
+
+```python
+x,y = 5,4
+print(f" isEqual(==)          {x}=={y} is {x==y}")
+print(f" notEqual(!=)         {x}!={y} is {x!=y}")
+print(f" isGreater(>)         {x}>{y}  is {x>y}")
+print(f" isSmaller(<)         {x}<{y}  is {x<y}")
+print(f" isGreaterOrEqual(>=) {x}>={y} is {x>=y}")
+print(f" isSmallerOrEqual(<=) {x}<={y} is {x<=y}")
+```
+
+​----
+
+# Basic Numeric Comparison Operators (output)
+
+
+     isEqual(==)          5==4 is False
+     notEqual(!=)         5!=4 is True
+     isGreater(>)         5>4  is True
+     isSmaller(<)         5<4  is False
+     isGreaterOrEqual(>=) 5>=4 is True
+     isSmallerOrEqual(<=) 5<=4 is False
+
+
+----
+
+# Basic Numeric Assignment Operators
+
+- Assignment operators are used to assigning values to variables
+
+```python
+y = 3
+x = y ;print(f" x = y \t| y is assigned to x\t| x={y}")
+x = 19 ;print(f" x = y \t| 17 is assigned to x\t| x={x}")
+x += y ;print(f" x += y \t| y is added to x\t| x={x}")
+x -= y ;print(f" x -= y \t| y subtracted from x\t| x={x}")
+x *= y ;print(f" x *= y \t| x multiplied by y\t| x={x}")
+x /= y ;print(f" x /= y \t| x divided by y\t| x={x}")
+x %= y ;print(f" x %= y \t| x%y is assigned to x\t| x={x}")
+x **= y;print(f" x **= y\t| x**y is Added to x\t| x={x}")
+x //= y;print(f" x //= y\t| x//y is assigned to x\t| x={x}")
+```
+
+----
+
+# Basic Numeric Assignment Operators (output)
+
+- Assignment operators are used to assigning values to variables
+
+```
+ x = y   | y is assigned to x       | x=3
+ x = y   | 17 is assigned to x      | x=19
+ x += y  | y is added to x          | x=22
+ x -= y  | y subtracted from x      | x=19
+ x *= y  | x multiplied by y        | x=57
+ x /= y  | x divided by y           | x=19.0
+ x %= y  | x%y is assigned to x     | x=1.0
+ x **= y | x**y is Added to x       | x=1.0
+ x //= y | x//y is assigned to x    | x=0.0
+```
+
+
+----
+# Basic Logical Operators
+
+- Logical operators in Python are used for conditional statements are true or false. 
+- Logical operators in Python are **and**, **or** and **not**. 
+- For logical operators, the following condition are applied.
+- AND operator returns True if both the operands (right side and left side) are True
+- OR operator returns True if either of the operand (right side or left side) is True
+- NOT operator returns True if the operand is False
+
+
+----
+# Basic Logical Operators
+
+```python
+x,y = True,False
+print(f" When x is {x} and y is {y}")
+print(f" {'='*35}")
+print(f" x and y                 is {x and y}")
+print(f" x or y                  is {x or y}")
+print(f" not x and y             is {not x or y}")
+print(f" x and not y             is {x or not y}")
+print(f" {'~'*35}\n")
+x,y = 10,20
+print(f" When x is {x} and y is {y}")
+print(f" {'='*35}")
+print(f" x<y<y**2 and not y<x    is {x<y<y**2 and not y<x }")
+```
+
+
+
+----
+# Basic Logical Operators (output)
+
+
+     When x is True and y is False
+     ===================================
+     x and y                 is False
+     x or y                  is True
+     not x and y             is False
+     x and not y             is True
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+     When x is 10 and y is 20
+     ===================================
+     x<y<y**2 and not y<x    is True
+
+
+----
+# Basic Comparison operations on strings
+
+```python
+x,y = 'small','small'
+print(f" isEqual(==)          {x}=={y}={x==y}")
+print(f" notEqual(!=)         {x.upper()}!={y}={x.upper()!=y}")
+x,y = 'small','SMALL'
+print(f" {'='*40}")
+print(f" isEqual(==)          {x}=={y}={x==y}") 
+print(f" notEqual(!=)         {x}!={y.lower()}={x!=y.lower()}")
+```
+
+
+     isEqual(==)          small==small=True
+     notEqual(!=)         SMALL!=small=True
+     ========================================
+     isEqual(==)          small==SMALL=False
+     notEqual(!=)         small!=small=False
+
+
+----
+# Lets expand on strings 
+
+- Every string in Python is an object containing a sequence of characters. 
+- Each letter in a string has a distinct index corresponding to its specific order. 
+- Indices start in 0 and end in the length of the string-1
+- Spaces count as a character
+
+
+```python
+a = 'This is some string'
+```
+----
+
+# Single or double quotes?
+- Both single and double quotes can be used to define a string
+
+
+```python
+a,b = 'test', "test"
+print(f" Both tests are the same {a}=={b}={a==b}") 
+```
+
+    Both tests are the same test==test=True
+
+----
+# Single or double quotes?
+
+- This simplifies using either single or double quotes within a phrase 
+
+
+```python
+some_phrash = "Did you know that 'cultivar' is synonymous with 'clone'?"
+same_phrash = 'Did you know that "cultivar" is synonymous with "clone"?'
+print(f"British style\t: {some_phrash}")
+print(f"American style \t: {same_phrash}")
+
+```
+
+    British style    : Did you know that 'cultivar' is synonymous with 'clone'?
+    American style     : Did you know that "cultivar" is synonymous with "clone"?
+
+----
+# But what do we do when we want both?
+
+- Try to solve a way to store the following in a string
+- Do this before going to the next slide (which has the solution)
+
+>" 'The Green Hills of Earth' is one of my favourite stories," my teacher said.
+
+----
+# Luckily we have Escape Sequences in Python 
+
+- An escape sequence is defined using a backslash (\\) followed by any protected word.
+
+
+```python
+mixed_quote_phrash = '" \'The Green Hills of Earth\' is one of my favourite stories," my teacher said.'
+print(f"We can escape the single: \n{mixed_quote_phrash}")
+mixed_quote_phrash = "\" 'The Green Hills of Earth' is one of my favourite stories,\" my teacher said."
+print(f"Or the double: \n{mixed_quote_phrash}")
+```
+
+```
+We can escape the single: 
+"'The Green Hills of Earth' is one of my favourite stories," my teacher said.
+Or the double: 
+"'The Green Hills of Earth' is one of my favourite stories," my teacher said.
+```
+
+----
+# Escaping the Escape Sequences
+
+- If we need to add a backslash, we will simply use a double \\\ 
+- This will print out only one backslash
+
+
+----
+# useful Escape sequence characters (ESC)
+
+| ESC | Description |
+| :-- | :-- | 
+| \\\ | Prints Backslash | 
+| \\'  | Prints single-quote | 
+| \\"  | Prints double quote |
+| \\n  | Print line break | 
+| \\t  | print tab | 
+| \\uxxxx | Use 16-bit hex Unicode char | 
+| \\Uxxxxxxxx | Use 32-bit hex Unicode char | 
+| | |
+
+----
+# Everything in Python is an object
+
+- String class is an object as well.
+- Every time you create a string, it comes with many functions
+- After initializing a string object, all the possible functions can be accessed using dot notation
+
+```python
+print((" This is center ").center(40,'~'))
+print((" This is upper ").upper())
+print((" and this is chaining of both ").upper().center(40,'~'))
+print((" can be also useful ").title().center(40,'~'))
+```
+
+    ~~~~~~~~~~~~ This is center ~~~~~~~~~~~~
+     THIS IS UPPER 
+    ~~~~~ AND THIS IS CHAINING OF BOTH ~~~~~
+    ~~~~~~~~~~ Can Be Also Useful ~~~~~~~~~~
+
+----
+# More than style 
+
+- By definition, we would expect string functions to be associated with style
+- But there are also more general ones 
+- The string count() method returns the number of occurrences of a substring in the given string.
+- The find() method returns the index of the first occurrence of the substring (if found). If not found, it returns -1.
+
+
+
+```python
+print((" This is center ").count("is"))
+print(("some_file_name.zip").endswith("zip"))
+print(("some times we want to find where some word is").find("we"))
+
+```
+
+    2
+    True
+    11
+
+----
+# Let's focus on indexing for a moment 
+
+- Every string is a sequence of characters 
+- This is an excellent opportunity to cover how indexing works
+- The len() function will count all of the string characters (including spaces and punctuation)
+
+
+
+```python
+some_string = "some times we want to find where some word is"
+print(len(some_string))
+```
+
+    45
+
+----
+# So how can we navigate this sequence? 
+
+- To go to a specific index in a string, we use brackets \[\]
+- Remember that indexing starts at 0 for Python
+
+
+```python
+print(f"Access start index using [0]\t\t\t= {some_string[0].upper()} \n\
+Access end index using  [-1] \t\t\t= {some_string[-1].upper()} \n\
+Use the colon [start:end] to perform slicing \t= {some_string[38:40].upper()} \n\
+Get everything UPTO [:end] \t\t\t= {some_string[:4].upper()} \n\
+Get everything FROM TO [start:end-2] \t\t= {some_string[38:-2].upper()}" )
+
+```
+
+    Access start index using [0]            = S 
+    Access end index using  [-1]             = S 
+    Use the colon [start:end] to perform slicing     = WO 
+    Get everything UPTO [:end]             = SOME 
+    Get everything FROM TO [start:end-2]         = WORD 
+
+----
+# Slicing and skipping 
+
+- It is possible to use index and slice notation to get a sequence using a step size
+
+
+```python
+print(f"Print everything [:]\t\t= {some_string[:].upper()} \n\
+Print every second word [::2] \t= {some_string[::2].upper()} \n\
+Everything in reverse [::-1]\t= {some_string[::-1].upper()}" )
+```
+```python
+    Print everything [:]        = SOME TIMES WE WANT TO FIND WHERE SOME WORD IS 
+    Print every second word [::2]     = SM IE EWN OFN HR OEWR S 
+    Everything in reverse [::-1]    = SI DROW EMOS EREHW DNIF OT TNAW EW SEMIT EMOS
+```
+
+----
+# Strings are immutable
+
+- Remember, immutable means that you cannot change the object itself
+- This means that we cannot change a single letter in the string 
+- If you run this, you will get an error 
+
+```python
+some_string[4]='a'
+```
+----
+
+# We can also use split to break a long string
+
+- The split() and rsplit() methods splits string from the left or right at the specified separator and returns a list of strings.
+
+
+```python
+print("some times we would like to split long text".split())
+print("It,can,use any,kind of, delimiter".split(','))
+print("You,can,also,define,how,many,splits".split(',',3))
+print("As,well,as,direction,of,splits".rsplit(',',2))
+```
+
+```
+['some', 'times', 'we', 'would', 'like', 'to', 'split', 'long', 'text']
+['It', 'can', 'use any', 'kind of', ' delimiter']
+['You', 'can', 'also', 'define,how,many,splits']
+['As,well,as,direction', 'of', 'splits']
+```
+
+----
+# Strings can be concatenated 
+
+- We already saw that we could combine different strings together 
+- But this is not very easy to understand
+
+
+```python
+a,b,c,d = 'some','times', 'we', 'would'
+print(a+b+d*2+c)
+```
+
+    sometimeswouldwouldwe
+
+
+- For those paying attention to the code, you can see that I am constantly combining strings with variables 
+- This operation is called string formatting, and it is useful to know the different kinds it can be used 
+
+----
+
+# String Formatting
+
+- From python 3.6 string formatting is done using f-strings, these simplify this process and make the code easier to understand  
+- For those interested (and for completeness) [here is a link explaining the older methods](https://realpython.com/python-string-formatting/)
+
+
+----
+# f-strings examples
+
+
+```python
+some_str = "Malarkey"
+print(f"Do you know what {some_str} means?\n") 
+# using !r will keep the string
+print(f"{some_str!r} refers to talk that is particularly foolish") 
+```
+
+----
+# f-strings Float formatting 
+
+- Float formatting is used like this "result: {value:{total width in char}.{total number of digits}}"
+
+
+```python
+some_number = 45.35678
+print(f"My models accuracy is:{some_number:{6}.{4}}")
+```
+```
+My model's accuracy is: 45.36
+```
+----
+# f-strings zero padding
+
+- Some times (more often then you would think) you need to have zeros padded numbers
+
+
+```python
+print(f'length = {5:07}')
+```
+```
+length = 0000005
+```
+
+----
+
+# f-strings dates 
+
+- Dates are also simpler to define (however I am cheating here as I am using some Python package)
+
+
+```python
+from datetime import date
+some_date = date(year=2020, month=5, day=26)
+print(f"{some_date:%B %d, %Y}") 
+```
+```
+May 26, 2020
+```
+----
+
+# f-strings time
+
+- And time
+
+
+```python
+from datetime import time
+some_time = time(hour=13, minute=30,second=10)
+print(f"{some_time:%H:%M:%S}") 
+```
+```
+13:30:10
+```
+----
+# Finally f-string can do numeric notations
+
+- We often would like to use different notations in different occasions
+
+
+```python
+some_number = 240
+
+print(f"{some_number:x}") # hexadecimal
+print(f"{some_number:o}") # octal
+print(f"{some_number:e}") # scientific
+```
+
+----
+# Summary Basic python 
+
+- So in this section we covered most of the basic data types Python has 
+- We learned how to use them 
+- We also covered how to combine them using various operators 
+- In the next section we will cover Data Structures
+- So go and have a well deserved break
+
+-s-
+<!-- .slide: id="Data_Structures"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Data Structures</p>
+
+----
+
+# Lists
+
+- Lists are the basic sequence building block in Python.
+- They are mutable, therefore lists elements can be changed!
+- Lists are constructed with brackets \[\]
+- Every element in the list is separated by commas
+----
+# Constructing lists
+
+- Lists can hold any basic data type
+- They can also hold mixed types
+
+
+```python
+empty_list = []
+print(empty_list)
+some_list = ['frontal', 'parietal', 'temporal', 'occipital']
+print(some_list)
+another_list = [1, 2, 3, 4]
+print(another_list)
+mixed_list = ['frontal', 2.1, 0.112e-2, 2-2j,True,'a']
+print(mixed_list)
+```
+
+```
+[]
+['frontal', 'parietal', 'temporal', 'occipital']
+[1, 2, 3, 4]
+['frontal', 2.1, 0.00112, (2-2j), True, 'a']
+```
+
+----
+# lists have length
+
+
+```python
+print(f"some_list length is \t:{len(some_list)}")
+print(f"another_list length is \t:{len(another_list)}")
+print(f"mixed_list length is \t:{len(mixed_list)}")  
+```
+
+----
+
+# lists have indices
+
+- Indexing and slicing works just like in strings
+
+
+```python
+print(f"Access start index using [0]\t\t\t= {mixed_list[0]} \n\
+Access end index using  [-1] \t\t\t= {mixed_list[-1]} \n\
+Use the colon [start:end] to perform slicing \t= {mixed_list[1:3]} \n\
+Get everything UPTO [:end] \t\t\t= {mixed_list[:4]} \n\
+Get everything FROM [start:] \t\t\t= {mixed_list[3:]} " )
+```
+
+    Access start index using [0]            = frontal 
+    Access end index using  [-1]             = a 
+    Use the colon [start:end] to perform slicing     = [2.1, 0.00112] 
+    Get everything UPTO [:end]             = ['frontal', 2.1, 0.00112, (2-2j)] 
+    Get everything FROM [start:]             = [(2-2j), True, 'a'] 
+
+----
+
+# lists have indices
+
+- Indexing and slicing works just like in strings
+
+
+```python
+print(f"Get everything [:]\t\t= {mixed_list[:]} \n\
+Get every second element [::2] \t= {mixed_list[::2]} \n\
+Get list in reverse [::-1]\t= {mixed_list[::-1]}" )
+```
+
+
+```
+Get everything [:] = ['frontal', 2.1, 0.00112, (2-2j), True, 'a']
+Get every second element [::2]     = ['frontal', 0.00112, True] 
+Get list in reverse [::-1]    = ['a', True, (2-2j), 0.00112, 2.1, 'frontal']
+```
+
+----
+# lists can be also be concatenated
+
+- You can combine two lists together 
+- And you can multiply lists using integers
+
+
+```python
+print(f"some_list + mixed_list length is \t:{len(some_list+mixed_list)}")
+print(some_list*2)
+
+```
+
+    some_list + mixed_list length is     :10
+    ['frontal', 'parietal', 'temporal', 'occipital', 'frontal', 'parietal', 'temporal', 'occipital']
+
+----
+# lists can be generated 
+
+
+```python
+letter_list = list('frontal')
+print(f"Int lists can be created using range\t:{list(range(5))}")
+print(f"This is quite flexible \t\t\t:{list(range(45,49))}")
+print(f"And allows even steps \t\t\t:{list(range(56,69,3))}")
+print(f"Also in reverse \t\t\t:{list(range(-56,-69,-3))}")
+print(f"String can create Letters lists \t:{letter_list}")
+```
+
+    Int lists can be created using range    :[0, 1, 2, 3, 4]
+    This is quite flexible             :[45, 46, 47, 48]
+    And allows even steps             :[56, 59, 62, 65, 68]
+    Also in reverse             :[-56, -59, -62, -65, -68]
+    String can create Letters lists     :['f', 'r', 'o', 'n', 't', 'a', 'l']
+
+----
+# Items can be Appended or Inserted to lists
+
+
+```python
+letter_list = list('frontal')
+letter_list.insert(5, 'o');
+print(f"Insert a number at index\t:{letter_list}")
+letter_list.pop(6);letter_list.pop(-1)
+print(f"remove a letter at index\t:{letter_list}")
+letter_list.extend('parietal')
+print(f"remove a letter at index\t:{letter_list}")
+```
+
+    Insert a number at index    :['f', 'r', 'o', 'n', 't', 'o', 'a', 'l']
+    remove a letter at index    :['f', 'r', 'o', 'n', 't', 'o']
+    remove a letter at index    :['f', 'r', 'o', 'n', 't', 'o', 'p', 'a', 'r', 'i', 'e', 't', 'a', 'l']
+
+----
+# lists can be sorted or reversed
+
+
+```python
+letter_list.reverse()
+print(f"In both directions\t:{letter_list}")
+letter_list.sort()
+print(f"lists can be sorted\t:{letter_list}")
+letter_list.sort(reverse=True)
+print(f"In both directions\t:{letter_list}")
+
+```
+
+    In both directions    :['l', 'a', 't', 'e', 'i', 'r', 'a', 'p', 'o', 't', 'n', 'o', 'r', 'f']
+    lists can be sorted    :['a', 'a', 'e', 'f', 'i', 'l', 'n', 'o', 'o', 'p', 'r', 'r', 't', 't']
+    In both directions    :['t', 't', 'r', 'r', 'p', 'o', 'o', 'n', 'l', 'i', 'f', 'e', 'a', 'a']
+
+----
+# lists items can be removed
+
+
+```python
+letter_list[2:-1] = []
+letter_list
+```
+
+
+
+
+    ['f', 'r', 'l']
+
+----
+
+# Changed or added
+
+
+```python
+letter_list[2] = 'T'
+print(f"We can cahnge an item\t:{letter_list}")
+
+```
+
+
+
+
+    ['f', 'r', 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+----
+
+# List Comprehensions
+
+- list comprehensions is an efficient way to create complex lists 
+- However, to fully understand this method you need to understand how for loops work in Python
+- Therefore, we will revisit this concept next week after covering some [Programming Fundamentals]("#/Programming_Fundamentals") this week 
+
+----
+
+# Nested lists 
+- Python data structures support a nested hierarchy
+- In other words, we can have a data structure within a data structure
+- let's create a 5 x 10 matrix of zeros
+
+
+```python
+nested_list = list([[0]*5+[1]*5]*5)
+nested_list
+```
+
+
+
+
+    [[0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]]
+
+----
+
+# What is the problem with this method?
+- It is important to remember that performing concatenation and multiplication over lists works at the pointer level
+- In other words, we just stacked the same object five times 
+- As a result, changing one element in the matrix will affect all the column
+- Solving this is not hard; however, it involves List Comprehensions
+- Furthermore, this is simpler to achieve with Numpy that was built for these operations
+
+
+```python
+nested_list[1][4]= 5
+nested_list
+```
+
+
+
+
+    [[0, 0, 0, 0, 5, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 5, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 5, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 5, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 5, 1, 1, 1, 1, 1]]
+
+----
+
+# Nested index
+- Indexing needs to take into account the hierarchy
+- Getting the first level is easy, i.e. rows
+- It is also simple to extract, change or manipulate parts of a row
+- However, for real matrix manipulation, we either need List Comprehensions 
+- Alternatively, we can use NumPy which is a specific package to perform various numeric manipulations 
+
+
+```python
+print(f"Extract second row \t:{nested_list[1]}")
+print(f"Extract central elements \t:{nested_list[1][1:-1]}")
+```
+
+    Extract second row     :[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    Extract central elements     :[0, 0, 0, 0, 0, 0, 0, 0]
+
+----
+
+
+
+# Tuples
+
+- In mathematics, a tuple is a finite ordered list of elements
+- And in Python tuples can be viewed as immutable lists 
+- In other words, once a tuple is constructed its elements can't change
+
+----
+# creating Tuples
+
+- Use parentheses () to construct an empty tuple
+- And place items separated by commas to fill it
+
+
+
+```python
+empty_tuple = ()
+print(empty_tuple)
+some_tuple = ('frontal', 'parietal', 'temporal', 'occipital')
+print(some_tuple)
+another_tuple = (1, 2, 3, 4)
+print(another_tuple)
+mixed_tuple = ('frontal', 2.1, 0.112e-2, 2-2j,True,'a','a','c')
+print(mixed_tuple)
+```
+
+    ()
+    ('frontal', 'parietal', 'temporal', 'occipital')
+    (1, 2, 3, 4)
+    ('frontal', 2.1, 0.00112, (2-2j), True, 'a', 'a', 'c')
+
+----
+# Tuples also have a length
+
+
+```python
+print(f"some_tuple length is \t:{len(some_tuple)}")
+print(f"another_tuple length is \t:{len(another_tuple)}")
+print(f"mixed_tuple length is \t:{len(mixed_tuple)}")  
+```
+
+----
+# And we can index the tuple exactly like a list
+
+
+```python
+print(f"Access start index using [0]\t\t\t= {mixed_tuple[0]} \n\
+Access end index using  [-1] \t\t\t= {mixed_tuple[-1]} \n\
+Use the colon [start:end] to perform slicing \t= {mixed_tuple[1:3]} \n\
+Get everything UPTO [:end] \t\t\t= {mixed_tuple[:4]} \n\
+Get everything FROM [start:] \t\t\t= {mixed_tuple[3:]} " )
+```
+
+    Access start index using [0]            = frontal 
+    Access end index using  [-1]             = a 
+    Use the colon [start:end] to perform slicing     = (2.1, 0.00112) 
+    Get everything UPTO [:end]             = ('frontal', 2.1, 0.00112, (2-2j)) 
+    Get everything FROM [start:]             = ((2-2j), True, 'a') 
+    Get everything [:]        = ('frontal', 2.1, 0.00112, (2-2j), True, 'a') 
+    Get every second element [::2]     = ('frontal', 0.00112, True) 
+    Get list in reverse [::-1]    = ('a', True, (2-2j), 0.00112, 2.1, 'frontal')
+
+----
+# And the same tricks
+
+
+```python
+print(f"Get everything [:]\t\t= {mixed_tuple[:]} \n\
+Get every second element [::2] \t= {mixed_tuple[::2]} \n\
+Get tuple in reverse [::-1]\t= {mixed_tuple[::-1]}" )
+```
+
+    Get everything [:]        = ('frontal', 2.1, 0.00112, (2-2j), True, 'a') 
+    Get every second element [::2]     = ('frontal', 0.00112, True) 
+    Get tuple in reverse [::-1]    = ('a', True, (2-2j), 0.00112, 2.1, 'frontal')
+
+----
+# Tuple has only two basic Methods
+
+- Use .index to get the index that matches the first occurrence of an item
+- What happens if a match isn't found?
+
+
+```python
+print(f"Where is 'a'? \t\tindex= {mixed_tuple.index('a')}")
+print(f"Where is 'l'? \t\tindex= {mixed_tuple.index('l')}")
+```
+
+----
+
+# Tuple has only two basic Methods
+
+- Use .count to get the number of items in a tuple
+- What happens if an item is not in the tuple?
+
+
+```python
+print(f"How many 'a'? \t\t n = {mixed_tuple.count('a')}")
+print(f"How many 'l'? \t\t n = {mixed_tuple.count('l')}")
+```
+
+    How many 'a'?          n = 2
+    How many 'l'?          n = 0
+
+----
+
+# We can combine tuples 
+
+
+```python
+combined_tuple = some_tuple + mixed_tuple
+print(f"How many items are in combined_tuple \tn= {len(combined_tuple)}")
+print(f"{combined_tuple}")
+multiplied_tuple =some_tuple*2 
+print(f"How many items are in multiplied_tuple \tn= {len(multiplied_tuple)}")
+print(f"{multiplied_tuple}")
+```
+
+    How many items are in combined_tuple     n= 12
+    ('frontal', 'parietal', 'temporal', 'occipital', 'frontal', 2.1, 0.00112, (2-2j), True, 'a', 'a', 'c')
+    How many items are in multiplied_tuple     n= 8
+    ('frontal', 'parietal', 'temporal', 'occipital', 'frontal', 'parietal', 'temporal', 'occipital')
+
+----
+
+# what we can't do is change items 
+
+- Tuples are immutable!!!
+
+
+```python
+mixed_tuple[2]= 'a'
+mixed_tuple[2]=[] 
+```
+
+----
+# What are Dictionaries?
+
+- A dictionary is a data structure that maps keys to values
+- Dictionaries are unordered (i.e. no index)
+- Dictionaries rely on a data structure called hash tables
+- If you don't know what a [hash table](https://www.data-structures-in-practice.com/hash-tables/) and you are dying to find out 
+
+----
+# Important things about Dictionaries
+
+- Each item in a dictionary has a key and a value
+- The key acts as the value index, so no two values can have the same key (i.e. keys are unique).
+- Keys must also be hashable (i.e. can be used as a key by a hash table)
+- Any built-in immutable data type is hashable 
+- immutable data types are int, float, complex, bool, str, tuple, Unicode and even None
+
+----
+
+# creating a dictionary
+
+- We create an empty dictionary using braces {}
+- We can use any valid key
+- And we can use any kind of data as a value
+
+
+
+```python
+empty_dict = {}
+some_dict = {"SBC":"subcortical","DMN":"default mode network","ECN":"executive control", "ATT":"attentional"}
+mixed_dict = {1:{"SBC":"subcortical"},2:["DMN","default mode network"], 3:("ECN","executive control")}
+```
+----
+
+# nesting Dictionaries
+- We can create complex nested hierarchies
+- And extract their values
+
+
+```python
+nested_dict = {"1":{"1.1":{"1.1.1":"Tada!!!"}}}
+nested_dict["1"]["1.1"]["1.1.1"]
+```
+
+
+
+
+    'Tada!!!'
+
+----
+
+# and as you guessed Dictionaries have some basic methods
+
+
+```python
+print(f"lobes keys :{lobes.keys()}") 
+print(f"lobes values :{lobes.values()}") 
+print(f"lobes items :{lobes.items()}")
+print(f"lobes length :{len(lobes)}")
+```
+
+    lobes keys :dict_keys([1, 2, 3, 4])
+    lobes values :dict_values(['frontal', 'parietal', 'temporal', 'occipital'])
+    lobes items :dict_items([(1, 'frontal'), (2, 'parietal'), (3, 'temporal'), (4, 'occipital')])
+    lobes length :4
+
+----
+# Assigning a dictionary to a variable passes a reference
+- That means changes in the source will affect all pointers
+- To break this chain, we use the copy function 
+
+
+```python
+same_lobes = lobes;lobes[1]= 0
+print(f"lobes length :{same_lobes.values()}")
+same_lobes = lobes.copy();lobes[1]= 5
+print(f"lobes length :{same_lobes.values()}")
+```
+
+    lobes length :dict_values([0, 'parietal', 'temporal', 'occipital'])
+    lobes length :dict_values([0, 'parietal', 'temporal', 'occipital'])
+----
+
+# Sets
+
+- Sets are a special data structure that holds **unique** unordered elements
+- In a way, sets are similar to keys in the dictionary 
+- Unsurprisingly, sets can only take hashable data types
+- Sets can be extremely powerful if used right
+
+----
+# What are sets used for 
+
+- The list is endless,
+- From our narrow perspective, we will use them in the context of set theory
+    - This means finding intersections between sets
+    - Getting the union of several sets 
+    - Or even the differences of several sets 
+
+----
+# creating sets 
+
+- Sets are created using a list 
+
+
+```python
+empty_set = set()
+print(f'This is an empty {type(empty_set)}')
+some_set = {'frontal', 'parietal', 'temporal', 'occipital'}
+print(f'This is also a set {type(some_set)}')
+another_set = set([1, 2, 3, 4])
+print(f'We can use lists as constructor for sets {type(another_set)}')
+mixed_set = set(['frontal', 2,'c'])
+print(f'And we can used mixed sets {type(mixed_set)}')
+```
+
+    This is an empty <class 'set'>
+    This is also a set <class 'set'>
+    We can use lists as a constructor for sets <class 'set'>
+    And we can use mixed sets <class 'set'>
+
+----
+# sets have some basic methods
+
+
+
+```python
+print(f'Sets have length {len(mixed_set)}')
+mixed_set.remove('c');print(f'Elements can be removed {mixed_set}')
+print(f'And elements can be removed from a set {mixed_set.pop()}')
+print(f'Until it is empty  {mixed_set.pop()}')
+mixed_set.add('c');print(f'And then added {mixed_set}')
+```
+----
+# sets also have unique methods
+
+- Consider the following three numeric sets
+
+
+```python
+X = {1, 2, 5, 6, 7, 9}
+Y = {1, 3, 4, 5, 6, 8} 
+Z = {3, 5, 6, 7, 8, 10}
+```
+----
+# sets can be intersected
+
+- The intersection of two or more sets is the set of elements which are common to all sets. 
+- For example, the intersection of three sets X, Y and Z is the set of elements that are common to sets X, Y and Z. 
+- It is denoted by X ∩ Y ∩ Z
+
+
+
+```python
+XnY = X.intersection(Y) # X ∩ Y
+YnX = Y.intersection(X) # X ∩ Y
+print(f'Intersection is indifferent to order X ∩ Y == Y ∩ X = {XnY==YnX}')
+XnYnZ = X.intersection(Y,Z) # X ∩ Y ∩ Z
+print(f'Intersection function can take multiple sets X ∩ Y ∩ Z = {XnYnZ}')
+print(f'Intersection can be called using the & operator X & Y & Z = {X & Y & Z}')
+```
+```
+Intersection is indifferent to order X ∩ Y == Y ∩ X = True
+Intersection function can take multiple sets X ∩ Y ∩ Z = {5, 6}
+Intersection can be called using the & operator X & Y & Z = {5, 6}
+```
+----
+# Set Difference
+
+- The (set) difference (aka relative complement) between two sets X and Y is written X∖Y, 
+- This means the set that consists of the elements of X which are not elements of Y
+- The key take-home is that we are after the unique elements of X. 
+- Here order does matter!! 
+- Difference can be called using the difference function or using the - operator
+
+
+
+```python
+print(f'X\Y={X-Y} and is not equal to Y\X {Y-X}')
+print(f'The Difference of X\Y\Z={X.difference(Y,Z)}')
+```
+```
+X\Y={9, 2, 7} and is not equal to Y\X {8, 3, 4}
+The Difference of X\Y\Z={9, 2}
+```
+
+----
+
+# sets can also be united
+- The union of sets (denoted by ∪) is a set containing all unique elements of the united sets
+
+
+```python
+print(f'X ∪ Y={X.union(Y)} and is equal to Y ∪ X {Y.union(X)}')
+print(f'The union of all of them X ∪ Y ∪ Z={X.union(Y,Z)}')
+```
+
+----
+
+# Sets are a powerful tool 
+
+- But for this course, the above is enough
+
+----
+
+# Summary 
+ 
+- In this section we covered the different common data structures Python has  
+- We saw how Lists, Tuples, Dictionaries and Sets could be created 
+- We learned about some basic methods they have 
+- And we learned how to index and slice parts of them
+- You deserve a break before heading out to the last Programming section 
+
+
+-s-
+<!-- .slide: id="Programming_Fundamentals"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Programming Fundamentals</p>
+----
+
+# Programming Fundamentals
+
+- In this section, we will go over the things that make programming so powerful 
+- We will cover conditional statements 
+- For and while loops 
+- And finally, cover function creation 
+----
+
+# conditional Statements
+
+- Conditional statements in Python enables performing alternative actions based on some rule
+- Just like in Bash there are if, elif, else. 
+- The main difference is syntax and simplicity 
+----
+
+# if statements syntax format
+
+```python
+if rule1:
+    do something
+elif rule2:
+    do something different
+else: # if both are False
+    do another thing
+```    
+----
+
+# if example
+
+
+```python
+rule1 = True
+if rule1:
+    print(f'Rule 1 is {rule1}')
+
+rule1 = False    
+if not rule1:
+    print(f'Only if Rule 1 is {rule1} go here')
+else: 
+    print(f"Not Rule 1 is {not rule1}")
+    
+```
+
+```
+Rule 1 is True
+Only if Rule 1 is False
+```
+
+----
+# Multiple if Branches example 
+- try to play with different values and see what you get 
+
+
+```python
+rule1,rule2 = True,False    
+if not rule1:
+    print(f'Only if Rule 1 is {rule1} go here')
+elif not rule2:
+    print(f'Only if Rule 2 is {rule2} go here')
+else: 
+    print(f"Not Rule 1 is {not rule1}")
+```
+
+    Only if Rule 2 is False go here
+
+----
+# nested if example (see Indentation!!!)
+
+
+```python
+var1, var2 = 'CRTX','FPN'
+
+if var1 == 'CRTX':
+    if var2 == 'FPN':
+        print(f'The {var2} is part of the {var1}')
+```
+
+    The FPN is part of the CRTX
+
+----
+# ternary operator
+
+- Python supports ternary in a nice way 
+- If you don't know what ternary operator and want to dive in the rabbit hole check this [link](https://en.wikipedia.org/wiki/%3F:) 
+- However, for our cases, it is just a short form of conditional statements that takes the following form 
+
+```python
+one_line = 'yes' if expression==True else 'no'
+```
+
+
+```python
+age=13
+teen = True if age>=13 and age <=18 else False
+teen
+```
+
+
+
+
+    True
+
+
+----
+# Loops
+
+- A `for` loop goes through items that are in any iterable objects
+- Iterable objects include strings, lists, tuples, dictionaries, and sets
+- These are called object Iterators
+- An iterator is an object that allows us to go over a sequence one element at a time 
+----
+# Loops syntax 
+
+```python 
+for item in Iterator:
+    do_something 
+```    
+----
+# lets loop over a sequence 
+
+- Let's create a list of strings with zero-padded numbers as a suffix
+- For example week_01,...,week_10
+- Think on how you would do this using a for loop and a list 
+- Only after you have a plan move to the next slide 
+----
+# Week_nn loop example 
+- We can use the range function like before as a constructor to create a list of ints.
+
+
+```python
+iter = list(range(1,11))
+print(type(iter))
+for num in iter:
+    print(f'Week_{num:02}')
+```
+
+    <class 'list'>
+    Week_01
+    Week_02
+    Week_03
+    Week_04
+    Week_05
+    Week_06
+    Week_07
+    Week_08
+    Week_09
+    Week_10
+
+----
+# Week_nn loop using range
+- However, we can use the range function as an iterator without creating a list.
+
+
+```python
+print(type(range(1,11)))
+for num in range(1,11):
+    print(f'Week_{num:02}')
+```
+
+    <class 'range'>
+    Week_01
+    Week_02
+    Week_03
+    Week_04
+    Week_05
+    Week_06
+    Week_07
+    Week_08
+    Week_09
+    Week_10
+
+----
+# loop with a conditional statement 
+
+- We will now create a for loop that will print if a number is even or odd 
+- Again think how you would do this 
+- Then move forward to the next slide
+
+----
+# even odd for example 
+
+
+```python
+for num in range(1,11):
+    if not num % 2: 
+        print(f'{num} \tis even!')
+    else:     
+        print(f'{num} \tis odd!')
+```
+
+    1     is odd!
+    2     is even!
+    3     is odd!
+    4     is even!
+    5     is odd!
+    6     is even!
+    7     is odd!
+    8     is even!
+    9     is odd!
+    10     is even!
+----
+
+# for loop over a string
+
+- You might recall that in Python strings are a sequence of letters 
+- This means that we can loop over a string 
+- Try to come with a way to decide if a letter is upper or lower case 
+- When you have a solution move to the next slide
+----
+# for loop example UPPER or lower
+
+
+```python
+for letter in "abcdEFGH":
+    if letter.isupper():
+        print(f'{letter} \tis upper!')
+    else:
+        print(f'{letter} \tis lower!')
+```
+
+    a     is lower!
+    b     is lower!
+    c     is lower!
+    d     is lower!
+    E     is upper!
+    F     is upper!
+    G     is upper!
+    H     is upper!
+----
+
+# What about printing only letters and skipping spaces?
+
+- This time I want you to take one of the following quotes 
+    - "People say nothing is impossible, but I do nothing every day."
+    - "The best thing about the future is that it comes one day at a time."
+    - "The difference between stupidity and genius is that genius has its limits."
+- And using a for loop print **on the same line** the same sentence with underscores instead of spaces
+
+----
+# One possible solution for skipping spaces
+- So by default, the print command ends with a newline 
+- To change that we can pass a new value, in this case, an empty string
+
+
+```python
+quote =  "The difference between stupidity and genius is that genius has its limits."
+for letter in quote:
+    if letter.isspace():
+        print('_', end ="")
+    else:
+        print(letter, end ="")        
+```
+
+    The_difference_between_stupidity_and_genius_is_that_genius_has_its_limits.
+
+----
+# Print each word independently 
+
+- So in this last for loop over lists challenge I want you to choose a quote
+- And print each word independently 
+
+----
+# So this solution is simple if you remember `split()`
+
+
+
+```python
+quote = "The best thing about the future is that it comes one day at a time." .split()
+for word in quote:
+    print(word)
+
+```
+
+    The
+    best
+    thing
+    about
+    the
+    future
+    is
+    that
+    it
+    comes
+    one
+    day
+    at
+    a
+    time.
+
+----
+# Index challenge 
+
+- Here I want you to select a single word from the quote 
+- And print only for that word the relative index (for that word) before the letter 
+- An absolute index (in the quote) after it
+
+----
+# One possible solution Index challenge
+
+- Enumerate function extracts both index and value from a list
+
+
+
+```python
+word = "stupidity"
+start = quote.index(word)
+end = quote.index("and")
+for index,letter in enumerate(quote[start:end-1]):
+    print(f"{index}\t {letter.upper()}\t{index+start} ")
+```
+
+    0     S    23 
+    1     T    24 
+    2     U    25 
+    3     P    26 
+    4     I    27 
+    5     D    28 
+    6     I    29 
+    7     T    30 
+    8     Y    31 
+
+----
+# But what about dictionaries?  
+
+- As you would expect dictionaries items and values can be unpacked in a similar way
+- let's create a dictionary using one of the words of the quote to illustrate 
+
+
+
+```python
+words_dict={}
+for index,word in enumerate(quote):
+    words_dict[index]=word
+print(words_dict)
+```
+----
+# We can iterate over the values 
+
+
+```python
+for value in words_dict.values():
+    print(value,end='|')
+```
+
+    The|best|thing|about|the|future|is|that|it|comes|one|day|at|a|time.|
+
+
+----
+# Or the keys
+
+
+```python
+for key i words_dict.keys():
+    print(key,end='|')
+```
+
+    0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|
+
+----
+# Or both by **unpacking** the items to the keys and values
+
+
+```python
+for key,value in words_dict.items():
+    print(f'{key},{value}',end='|')
+```
+
+    0,The|1,best|2,thing|3,about|4,the|5,future|6,is|7,that|8,it|9,comes|10,one|11,day|12,at|13,a|14,time.|
+
+----
+# While loop 
+
+- While loop can be considered a mixture between a for loop and a conditional statement 
+- The statement will repeat until the condition is no longer true.
+- The general syntax of a while loop is:
+
+```
+while condition:
+    do until condition is false
+else:
+    do once
+```
+----
+# let's look at some examples
+
+
+```python
+counter = 20
+while counter>0:
+    print(f'{counter}',end='|')
+    counter -= 1
+```
+
+    20|19|18|17|16|15|14|13|12|11|10|9|8|7|6|5|4|3|2|1|
+
+----
+# while loops are dangerous 
+- Think what will happen if you type + instead of minus in the previous example
+- Unless we add another condition, this loop will run forever 
+- When this happens by mistake, you can always use the stop icon at the top to break the loop
+
+
+```python
+counter = 20
+while counter>0 and counter<50:
+    print(f'{counter}',end='|')
+    counter += 1
+else: 
+    print(f'\n\nDone !!')
+```
+
+    20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|
+    
+    Done !!
+
+----
+# break, continue, pass
+
+- We can use control statements in our loops to add additional functionality for various cases
+    - Break; Breaks out of the current loop.
+    - Continue; Goes to the top of current loop
+    - Pass: do nothing 
+
+----
+# Why do we need a control statement that does nothing? 
+
+- Python requires that code blocks (after if, except, def, class etc.) will not be empty.
+- Empty code blocks are however useful in a variety of different contexts
+- One main one is during implementation as a place holder to remember to deal with
+- let's test this with some silly function 
+
+
+
+```python
+for num in range(-5,5):
+    if not num % 2: # Even numbers are divided by 3
+        print(f'f({num})={num/3}')
+    elif num<0: # odd negative numberes become positive
+        print(f'f({num})={(num**2)**.5}')
+    else: # Otherwise, I still haven't decided 
+        pass
+```
+
+    f(-5)=5.0
+    f(-4)=-1.3333333333333333
+    f(-3)=3.0
+    f(-2)=-0.6666666666666666
+    f(-1)=1.0
+    f(0)=0.0
+    f(2)=0.6666666666666666
+    f(4)=1.3333333333333333
+----
+
+
+# Why do we need to know all of this 
+
+- We will use most of these options during the course 
+- so it is important that you have a resource where you can easily search for a term or idea 
+- Also if you took my suggestion and made a big markdown file with all of these, it will become your own cheat sheet
+- This will grow over the years and probably split into many different cheat sheets 
+- In fact this week main assignment is to create this cheat sheet
+
+-s-
+<!-- .slide: id="Functions"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Functions</p>
+----
+
+# Functions - Last topic for this week &#128555;
+
+- A function is a useful device that groups together a set of statements so they can be run more than once.
+- Functions are self-contained pieces of code that accomplish a specific task 
+- Functions are by far the most useful thing you will ever learn in this course 
+- My golden rule is that any piece of code that you use more than once should become a function
+----
+
+# DRY - Don't repeat yourself
+
+> "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system"
+>  Andy Hunt and Dave Thomas (The Pragmatic Programmer)
+
+- Think of all the times you copied and pasted a piece of code that did something 
+- Each time you did that what you should have done is create a function 
+----
+
+# Modularity
+
+- Functions allow complex processes to be broken up into smaller steps
+- We can start a project as a bunch of empty functions (that have pass inside :))
+- As we go along, we will fill these with functional bits 
+----
+
+# Function syntax 
+
+```python
+def function_name(param1,param2):
+    '''
+    Docstring comment that tells us what this function does
+    '''
+    # statement go here 
+    # Function returns something
+```    
+----
+
+# Function scope 
+
+- A function creates it's own environment that contains only:
+    - The parameter you pass the function  
+    - Any variable you define within the function
+
+
+```python
+def print_local_scope(param1):
+    '''
+    print_local_scope prints the local scope of the function
+    '''
+    str1 = '-- Inside print_local_scope'
+    int1 = 10
+    print(locals())
+
+print_local_scope(20)
+```
+----
+
+# Empty Functions
+
+- Empty functions are useful
+
+
+```python
+def get_data():
+    ''' 
+    get_data will go somewhere and get my data 
+    '''
+    pass
+
+
+```
+----
+
+# if only it was this simple... 
+- Some times we will begin a project creating high-level abstraction
+- Each of the nested functions can contain pass statement 
+- As it stands this function will run 
+- As we progress we can deal with each function independently 
+
+
+```python
+def my_amazing_pipeline(param1):
+    '''
+    my_amazing_pipeline does many complex things 
+    '''
+    get_data()
+    clean_data()
+    process_data()
+    make_sense_of_data()
+    make_crazy_models()    
+    make_amazing_figures()
+    make_great_tables()
+    write_paper()
+```
+
+    {'args': (20, 10, 3), 'str1': '-- Inside print_local_scope', 'int1': 10}
+
+----
+
+# Arbitrary Arguments, *args 
+- Adding a * before the parameter name in the function definition will convert passed arguments into a tuple.
+- Then each argument could be used by indexing into the tuple
+
+
+```python
+def some_function(name, *demo):  
+    print(f'{name} is',end=':')
+    for arg in demo:  
+        print(f'{arg}',end=',')
+some_function('Jhon','20 years old', 'A smoker', 'alcohlic', 'and unemployed' )              
+```
+
+    Jhon is:20 years old,A smoker,alcohlic,and unemployed,
+
+
+----
+
+# keyworded, variable-length argument list **kwargs
+- Adding a \*\* before the parameter name in the function definition will pass a keyworded, variable-length argument list
+
+
+
+```python
+def another_function(**demo):  
+    for key, value in demo.items(): 
+        print(f"key={key},value={value}")
+another_function(SBC="subcortical",DMN="default mode network",ECN="executive control", ATT="attentional")        
+```
+
+    key=SBC,value=subcortical
+    key=DMN,value=default mode network
+    key=ECN,value=executive control
+    key=ATT,value=attentional
+
+----
+
+# Default Parameter Value
+
+- any keyworded Parameter can have a Default value
+
+
+```python
+def my_amazing_plot(font_size=12,font_units="points"):  
+    print(locals())
+my_amazing_plot()
+```
+
+    {'font_size': 12, 'font_units': 'points'}
+
+----
+
+# Return Values
+- To let a function return a value, use the return statement:
+
+
+```python
+def add_squared(args1):  
+    total=0
+    for num in args1:
+        print(f'{total}+{num**2}={total+num**2}')
+        total +=num**2
+    return  total
+add_squared(range(10))
+```
+
+    0+0=0
+    0+1=1
+    1+4=5
+    5+9=14
+    14+16=30
+    30+25=55
+    55+36=91
+    91+49=140
+    140+64=204
+    204+81=285
+
+
+
+
+
+    285
+
+
+----
+
+
+# Summary
+
+- You should now have a basic understanding of what functions are and how to write your own.
+- This week was all about going over the basics and making sure you know what they are 
+- Next week we will complete this overview when we cover some crucial bits as well as modules 
+
+
+
+
+
+
+	
+----
+
+<h1 style="text-align: center;font-size: 4.5vmin"> That's it for this Jupyter boot camp week</h1>
+<div class="centered_image">
+    <img src="http://phdcomics.com/comics/archive/phd0107.gif">
+</div>
+
+<h1 style="text-align: center;font-size: 4.5vmin">  Next week will be covering <br>
+data-science packages and some minor things in Python we left out </h1>
+
+</script>
+</section>
+</div>
+</div>
+
+<script src="js/reveal.js"></script>
+<script src="js/config.js"></script>
+<script>
+window.onload=function(){function a(a,b){var c=/^(?:file):/,d=new
+XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var
+b,c=document.getElementsByTagName("*");for(b in
+c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"))};
+</script>	
+</body>
+
+</html>
