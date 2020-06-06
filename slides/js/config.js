@@ -48,6 +48,7 @@ Reveal.initialize({
         { src: 'plugin/highlight/highlight.js', async: true },
         { src: 'plugin/math/math.js', async: true },
         { src: 'plugin/zoom-js/zoom.js'},
+        { src: 'plugin/print-pdf/print-pdf.js'},
         { src: 'plugin/search/search.js', async: true },
         { src: 'plugin/menu/menu.js'}
     ]
