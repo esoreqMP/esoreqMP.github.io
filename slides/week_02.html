@@ -1119,14 +1119,6 @@ ax2.imshow(array_3d_tall)
 
 
 
-    <matplotlib.image.AxesImage at 0x2aabd89dba90>
-
-
-
-
-![png](output_112_1.png)
-
-
 -VV-
 
 # Creating Arrays using numpy Built-in Methods
@@ -1187,7 +1179,6 @@ ax3.imshow(full_3d_array)
 
 
 -VV-
-
 # Creating Arrays using numpy Built-in Methods
 
 - And even arrays with various randome number generators (e.g. rand, randint, randn)
@@ -1195,13 +1186,13 @@ ax3.imshow(full_3d_array)
 
 
 ```python
-from matplotlib import pyplot as plt 
+from matplotlib import pyplot as plt
 # we import matplotlib module pyplot and name it plt
-uniform_noise = np.random.rand(10,10)# 
-normal_noise = np.random.randn(10,10)# 
-discrete_noise = np.random.randint(0,3,size=(10,10))# 
+uniform_noise = np.random.rand(10,10)#
+normal_noise = np.random.randn(10,10)#
+discrete_noise = np.random.randint(0,3,size=(10,10))#
 
-# we can go on and on 
+# we can go on and on
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
 
 ax1.imshow(uniform_noise)
@@ -1209,51 +1200,273 @@ ax2.imshow(normal_noise)
 ax3.imshow(discrete_noise)
 ```
 
-
-
-
-
-
-
-
-
-
 -VV-
 
-# Creating Arrays using numpy Built-in Methods
+# Inspecting array Properties
 
-- We can create arrays of zeros, ones, identity matrix (i.e. ones in the lead diagonal)
-- We can also create an array with predefined values using full
-- And even arrays with various randome number generators (e.g. rand, randint, randn)
+- In Numpy array have properties
+- We already saw the shape property that returns a tuple describing the length of each dimension
+- We also saw Numpy has many different data types
+- The last property I want to cover is Size which simple returns the number of dimensions the array has
+
 
 
 
 ```python
-from matplotlib import pyplot as plt 
-# we import matplotlib module pyplot and name it plt
-zeros_vector = np.zeros(10)
-zeros_2d_array = np.zeros((10,10))
-zeros_3d__int8_array = np.zeros((10,10,10),dtype="int8")
-zeros_3d_float64_array = np.zeros([10,10,10],dtype="float64")
-# we can go on and on 
-print(zeros_3d__int8_array.dtype)
-print(zeros_3d_float64_array.dtype)
+arr = np.array((10,20,30))
+print(arr.size)
+```
+
+-VV-
+
+# Indexing in Numpy vectors
+
+- Indexing in Numpy is far simpler than in multidimensional lists
+- lets explore some things
+
+
+
+```python
+vector = np.array(range(1,11))# 10 rows
+print(f'Vector = {vector}')
+print(f'First element = {vector[0]}')
+print(f'Last element = {vector[-1]}')
+print(f'Middle elements = {vector[len(vector)//2-1:len(vector)//2+1]}')
+print(f'All elements strating from 4 = {vector[4:]}')
+print(f'last 4 elements = {vector[-4:]}')
+print(f'Everything but last 4 elements = {vector[:-4]}')
+```
+
+-VV-
+
+# Two-Dimensional Indexing and Slicing in Numpy arrays
+
+- Indexing in Numpy is far simpler than in multidimensional lists
+- lets explore some things
+
+
+
+```python
+array = np.array([range(1,11)]).T*np.array([range(1,15)])# element wise multiplication
+print(f'Vector = {array}')
+print(f'First element = {array[0,0]}')
+print(f'Last element = {array[-1,-1]}')
+print(f'Middle elements = {array[array.shape[0]//2-1:array.shape[0]//2+1,array.shape[1]//2-1:array.shape[1]//2+1]}')
+print(f'All rows above the 4th row = {array[4:,:]}')
+print(f'last 4 columns = {array[:,-4:]}')
+print(f'Everything but last 4 elements = {array[:,:-4]}')
+```
+
+-VV-
+
+# Statistics in Numpy arrays
+
+- Numpy has some basic statistics functions
+- We will go over them quickly
+
+
+
+```python
+array = np.array([range(1,11)]).T*np.array([range(1,11)])# element wise multiplication
+
+fig, (ax1) = plt.subplots(1,1)
+
+ax1.imshow(array)
+print(np.sum(array,axis=0)) # sum over the x dimension
+print(np.mean(array,axis=1)) # mean over the y dimension
+print(np.min(array,axis=1)) # min over the y dimension
+print(np.max(array,axis=0)) # max over the y dimension
+print(np.var(array,axis=1)) # var over the y dimension
+print(np.std(array,axis=0)) # var over the y dimension
+ax1.imshow(np.corrcoef(array))
 
 ```
 
-    int8
-    float64
-
-
-
 # Summary
-- In this section we covered Some basics of Numpy
-- We learned how to install it in our home directory using ssh
-- We also learned how to create project specific enviorment
-- Finally we installed some basic data science packages
+- In this section, you discovered how to create and access data in NumPy arrays with Python.
+- Specifically, you learned:
+- How to create NumPy arrays.
+- How to access data using Pythonic indexing and slicing.
 
 
 -s-
+
+<!-- .slide: id="Advanced Python"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 2vmin">Pandas Basics<br></p>
+
+-VV-
+
+
+# Introduction to Pandas
+
+If Numpy is the central library for scientific computing in Python and Matplotlib is the primer (and the most complete)
+data visualization, then Pandas lives in the middle and also builds on both libraries to support data manipulation
+fundamental analysis and feature exploration.
+
+Pandas data structures were created to make data analysis simpler. However, using it at first may feel intimidating.
+
+-VV-
+
+
+# We start by importing pandas
+
+- lets make sure pandas is working
+
+
+```python
+import pandas as pd
+```
+
+-VV-
+
+
+# Let's import some data
+
+- The data set we will be working with is the unrestricted HCP behavioural, neuronal and demographics measures across
+1206 subjects.
+- The dataset contains the HCP_raw (which ironicly is the processed summary table for the entire HCP study
+- This week is not about the data properties but rather learning how to read the data and use pandas
+- We start by locating the data-sets using the basic modules os and glob
+
+
+```python
+import os
+import glob
+filelist = glob.glob(os.path.join("learning/course_2020/data/*/*.csv"))
+filelist
+```
+
+-VV-
+
+
+# HCP_DataDictionary and HCP_raw
+
+- The HCP_DataDictionary is a csv table describing all the columns representing unique features
+- We will now read the HCP_DataDictionary using the pandas read_csv function
+
+
+```python
+df = pd.read_csv(filelist[1], encoding = "ISO-8859-1")
+df.head()
+```
+
+-VV-
+
+
+# DataDictionary number of categories
+
+- Each column in this dataframe will return a pandas.Series data structure
+- Access is simple we use the column header to select one series ds
+- Series have several powerful functions amoung them the unique function that extracts only unique values
+- Can you think of another way to get the unique values?
+- If you said sets you can pat yourself on the shoulder
+
+-VV-
+
+
+# DataDictionary unique number of categories
+
+- If we compare both approuches we can see that the set is not only faster but also far stable
+
+
+```python
+%timeit df['category'].unique()
+%timeit set(df['category'])
+```
+
+-VV-
+
+# Back to the DataDictionary categories
+
+- We can see that the dateset is rich in interesting categories
+- What we want to view now is some summary for each category
+- The count() function together with groupby will give you excatly that
+
+
+```python
+set(df['assessment'])
+df.groupby('category').count()
+```
+-VV-
+
+# subset
+
+- I want to extract all columns for **"Emotion"**
+- To do that I simply need to create a logical array and extract all columnHeader
+
+
+
+
+```python
+hfh_hcp = df["columnHeader"][df['category']=="Emotion"]
+hfh_hcp
+```
+-VV-
+
+# subset
+
+- Now I want to use these columnHeader to extract only those for quick data inspection
+- Lets upload the first 100 rows
+- Then create the subset
+
+
+
+```python
+df_hcp = pd.read_csv(filelist[0], encoding = "ISO-8859-1",nrows=100)
+subset = df_hcp.loc[:, df_hcp.columns.isin(list(hfh_hcp))].copy()
+```
+-VV-
+
+# subset
+
+- lets use the describe function extract some basic statistics
+
+
+
+```python
+subset.head()
+subset.describe()
+```
+-VV-
+
+# subset
+
+- The cross-correlation of the data suggests multicollinearity
+- Next week we will explore this further
+- For now, let's finish with this analysis and move the home assignment
+
+
+```python
+import matplotlib.pyplot as plt
+fig, (ax1) = plt.subplots(1,1)
+im = ax1.matshow(subset.corr())
+fig.colorbar(im, ax=ax1);
+```
+-VV-
+
+# Summary
+
+- We only touched the surface of using pandas to explore a complex data set like this
+- But we have an arsenal of tools to allow us to do so
+- Next week we will finish going over the essential tools that allow basic exploration of data set
+- We will also learn how to automate some of these steps
+-s-
+
+# Home assignment
+
+- Create a notebook with your name under notebooks week_02
+- In it using pandas import both the hcp data and the hcp dictionary
+- Using the dictionary select one category and use its features to create a short report describing the different
+relationship between the features
+- You should have a minimal description of the category and the features it includes
+-VV-
+# Home assignment
+- What are they trying to measure
+- What is the association between them
+- Next week we will explore various exploratory analysis methods to examine these relationships in-depth
+- This assignment will take two-week so take your time
+
 
 </script>
 </section>
