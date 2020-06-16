@@ -890,7 +890,7 @@ python -m ipykernel install --user --name sys2020 --display-name "Python (sys202
 ```bash
 echo "if [ -f ~/opt/conda/etc/profile.d/conda.sh ]; then" >> ~/.profile 
 echo ". /opt/conda/etc/profile.d/conda.sh # --> source global conda.sh, if present." >> ~/.profile
-echo "fi>> ~/.profile
+echo "fi">> ~/.profile
 ```
 
 -VV-
@@ -1293,7 +1293,7 @@ ax1.imshow(np.corrcoef(array))
 
 <!-- .slide: id="Advanced Python"  -->
 <!-- .slide: data-background="#ffffff" data-transition="zoom" -->
-<p style="text-align: center;font-size: 2vmin">Pandas Basics<br></p>
+<p style="text-align: center;font-size: 15vmin">Pandas Basics<br></p>
 
 -VV-
 
@@ -1367,7 +1367,7 @@ df.head()
 
 # DataDictionary unique number of categories
 
-- If we compare both approuches we can see that the set is not only faster but also far stable
+- If we compare both approuches we can see that the set is not only faster but also far stabler
 
 
 ```python
@@ -1392,14 +1392,25 @@ df.groupby('category').count()
 
 # subset
 
-- I want to extract all columns for **"Emotion"**
-- To do that I simply need to create a logical array and extract all columnHeader
+- In big data sets it is often common to examin only a subset of the data. 
+- For example lets try to create a subset containing only data from the **"Emotion"** category
+- To do that I will first use the dictionary dataset to identify all the **"Emotion"** column headers 
+- Then we will use these headers to subset the actual dataset 
 
 
+-VV-
+
+# subset
+
+- We are using logical expressions to identify any **row** in the hcp dictionary whose category is equal to Emotion
+- We can use either key or dot notation to acheive this 
 
 
 ```python
+# key notation is the same 
 hfh_hcp = df["columnHeader"][df['category']=="Emotion"]
+# as dot notation
+hfh_hcp = df.columnHeader[df.category == 'Emotion']
 hfh_hcp
 ```
 -VV-
