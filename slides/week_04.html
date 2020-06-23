@@ -1,0 +1,595 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sysAI.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown data-separator-vertical="-VV-" data-separator="-s-">
+					<script type="text/template">
+<!-- .slide: id="intro_week_04"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<h1 style="text-align: center;font-size: 15vmin">WEEK 04 <br> Data Pre-Processing </h1>
+
+-VV-
+# Today we will become intimate with a big big-five dataset.
+- You will start by Understand the theory behind the dataset 
+    - What measures it contains 
+    - How was it collected 
+- We will then use this as a demonstration of Data cleaning
+   - We will identify missing measures
+   - And identify inaccurate measures
+- Finally, as a group, you will create an EDA notebook report exploring the data set in preparation for next week 
+
+-VV-
+
+<!-- “A picture is worth more than ten thousand words” Chinese proverb -->
+
+# Online assignment
+
+## The online assignment is simple:
+
+- You will be separated to the same four groups 
+- And each of you should follow the slides to generate a clean dataframe
+- Then if you completed everything you can use start creating a report that intersects the different categories with the behavioural measures  
+
+
+-s-
+<!-- .slide: id="intro_week_04"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> Domain Expertise </p>
+
+-VV-
+# Domain Expertise 
+
+- Domain expertise implies knowledge and understanding of the essential aspects of a specific field of inquiry.
+- As we will shortly see, deciding what has value, both in terms of input and output, as well as of what makes sense is hard. It requires an intimate understanding of what was collected, how and when it was collected and what standard approaches are standard with this type of data. 
+- Poor understanding of the information to be processed will lead to datasets with little value.
+- Domain expertise is cruical for:
+    - Evaluating the inputs
+    - Guide the pre-processing, 
+    - Evaluate perliminary findings within the context of value and validity.
+
+-VV-
+# Domain Expertise gives context
+
+- Analysing cognitive data is hard! 
+- Linking behaviour to neuronal measures is even harder 
+- To limit your mistakes to a minimum, you should always start by gaining some understanding of the underlying behavioural measures you are using
+- To obtain a better understanding of the concepts in this weeks material, we will use a large dataset (>1m events) containing self-report test measures from a variant of the big five personality questionnaire
+
+-VV-
+
+# The Big Five Dimensions of Personality?
+
+![png](https://www.verywellmind.com/thmb/jvkRvSnCkciQcBMzmgR2AfzkHMk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/2795422-article-the-big-five-personality-dimensions-5a9083fb6edd650036603137.png)
+
+-VV-
+
+# What Are the Big Five Dimensions of Personality?
+
+- The Big Five are five broad factors (dimensions) of personality traits. They are:
+    - Extraversion. e.g. traits as talkative, energetic, and assertive.
+    - Agreeableness. e.g. traits like sympathetic, kind, and affectionate.
+    - Conscientiousness. e.g. traits like organized, thorough, and planful.
+    - Neuroticism/Emotional Stability e.g. traits like tense, moody, and anxious.
+    - Intellect (aka Openness to Experience) e.g. traits wide interests, and being imaginative and insightful.
+- [Big five short background reading](https://openpsychometrics.org/tests/IPIP-BFFM/)
+- [Big-five book chapter covering history, measures and conceptual issues](https://www.ocf.berkeley.edu/~johnlab/pdfs/2008chapter.pdf)
+
+-VV-
+
+# What measures should we expect 
+- The big five is a questionnaire composed of 50-100 questions (depending on the version)
+- So the fundamental measure is usually a per question response in a Likert scale 
+- (i.e. 1-5 Very Inaccurate - Very accurate). 
+- We can also expect to find the time it took to respond to each question (reaction/response time)
+- This will also have some demographics 
+-VV-
+
+
+# How was it collected 
+- The data was collected online as part of the [openpsychometrics](https://openpsychometrics.org/tests/IPIP-BFFM/) project
+- Participants were asked to score questions based on how accurately they describe them.
+- Here is a [page](https://ipip.ori.org/new_ipip-50-item-scale.htm) describing the scale
+
+-VV-
+# Great, Now we know what to excpect 
+
+- Let's dive in... 
+- Any data worth spending time on will have some pre-processing associated with 
+- Web datasets are notorious for having many problems 
+- This makes the following dataset a perfect candidate to learn about one of the most essential steps in any project: Data pre-processing 
+
+-s-
+<!-- .slide: id="intro_week_04"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> Data pre-processing </p>
+
+-VV-
+
+# Data pre-processing  (cleaning the data)
+
+- Completeness (identify missing measures)
+- Accuracy (identify inaccurate measures)
+- The first step is to flag any row (i.e. unique event) that contains either missing or inaccurate measures
+- In most cases missing measures won't be labelled as missing
+
+-VV-
+
+# So lets get data dirty 
+
+- Start by importing some packages we will use 
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import os, glob
+import textwrap
+%load_ext autoreload
+
+```
+-VV-
+
+# Use glob to examine the different data files
+
+- To simplify our life we will change the current directory to be in the data 
+
+```python
+os.chdir('/scratch/systemAI/course_2020/data/raw/IPIP-FFM-data-8Nov2018')
+filelist = glob.glob(os.path.join("*"))
+filelist
+```
+
+
+-VV-
+# Load the data-set 
+- Importantly, the data is delimited using tabs
+- We need to tell pandas this is the case using the `sep` parameter 
+
+
+```
+df = pd.read_csv(filelist[2],sep="\t")
+df.info()
+```
+
+-VV-
+# Big and complex data-set
+- Quick explorations suggest that the first 50 columns are survey response 
+- The next 50 columns are response time
+- And the final 10 are additional properties
+
+
+```
+df.describe(include = 'all')
+```
+-VV-
+
+# The data is huge
+
+- You could just dive in... 
+- However, the first file is named codebook, 
+- It might be wise to have a look inside 
+
+
+```
+code = !head -7 "codebook.txt"
+display(textwrap.wrap(' '.join(code), width=90))
+```
+
+-VV-
+
+# lets read on 
+
+- The code book contains all the questions and their column headers
+- You can just open the text file in the Jupyter text editor 
+
+```
+Q = !head -17 "codebook.txt" | tail -10
+display(Q)
+```
+
+-VV-
+# What about other measures? 
+
+- The codebook further gives information on the additional information we can extract
+- This contains :
+    - Per question response time 
+    - The width and height of the screen used to fill the survey 
+    - IPC = The number of records from the user's IP address in the dataset
+    - The country
+    - Approximate Longitude and Latitude
+    - The date the survey was completed on 
+- It also contains some warnings: 
+    - For max cleanliness, only use records where IPC value is 1
+    - Approximate Longitude and Latitude IS NOT VERY ACCURATE
+- So before we move on to the data let's process these columns 
+
+```
+Q = !tail -12 "codebook.txt" 
+display(textwrap.wrap(' '.join(Q), width=90))
+```
+
+-VV-
+
+# Some useful functions from last time 
+
+- Last week we created the freq EDA function
+- This week we will be using it to help uncover problems 
+
+```python
+def freq(x):
+    dummy = pd.get_dummies(x)
+    Count = np.sum(dummy)
+    Proportion = Count/np.sum(Count)
+    Percent = Proportion*100
+    df = pd.DataFrame({"Count":Count,"Proportion":Proportion,"Percent":Percent}).T
+    df['Total'] = [np.sum(Count),np.sum(Proportion),np.sum(Percent)]
+    df.columns.name = x.name
+    return df
+```
+
+
+-VV-
+
+# flag IPC>1
+
+- We will add several columns of boolean problems 
+- The first one is IPC
+- We can see that this step will discard more than 30% of the data 
+- In normal circumstances, we would be alarmed, but in this kind of magnitude this is fine 
+
+
+```
+df['ix_IPC'] = list(map(lambda x: True if x>1 else False,df['IPC']))
+freq(df['ix_IPC'])
+```
+
+
+-VV-
+
+# flag inaccuracies
+
+- The next step is to identify inaccurate survey responses 
+- As the code defines the scale from 1-5. Any value above or below that scale is inaccurate and should be flagged
+- We want to identify any row that has at least one inaccurate response 
+- We also want to quantify the extent of inaccurate responses 
+
+
+
+-VV-
+
+
+# We start by defining this as a conditional statement 
+
+- We can identify these in one go across all responses  
+- What we do here is quantify two outlier features 
+
+
+```
+mat = (df.iloc[:,0:50]>5)|(df.iloc[:,0:50]<=0)
+df['ix_survey_has_inaccuracies'] = np.any(mat,axis=1)
+df['ix_sum_of_survey_inaccuracies'] = np.sum(mat[df['ix_survey_has_inaccuracies']],axis=1)
+display(freq(df['ix_survey_has_inaccuracies']))
+display(freq(df['ix_sum_of_survey_inaccuracies']))
+```
+
+-VV-
+
+# Try to Interpret these findings
+
+
+-VV-
+
+# My take
+
+- So 13.7% of the responses has some problem with the entries 
+- However, most of these (~100k events) will have only one inaccurate response
+- What about the response time? 
+
+
+
+-VV-
+
+# What about response time? 
+- If you read carefully, you can see that this reaction time measurement is not a clean measure 
+- However, it is useful to have if we can clean it 
+
+```
+tmp = !head -60 "codebook.txt" | tail -2
+display(tmp)
+```
+
+
+-VV-
+
+# let's examine the data 
+
+- Just from eyballing the describe table we see problems 
+    - We have negative RT!!!
+    - We have insanely long RT 
+- Dealing with this requires some better understanding of the data 
+
+
+```
+display(df.iloc[:, 50:100].describe().T.head(10))
+```
+
+-VV-
+# Before moving on we should try to understand these odd measures
+
+- Let's start by examining the frequency of negative RT within subjects
+- This means we can just filter these results
+- They are probably just reflecting some technical problem with the acquisition of the response time
+
+```python
+display(freq(np.sum(df.iloc[:, 50:100]<0,axis=1)))
+```
+
+-VV-
+
+# What about the extreme measures?
+- We can use the same trick but with a twist 
+- We could apply an upper limit that invalidates a response for a question 
+- This could be defined using data-driven approaches or using common sense 
+- For now, we will use the common-sense approach examined in two ways
+    1. Count the number of people spending more than one minute on at least one question 
+    1. Count the number of people that completed the entire questionnaire in more than 50 minutes
+- Both these approaches will clean our data further 
+
+
+```
+display(freq(np.sum(df.iloc[:, 50:100]>6e4,axis=1)))
+display(freq(np.sum(df.iloc[:, 50:100],axis=1)>3e6))
+```
+-VV-
+
+# Try to Interpret these findings
+
+
+-VV-
+# My take 
+- So around 16% of the responses had at least one response that took more than one minute 
+- However, the majority of these slow participants had only one response that was longer than one minute
+- Furthermore, less than 1% of participants took more than 50 minutes to complete the entire questionnaire 
+
+
+-VV-
+
+# What about very fast RT ?
+- So the final measure is unreasonably fast RT 
+- We want to create some principled way to identify participants not paying attention to the questions asked 
+- One way is to perform literature search here are some references I consider relevant 
+   1. Casey, M.M. & Tryon, W.W. (2001). Validating a double-press method for computer administration of personality inventory items. Psychological assessment, 13, 521.
+   1. Wagner-Menghin, M. (2002). Towards the identification of non-scalable personality questionnaire respondents: Taking response time into account. Psychologische Beiträge, 44(1), 62-77.
+   1. Rayner, K. (2009). Eye movements and attention in reading, scene perception, and visual search. The Quarterly Journal of Experimental Psychology (2006) (Vol. 62, pp. 1457-506).
+
+-VV-
+
+# What about very fast RT ?
+
+- Many different factors can and should be taken into account if this was a real study analysis 
+- The vital issue is to have a measure that can be defended 
+- What I take in the end is the P600 marker that suggests at least 600ms needed to comprehend text 
+- And as you can see these are less than 15 of the data 
+
+```
+df['ix_fast_rt'] = np.sum(df.iloc[:, 50:100],axis=1)<6e2
+freq(df['ix_fast_rt'])
+```
+
+
+
+-VV-
+
+
+# So now we can use these various heuristics to clean the data
+
+- We are going to remove the data flagged as outlier or anomaly 
+- We are left with almost 60% of the data which is based on very aggressive cleaning 
+
+
+```
+ix = ~(df['ix_IPC'] | df['ix_survey_has_inaccuracies'] | df['ix_fast_rt'])
+freq(ix)
+```
+
+
+-VV-
+
+# Lets create a new df to hold the clean subset
+- We will now use our not_outlier index
+- We start by transforming the date field to a datetime object and use it to create simple categories
+
+```
+DF = pd.DataFrame()
+DF["dateload"] = pd.to_datetime(df.dateload[ix])
+DF['year'] = DF["dateload"].dt.year
+DF['quarter'] = DF["dateload"].dt.quarter
+DF['month'] = DF["dateload"].dt.month
+```
+
+-VV-
+
+# Lets create a new df to hold the clean subset
+- Now we just copy over the country code 
+- We convert the screen dimension to string format 
+- And arbitrarily code device size 
+
+
+```
+DF['country'] = df['country'][ix]
+DF['screen'] = [str(w) + " x " + str(h) for w,h in zip(df['screenw'][ix],df['screenh'][ix])]
+DF['device_size'] = list(map(lambda w: 'small' if w <= 800 else 'medium' if w <=1440 else 'large', df['screenw'][ix]))
+DF.head()
+```
+
+
+-VV-
+
+# Are these actually factors?
+
+- One is tempted to just extract the survey data and get done with this 
+- Let's examine the pairwise similarity matrix between questions
+- We will use spearman rank correlation to take into account that discreate nature of the data
+- We see that the questions dont cluster into the expected five factors 
+- Something just isn't right 
+
+
+```
+subset = df.iloc[:,0:50][ix]
+fig, (ax1) = plt.subplots(1,1)
+im = ax1.matshow(subset.corr(method='spearman'))
+fig.colorbar(im, ax=ax1);
+```
+
+-VV-
+
+# Reverse coding
+- Questionnaires that use a Likert scale (e.g. 1=Disagree, 3=Neutral, 5=Agree) often contain some items which are to be reverse scored.
+- For example, in our case, some questions have positively worded questions (e.g. I am the life of the party), and some are negatively worded (e.g. I keep in the background).
+- To be able to aggregate both positive and negative questions, we can simply reverse the coding.
+- Reverse scoring simply means that the numerical scoring scale runs in the opposite direction.
+- So, in the above example if we keep the raw values as is a person who responded 5,1 will have the same summary score as a person who responded 1,5.
+- In contrast, if we reversed the codes, the first person will get 10 and be considered high extrovert and the second will get a score of 2 and regarded as a low extrovert.
+
+
+-VV-
+
+# How do we Reverse code
+
+- This step is simple we need to code the direction of each question 
+- Any good questioner should have a key associated with 
+- If we examine the questions for one of the big-five factors, it is simple to see which are positive and which are negative 
+- However, any good questionnaire should have a key table: [bigFive key](https://ipip.ori.org/newBigFive5broadKey.htm)
+-VV-
+
+# We can create a code table 
+- In fact, I made one already to make things easier
+
+
+```
+df_codes = pd.read_csv("codes.csv")
+display(df_codes.head(5))
+```
+
+
+-VV-
+# We can reverse code the data now
+
+- Recall that the scale is 1-5 
+- Reversing this means just subtracting five from all negative responses
+- We need to do this only for those negative responses 
+
+```
+for q in df_codes.Q_id[df_codes.Key_direction=='-']:
+    df[q] = 5-df[q]
+```
+
+-VV-
+
+# This has an immediate effect
+
+- We see that now the questions cluster nicely into five factors 
+```
+subset = df.iloc[:,0:50][ix]
+fig, (ax1) = plt.subplots(1,1)
+im = ax1.matshow(subset.corr(method='spearman'))
+fig.colorbar(im, ax=ax1);
+```
+
+-VV-
+
+# Next we centre the scales around zero
+
+- Another thing that is useful in some cases is transforming the data using different methods 
+- We will discuss this in-depth next week, but for now, we want to consider this space as a gradient having a negative snd positive sides as it was designed in the first hand
+- Shifting the results will do this 
+
+
+```
+ df.iloc[:,0:50] = 2-df.iloc[:, 0:50]
+```
+
+-VV-
+# Now we can average each factor response
+- We just confirmed that these questions form a hierarchy 
+- And they are incredibly similar
+- This means we can aggregate the data to reduce complexity.
+- We will dive further into this assumption in one of the following weeks, but for now, the mean will work fine 
+
+
+```
+subset = df.iloc[:,0:50][ix]
+for factor in np.unique(df_codes.Factor):
+    DF[factor] = subset[df_codes.Q_id[df_codes.Factor==factor]].mean(axis=1)
+display(DF.describe(include='float'))  
+```
+-VV-
+
+# We can do the same for RT 
+- Finally we can also extract mean RT 
+
+
+```
+subset = df.iloc[:,50:100][ix]
+for factor in np.unique(df_codes.Factor):
+    DF[factor+'_RT'] = subset[df_codes.Q_id[df_codes.Factor==factor]+'_E'].mean(axis=1)
+display(DF.describe(include='float'))  
+```
+
+-VV-
+
+# What next
+- You now have a cleaned data-set
+- Now we need to combine last week assignment with this data-set 
+- In other words, use the various EDA methods we explored last week to examine interesting patterns in the data 
+
+-s-
+
+# Final report (submitted as a group)
+
+- You now have a cleaned data set with over 500k participants
+- You also have some categories that may lead to some insights 
+- For example, can we see differences in responses from different years across different personality factors? 
+- Is there an effect for the type of screen (or device) on either RT or factors 
+- There are many questions one can explore this dataset - be creative  
+
+
+</script>
+</section>
+</div>
+</div>
+
+<script src="js/reveal.js"></script>
+<script src="js/config.js"></script>
+<script>
+window.onload=function(){function a(a,b){var c=/^(?:file):/,d=new
+XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var
+b,c=document.getElementsByTagName("*");for(b in
+c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"))};
+</script>	
+</body>
+
+</html>
