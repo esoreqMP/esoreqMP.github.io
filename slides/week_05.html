@@ -575,6 +575,7 @@ def freq_with_thr(x,thr):
 
 
 ```python
+
 def freq_with_thr(x,thr):
     df = freq(x).T.sort_values(by='Count', ascending=False)
     Other = df.query("Percent <= "+str(thr))
