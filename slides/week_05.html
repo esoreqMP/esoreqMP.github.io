@@ -1,0 +1,835 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sysAI.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown data-separator-vertical="-VV-" data-separator="-s-">
+					<script type="text/template">
+<!-- .slide: id="intro_week_04"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<h1 style="text-align: center;font-size: 15vmin">WEEK 05 <br> Data Pre-Processing (cont.) </h1>
+
+-VV-
+# Welcome to week five
+- We will continue using the big big five dataset this week to start tidying up
+- We will use a minimal project package to create a reproducible notebook
+- And we will cover in depth data transformations
+- Next week we will leave the behavioural data and dive into MRI structural data 
+
+-VV-
+
+# Online assignment
+
+## The online assignment is simple:
+
+- You will be separated to the same four groups 
+- We will go over some transformation tricks and some aggregation
+- We will create a package and fill it with some pre-processing functions
+- And unpack the different steps needed to create them 
+
+-VV- 
+
+# Before we dive in there was some confusion about scale transformation
+
+- In last week material, there were two mistakes in the data transformation
+- To make sure you understand this issue I created a simple graphical example
+- Reversing a scale requires us to subtract from $x_{inv} = max(x)+min(x) - x$
+- The reason is simple; we want to maintain the original scale so:
+- For the maximum value to become the minimum, we need to subtract the maximum and shift it back to the minimum
+- For the minimum value to become the maximum, we need to subtract the minimum and add the maximum to it
+
+-VV-
+# Here is a graphical example
+
+```python
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+from scipy.stats import skewnorm
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler((2,9))
+x = scaler.fit_transform(skewnorm.rvs(5, size=1000).reshape(1000,1))
+def inv(x,lb,ub):
+    return lb+ub-x
+f,ax = plt.subplots(1,2,figsize=(15,3))
+ax[0].hist(x,20)
+ax[0].set_title(f"Normal (Min={np.min(x)} Max={np.max(x)})")
+ax[1].hist(inv(x,2,9),20)
+ax[1].set_title(f"Reverse coded Min={np.min(inv(x,2,9))} Max={np.max(inv(x,2,9))}");
+```python
+
+-VV- 
+
+# And some confusion about centering
+- In order to center we need to subtract from the data the mean of the scale
+
+```python
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
+
+from scipy.stats import skewnorm
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler((1.0,7.0))
+def center(x,lb,ub):
+return x-(lb+ub)/2
+demo = {1 : scaler.fit_transform(skewnorm.rvs(5, size=1000).reshape(1000,1))
+,2 : scaler.fit_transform(skewnorm.rvs(0.5, size=1000).reshape(1000,1))
+,3 : scaler.fit_transform(skewnorm.rvs(-0.5, size=1000).reshape(1000,1))
+,4 : scaler.fit_transform(skewnorm.rvs(-5, size=1000).reshape(1000,1))}
+
+f,ax = plt.subplots(3,4,figsize=(15,9))
+plt.subplots_adjust(hspace=0.2)
+for i in range(3):
+for ix,(key,data) in enumerate(demo.items()):
+x = {0:data,1:inv(data),2:center(data,1,7)}[i]
+ax[i,ix].hist(x,20)
+```
+
+-s-
+<!-- .slide: id="intro_week_05"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> project package </p>
+
+-VV-
+# Using a project package to create a reproducible notebook
+
+- At the beginning of the course, we talked about the notion of reproducibility 
+- In our work so far we avoided addressing two key points
+    - Transparency (How simple is it to recreate our work)
+    - And readability (How simple it is to understand what we did)
+- We also covered (in week two) how to create our local package 
+- This week we will try to combine these points to make a notebook that is both transparent, readable and reproducible
+
+-VV-
+# The simplest approach is to create a local package
+
+- While some would advocate starting with a proper repository from the start. It is not necessarily the case when you
+start a project on your own or with a small team.
+- Working with other people on a shared folder (either on dropbox or on a cluster) containing python files is a quick
+and straightforward way to create these objectives.
+- The benefits are simplicity for both you and potential collaborators who are git and python challenged.
+- Using a repository on your side, you can also track change, but it isn't necessary for this to work.
+
+-VV-
+
+# Before we begin we need to copy over this week folder data
+
+- We need to make sure our current working directory (cwd) has the following file structure: 
+    - bigfive_group_(your group letter)
+        - notebooks
+        - src
+            - `__init__.py`
+            - `pre_processing.py`
+            - `plots.py`
+
+-VV-
+
+# We start by importing the empty pre_processing module
+- As we covered in week two, we use magic commands to allow us to change the module if needed and it will magically update in the kernel 
+- Importantly, we need to make sure our current path is the same as the project folder for this to work 
+
+```python
+os.chdir("path to your porject")
+import os
+import pandas as pd
+from src import pre_processing as pp
+%load_ext autoreload
+%autoreload 2
+```
+
+-VV-
+
+# download data function
+
+- While we can download data manually as we did last week, we would prefer a situation where we minimise any place for
+error by coding everything
+- The automatic download is also useful for cases where the data might change periodically
+- We will be using the requests package to deal with downloads and the zipfile to extract the file contents
+- The data folder will be relative to the current working folder
+- And the URL will be the same we used last week
+
+```python
+data_folder = "data/raw"
+url = "https://openpsychometrics.org/_rawdata/IPIP-FFM-data-8Nov2018.zip"
+```
+
+-VV-
+
+
+# Lets unpack the download function in steps
+- First step is some house keeping
+- We track current folder
+- If target folder doesn't exist create it
+- We then move into the data folder
+
+```python
+def download_data(data_folder,url) :
+cwd = os.getcwd()
+if not os.path.exists(data_folder):
+os.makedirs(data_folder, exist_ok=True)
+os.chdir(data_folder)
+```
+
+-VV-
+# download function step 2
+- The next step is to check if someone downloaded the data already
+- If raw.zip doesn't exist we will download it using requests
+- We create a requests object
+- Using open we create an empty file called raw.zip
+- The wb indicates that the file is opened for writing in binary mode.
+- Writing in binary mode, means the data is written as it is to the file
+- We write url contents to the our zip_file and close it
+
+```python
+def download_data(data_folder,url) :
+    ...
+    if not os.path.exists('raw.zip'):
+        obj = requests.get(url)
+        print('Beginning data download')
+        zip_file = open('raw.zip', 'wb')
+        zip_file.write(obj.content)
+        zip_file.close()
+        print('Data download completed')
+```  
+
+-VV-
+
+# download function step 3
+- The final step is to extract the zip file to the data path and return to the original folder
+- The fact that it is indented means that if the file exists, we won't download it again, just extract it
+- However, even that step can be avoided if we want
+
+```python
+def download_data(data_folder,url) :
+    ...
+        ...
+    ZipFile('raw.zip').extractall(os.getcwd())
+    print('Data extraction completed')
+    os.chdir(cwd)
+```   
+
+-VV- 
+
+# Once completed we want to load the data 
+- Again we would have this in a function
+- While this function isn't necessary in our case (i.e. could be achieved by one panda line). 
+- It makes the code simple to read. 
+
+```python
+def load_data(data_folder):
+    cwd = os.getcwd() # we assume that the cwd is important 
+    os.chdir(data_folder)
+    df =  pd.read_csv(glob("*/data-final.csv")[0],sep="\t")
+    os.chdir(cwd)
+    return df
+```
+
+-VV- 
+
+# This line will load the data if it exists in the datafolder
+
+df = pp.load_data(data_folder)
+
+
+-VV- 
+
+# Date proper coding
+- Proper time coding can be useful and is worth spending time on. 
+- It is simple to achieve using the pandas `to_datetime()` method
+- Here I am also stripping the time part as it is irrelevant without time zone encoding which we lack in this dataset 
+- However, if you think about it, this can be achieved as well
+
+```python
+def dateload_to_datetime(df):
+    df["dateload"] = pd.to_datetime(df.dateload)
+    df['date'] = df["dateload"].dt.date
+    return df
+```
+
+-VV-
+# Hard coding domain expertise
+- In some cases, data preprocessing requires some domain expertise that isn't contained within the original data set.
+- We assume these heuristics are accurate. However, mistakes happen...
+- For example, in last week online material there were two human mistakes
+- Rebekka was able to catch one of these problems where we shifted the data by two scores rather than 3.
+- Therefore, documenting all steps can not only simplify the readability of the preprocessing stage but also allow pears
+to inspect your work critically
+
+
+-VV-
+# Reverse coding table as an example
+
+- In the pre_processing module, I just copied the reverse codes as a dictionary
+- This way the data is stored in one place and can be easily reloaded to identify mistakes
+
+```python
+def load_codes():
+'''Reverse Codes generated from based on https://ipip.ori.org/newBigFive5broadKey.htm'''
+codes = {'Q_id': {0: 'EXT1', 1: 'EXT2', 2: 'EXT3', 3: 'EXT4', 4: 'EXT5', 5: 'EXT6', 6: 'EXT7', 7: 'EXT8', 8: 'EXT9', 9:
+'EXT10', 10: 'EST1', 11: 'EST2', 12: 'EST3', 13: 'EST4', 14: 'EST5', 15: 'EST6', 16: 'EST7', 17: 'EST8', 18: 'EST9', 19:
+'EST10', 20: 'AGR1', 21: 'AGR2', 22: 'AGR3', 23: 'AGR4', 24: 'AGR5', 25: 'AGR6', 26: 'AGR7', 27: 'AGR8', 28: 'AGR9', 29:
+'AGR10', 30: 'CSN1', 31: 'CSN2', 32: 'CSN3', 33: 'CSN4', 34: 'CSN5', 35: 'CSN6', 36: 'CSN7', 37: 'CSN8', 38: 'CSN9', 39:
+'CSN10', 40: 'OPN1', 41: 'OPN2', 42: 'OPN3', 43: 'OPN4', 44: 'OPN5', 45: 'OPN6', 46: 'OPN7', 47: 'OPN8', 48: 'OPN9', 49:
+'OPN10'}, 'Question': {0: 'I am the life of the party.', 1: "I don't talk a lot.", 2: 'I feel comfortable around
+people.', 3: 'I keep in the background.', 4: 'I start conversations.', 5: 'I have little to say.', 6: 'I talk to a lot
+of different people at parties.', 7: "I don't like to draw attention to myself.", 8: "I don't mind being the center of
+attention.", 9: 'I am quiet around strangers.', 10: 'I get stressed out easily.', 11: 'I am relaxed most of the time.',
+12: 'I worry about things.', 13: 'I seldom feel blue.', 14: 'I am easily disturbed.', 15: 'I get upset easily.', 16: 'I
+change my mood a lot.', 17: 'I have frequent mood swings.', 18: 'I get irritated easily.', 19: 'I often feel blue.', 20:
+'I feel little concern for others.', 21: 'I am interested in people.', 22: 'I insult people.', 23: "I sympathize with
+others' feelings.", 24: "I am not interested in other people's problems.", 25: 'I have a soft heart.', 26: 'I am not
+really interested in others.', 27: 'I take time out for others.', 28: "I feel others' emotions.", 29: 'I make people
+feel at ease.', 30: 'I am always prepared.', 31: 'I leave my belongings around.', 32: 'I pay attention to details.', 33:
+'I make a mess of things.', 34: 'I get chores done right away.', 35: 'I often forget to put things back in their proper
+place.', 36: 'I like order.', 37: 'I shirk my duties.', 38: 'I follow a schedule.', 39: 'I am exacting in my work.', 40:
+'I have a rich vocabulary.', 41: 'I have difficulty understanding abstract ideas.', 42: 'I have a vivid imagination.',
+43: 'I am not interested in abstract ideas.', 44: 'I have excellent ideas.', 45: 'I do not have a good imagination.',
+46: 'I am quick to understand things.', 47: 'I use difficult words.', 48: 'I spend time reflecting on things.', 49: 'I
+am full of ideas.'}, 'Factor': {0: 'Extraversion', 1: 'Extraversion', 2: 'Extraversion', 3: 'Extraversion', 4:
+'Extraversion', 5: 'Extraversion', 6: 'Extraversion', 7: 'Extraversion', 8: 'Extraversion', 9: 'Extraversion', 10:
+'Stability', 11: 'Stability', 12: 'Stability', 13: 'Stability', 14: 'Stability', 15: 'Stability', 16: 'Stability', 17:
+'Stability', 18: 'Stability', 19: 'Stability', 20: 'Agreeableness', 21: 'Agreeableness', 22: 'Agreeableness', 23:
+'Agreeableness', 24: 'Agreeableness', 25: 'Agreeableness', 26: 'Agreeableness', 27: 'Agreeableness', 28:
+'Agreeableness', 29: 'Agreeableness', 30: 'Conscientiousness', 31: 'Conscientiousness', 32: 'Conscientiousness', 33:
+'Conscientiousness', 34: 'Conscientiousness', 35: 'Conscientiousness', 36: 'Conscientiousness', 37: 'Conscientiousness',
+38: 'Conscientiousness', 39: 'Conscientiousness', 40: 'Intellect', 41: 'Intellect', 42: 'Intellect', 43: 'Intellect',
+44: 'Intellect', 45: 'Intellect', 46: 'Intellect', 47: 'Intellect', 48: 'Intellect', 49: 'Intellect'}, 'Key_direction':
+{0: '+', 1: '-', 2: '+', 3: '-', 4: '+', 5: '-', 6: '+', 7: '-', 8: '+', 9: '-', 10: '-', 11: '+', 12: '-', 13: '+', 14:
+'-', 15: '-', 16: '-', 17: '-', 18: '-', 19: '-', 20: '-', 21: '+', 22: '-', 23: '+', 24: '-', 25: '+', 26: '-', 27:
+'+', 28: '+', 29: '+', 30: '+', 31: '-', 32: '+', 33: '-', 34: '+', 35: '-', 36: '+', 37: '-', 38: '+', 39: '+', 40:
+'+', 41: '-', 42: '+', 43: '-', 44: '+', 45: '-', 46: '+', 47: '+', 48: '+', 49: '+'}}
+return pd.DataFrame(codes)
+
+```
+
+-VV-
+# Loading the codes 
+
+```python
+codes = pp.load_codes()
+codes.head()
+```
+
+-VV-
+# The same goes to flagging outliers 
+- This approach of flagging out the different events that we aim to remove allows for maximum transparency 
+    - Human errors — Data entry errors
+        - Unfilled responses (score==0)
+        - Very fast responses (e.g. just automatically responding) 
+        - Very long responses (e.g. just forgot to respond)
+    - Instrument errors — Measurement errors
+        - Negative response time
+        - Multiple responses from the same IP
+        - Missing values for geospace coordinates 
+
+
+-VV-
+
+# The function will look like this
+
+```python
+def flag_outliers(df) :
+    # Flag IPC > 1 
+    df['ix01'] = list(map(lambda x: True if x>1 else False,df['IPC']))
+    # Flag any event above or below score constraints 
+    df['ix02'] = np.any((df.iloc[:,0:50]>5)|(df.iloc[:,0:50]<=0),axis=1)
+    # Flag any event with response time of faster than 600ms 
+    df['ix03'] = np.any(df.iloc[:, 50:100]<6e2,axis=1)
+    # Flag any event with response time slower than two minutes 
+    df['ix04'] = np.any(df.iloc[:, 50:100]>12e4,axis=1)
+    # Flag any event with 'NONE' In either the latitude or longitude columns
+    df['ix05'] = df.long_appx_lots_of_err == "NONE"
+    return df
+```
+
+
+-VV-
+
+# Finally we should have a function to remove anything flagged as an outlier
+
+- We perform data cleaning using this straightforward function
+
+```python
+def clean_data(df) :
+    ix = np.any(df[['ix01',"ix02","ix03","ix04","ix05"]],axis=1)
+    df["outlier"] = list(map(lambda x: np.nan if x else False,ix))
+    return df.dropna().copy()
+```
+
+
+-VV-
+
+# After flagging and cleaning events we can recode the data
+- We are using the negative codes to reverse-code the data
+- Here is another example you didn't catch from last week
+    - To preserve the Likert score range (1-5) only in reverse order, we need to subtract the negative scores from 6 and not
+    5.
+    - These are examples of data processing errors, i.e. data manipulation or data set unintended mutations that can have
+    devastating effects on the data
+
+-VV-
+
+# recode function
+```python
+def recode_scores(df,iter,lb,ub) :
+    # Reverse code all keys from an iterable object
+    for q in iter:
+        df[q] = lb+ub-df[q]
+    # Normalise values so 3 will be 0 
+    df.iloc[:,0:50] = df.iloc[:,0:50]-(lb+ub)/2
+    return df    
+```
+
+
+-VV- 
+
+# The whole cleaning stage will look like this
+
+```python
+%%time
+data_folder = "data/raw"
+url = "https://openpsychometrics.org/_rawdata/IPIP-FFM-data-8Nov2018.zip"
+pp.download_data(data_folder,url)
+codes = pp.load_codes()
+df = pp.load_data(data_folder)
+df = pp.flag_outliers(df)
+df = pp.clean_data(df,'all')
+df = pp.recode_scores(df,codes.Q_id[codes.Key_direction=='-'])
+df = pp.lat_and_long_to_float(df)
+df = pp.dateload_to_datetime(df)
+df.shape
+```
+
+-s-
+<!-- .slide: id="intro_week_04"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> Feature merging </p>
+
+-VV-
+
+# Extending the frequency function
+- Last week we used the frequency function to explore the dataset anomalies
+- However, as we saw this exploratory view isn't beneficial when you have many small categories
+- It would be helpful to add some proportion threshold to simplify the inspection and potentially help with either
+filtering or merging small categories
+
+-VV-
+
+# lets inspect the freq function 
+
+```python
+def freq(x):
+    dummy = pd.get_dummies(x)
+    Count = np.sum(dummy)
+    Proportion = Count/np.sum(Count)
+    Percent = Proportion*100
+    df = pd.DataFrame({"Count":Count,"Proportion":Proportion,"Percent":Percent}).T
+    df['Total'] = [np.sum(Count),np.sum(Proportion),np.sum(Percent)]
+    if hasattr(x, 'name'):
+        df.columns.name = x.name    
+    return df
+```
+
+-VV-
+
+# Why is this function useful?
+- If we run the old freq function to inspect country distribution, we see that there are 224 unique entries
+- However, most of these are so small it would make no sense to examine them
+- Two sensible options would be to filter these out or combine to one big category
+
+
+```python
+pp.freq(df.country)
+```
+
+-VV-
+# What steps do we need to add?
+
+- The current freq function does the following:
+    - It receives a series of values
+    - Identifies the unique categories within
+    - And returns a table with Count, Proportion and Percent as rows and unique categories as column
+
+-VV-
+
+# We need to extend this with the following functionality
+    - It receives a series of values **and** some threshold in percentage 
+    - It Identifies the unique categories above and below a threshold
+    - It combines all categories below the threshold to form one "OTHER" category
+    - It returns the same table as before containing unique categories above threshold as well as the "OTHER" category
+
+```python
+def freq_with_thr(x,thr):
+# This is where code should be
+return DF,x_recoded
+```
+- Try to think about the possible steps to achieve this
+
+-VV-
+
+# The data is huge
+
+- You could just dive in... 
+- However, the first file is named codebook, 
+- It might be wise to have a look inside 
+-VV-
+# freq_with_thr (step 1)
+
+- First step would be to use the freq function that already works
+```python
+def freq_with_thr(x,thr):
+    df = freq(x)
+```
+
+-VV-
+
+# freq_with_thr (step 2)
+
+- We need to transpose the freq output to simplify our life
+
+```python
+def freq_with_thr(x,thr):
+    df = freq(x).T
+```
+
+-VV-
+# freq_with_thr (step 3)
+
+- It would be useful to have the results sorted from large to small
+
+```python
+def freq_with_thr(x,thr):
+    df = freq(x).T.sort_values(by='Count', ascending=False)
+```
+
+-VV-
+
+# freq_with_thr (step 4)
+
+- Now we want to add all events below or equal a threshold 
+- One way to achieve this would be to use the query panda function
+
+```python
+def freq_with_thr(x,thr):
+    df = freq(x).T.sort_values(by='Count', ascending=False)
+    Other = df.query("Percent <= "+str(thr))
+```
+
+
+-VV-
+
+# freq_with_thr (step 5)
+
+- The same function in reverse can give us all categories above the threshold
+
+```python
+def freq_with_thr(x,thr):
+    df = freq(x).T.sort_values(by='Count', ascending=False)
+    Other = df.query("Percent <= "+str(thr))
+    df = df.query("Percent > "+str(thr))
+```
+
+-VV-
+
+# freq_with_thr (step 6)
+
+- We append the sum of other to the output table  
+
+```python
+def freq_with_thr(x,thr):
+    df = freq(x).T.sort_values(by='Count', ascending=False)
+    Other = df.query("Percent <= "+str(thr))
+    df = df.query("Percent > "+str(thr))
+    df=df.append(Other.sum().rename('Other'))
+```
+
+-VV-
+
+
+# freq_with_thr (step 7)
+
+- We remap the input series with OTHER for any below threshold category 
+- And return a transposed table back 
+
+```python
+def freq_with_thr(x,thr):
+    df = freq(x).T.sort_values(by='Count', ascending=False)
+    Other = df.query("Percent <= "+str(thr))
+    df = df.query("Percent > "+str(thr))
+    df=df.append(Other.sum().rename('Other'))
+    x_recoded = list(map(lambda a,b: 'OTHER' if a else b, x.isin(Other.index),x))
+    return df.T,x_recoded
+```
+
+-VV-
+
+# Now let's inspect our results
+
+- I am going to choose a 1.5% threshold (but feel free to select any value you like)
+- As you can see almost 25% of the data is in the Other category
+- Most responses originate from the US
+- Furthermore, the smallest category IN (codes for India) contains 17,491 responses
+
+```python
+country_freq,country_recoded = pp.freq_with_thr(df.country,1.5)
+country_freq
+```
+
+-VV-
+
+# My take
+
+- So 13.7% of the responses has some problem with the entries 
+- However, most of these (~100k events) will have only one inaccurate response
+- What about the response time? 
+
+
+
+-VV-
+
+# We just reduced the country dimensionality
+
+- We managed to recode our country column from 223 to 7 unique classes!!!
+- However, this puts the spot light on the huge country imbalance in this data-set
+- Perhaps we can use some data to expand the US category?
+
+-VV-
+
+# We could use the Latitude and Longitude 
+
+- Breaking USA country code to states requires a way to map the geodata we have to state codes. 
+- One simplistic approach would be to map all geo coordinates to closest state official coordinate. 
+- Importantly, this assumption has some flaws as it ignores the fact that states boundaries are defined as weird human-made polygon shapes. 
+- However, it allows me to teach you a vital function that will be useful later on
+
+
+-VV-
+# We need USA states central coordinates
+
+- I just used google to find this, and I hardcoded this into my pre_processing module
+- It doesn't matter if this is hardcoded or whether it relies on some package. What is important is the documentation of
+the method that allows (e.g. future me) to improve this if needed
+
+-VV-
+
+# Again I am storing the table as a dictionary
+
+
+```python
+def load_usa_states_geo_data():
+states = {'State': {37: 'Alabama', 24: 'Alaska', 42: 'Arizona', 15: 'Arkansas', 45: 'California', 35: 'Colorado', 14:
+'Connecticut', 13: 'Delaware', 18: 'Florida', 22: 'Georgia', 23: 'Hawaii', 46: 'Idaho', 12: 'Illinois', 16: 'Indiana',
+38: 'Iowa', 10: 'Kansas', 28: 'Kentucky', 49: 'Louisiana', 20: 'Maine', 43: 'Maryland', 44: 'Massachusetts', 21:
+'Michigan', 30: 'Minnesota', 11: 'Mississippi', 17: 'Missouri', 32: 'Montana', 9: 'Nebraska', 19: 'Nevada', 8: 'New
+Hampshire', 27: 'New Jersey', 39: 'New Mexico', 7: 'New York', 48: 'North Carolina', 29: 'North Dakota', 36: 'Ohio', 31:
+'Oklahoma', 6: 'Oregon', 41: 'Pennsylvania', 5: 'Rhode Island', 40: 'South Carolina', 4: 'South Dakota', 25:
+'Tennessee', 3: 'Texas', 34: 'Utah', 2: 'Vermont', 26: 'Virginia', 33: 'Washington', 1: 'West Virginia', 0: 'Wisconsin',
+47: 'Wyoming'}, 'Latitude': {37: 32.31823, 24: 66.160507, 42: 34.048927, 15: 34.799999, 45: 36.778259000000006, 35:
+39.113014, 14: 41.599998, 13: 39.0, 18: 27.994402, 22: 33.247875, 23: 19.741754999999998, 46: 44.068203000000004, 12:
+40.0, 16: 40.273502, 38: 42.032973999999996, 10: 38.5, 28: 37.839333, 49: 30.39183, 20: 45.367584, 43:
+39.045753000000005, 44: 42.407211, 21: 44.182204999999996, 30: 46.39241, 11: 33.0, 17: 38.573935999999996, 32: 46.96526,
+9: 41.5, 19: 39.876019, 8: 44.0, 27: 39.833851, 39: 34.307144, 7: 43.0, 48: 35.782169, 29: 47.650589000000004, 36:
+40.367474, 31: 36.084621000000006, 6: 44.0, 41: 41.203323, 5: 41.700001, 40: 33.836082, 4: 44.5, 25: 35.860119, 3: 31.0,
+34: 39.41922, 2: 44.0, 26: 37.926868, 33: 47.751076, 1: 39.0, 0: 44.5, 47: 43.07597}, 'Longitude': {37: -86.902298, 24:
+-153.36914099999998, 42: -111.09373500000001, 15: -92.199997, 45: -119.41793100000001, 35: -105.35888700000001, 14:
+-72.699997, 13: -75.5, 18: -81.760254, 22: -83.441162, 23: -155.844437, 46: -114.742043, 12: -89.0, 16: -86.126976, 38:
+-93.58154300000001, 10: -98.0, 28: -84.27002, 49: -92.329102, 20: -68.97216800000001, 43: -76.641273, 44: -71.382439,
+21: -84.50683599999999, 30: -94.63623, 11: -90.0, 17: -92.60376, 32: -109.53369099999999, 9: -100.0, 19: -117.224121, 8:
+-71.5, 27: -74.871826, 39: -106.01806599999999, 7: -75.0, 48: -80.79345699999999, 29: -100.437012, 36: -82.996216, 31:
+-96.921387, 6: -120.5, 41: -77.19452700000001, 5: -71.5, 40: -81.16372700000001, 4: -100.0, 25: -86.660156, 3: -100.0,
+34: -111.95068400000001, 2: -72.699997, 26: -78.024902, 33: -120.74013500000001, 1: -80.5, 0: -89.5, 47: -107.290283},
+'ID': {37: 1, 24: 49, 42: 2, 15: 3, 45: 4, 35: 5, 14: 6, 13: 7, 18: 8, 22: 9, 23: 50, 46: 10, 12: 11, 16: 12, 38: 13,
+10: 14, 28: 15, 49: 16, 20: 17, 43: 18, 44: 19, 21: 20, 30: 21, 11: 22, 17: 23, 32: 24, 9: 25, 19: 26, 8: 27, 27: 28,
+39: 29, 7: 30, 48: 31, 29: 32, 36: 33, 31: 34, 6: 35, 41: 36, 5: 37, 40: 38, 4: 39, 25: 40, 3: 41, 34: 42, 2: 43, 26:
+44, 33: 45, 1: 46, 0: 47, 47: 48}, 'code': {37: 'AL', 24: 'AK', 42: 'AZ', 15: 'AR', 45: 'CA', 35: 'CO', 14: 'CT', 13:
+'DE', 18: 'FL', 22: 'GA', 23: 'HI', 46: 'ID', 12: 'IL', 16: 'IN', 38: 'IA', 10: 'KS', 28: 'KY', 49: 'LA', 20: 'ME', 43:
+'MD', 44: 'MA', 21: 'MI', 30: 'MN', 11: 'MS', 17: 'MO', 32: 'MT', 9: 'NE', 19: 'NV', 8: 'NH', 27: 'NJ', 39: 'NM', 7:
+'NY', 48: 'NC', 29: 'ND', 36: 'OH', 31: 'OK', 6: 'OR', 41: 'PA', 5: 'RI', 40: 'SC', 4: 'SD', 25: 'TN', 3: 'TX', 34:
+'UT', 2: 'VT', 26: 'VA', 33: 'WA', 1: 'WV', 0: 'WI', 47: 'WY'}}
+return pd.DataFrame(states)
+```
+-VV-
+
+# Loading this to the workspace
+
+```python
+states = pp.load_usa_states_geo_data()
+states.head()
+```
+
+-VV-
+
+# We now need to write a us_to_states to expand US to states
+
+- The idea is to use a model to match two sets of coordinates 
+- We will use a spatial algorithm called KDTree that optimises this process
+
+-VV-
+
+# My us_to_states function (step 1)
+- Gets 
+    - The clean data frame 
+    - The states geo data 
+- Output 
+    - df with an additional country_and_state column
+
+-VV-
+
+ # My us_to_states function (step 2)
+    - we will be working only on US indices
+
+
+ ```python 
+from scipy import spatial
+def us_to_states(df,states):
+    index = df.country =='US'
+    df['country_and_state'] = df.country
+ ```
+
+
+-VV-
+
+ # My us_to_states function (step 3)
+    - We create a mapping dictionary
+
+ ```python 
+def us_to_states(df,states):
+    ...
+    mapping = dict(zip(states.index,"US-"+states.code))
+ ```
+
+
+
+-VV-
+
+ # My us_to_states function (step 4)
+    - We extract the states coordinates as numpy array
+     
+ ```python 
+def us_to_states(df,states):
+    ...
+    points = states.iloc[:,1:3].to_numpy()
+ ```
+
+-VV-
+
+# My us_to_states function (step 5)
+- Create a KD tree object and populate it with the points 
+
+```python
+def us_to_states(df,states):
+    ...
+    tree = spatial.cKDTree(points)
+```
+
+-VV-
+
+# My us_to_states function (step 6)
+- Use the tree object to query all our points in one go 
+- this step relies on the data being transformed to float
+
+```python
+def us_to_states(df,states):
+    ...
+    dist,ix = tree.query(df.loc[index,['lat_appx_lots_of_err','long_appx_lots_of_err']].to_numpy(), k=1)
+```
+
+
+-VV-
+
+# My us_to_states function (step 7)
+- We extract both the keys and values as numpy arrays 
+- and create a mapping array 
+
+```python
+def us_to_states(df,states):
+    ...
+    keys = np.array(list(mapping.keys()))
+    values = np.array(list(mapping.values()))
+    mapping_array = np.zeros(keys.max()+1
+                ,dtype=values.dtype)
+```
+-VV-
+
+# My us_to_states function (step 8)
+- We match keys to values in our mapping array 
+- and use the kdtree index to generate matching values 
+
+```python
+def us_to_states(df,states):
+    ...
+    mapping_array[keys] = values
+    out = mapping_array[ix]
+```
+
+
+-VV-
+
+# My us_to_states function (step 9)
+- Final step we replace the original values with the mapped ones 
+- and return the dataframe
+
+```python
+def us_to_states(df,states):
+    ...
+    df.loc[index,'country_and_state'] = list(out)
+    return df.copy()
+```
+
+
+-VV-
+# we run our function 
+
+```python
+df = pp.us_to_states(df,states)
+```
+-VV-
+
+# What next
+- You now need to create a summery function that generates the cleaned summary df
+- And create a plots file where you will have all your plot functions 
+-s-
+
+# Final report  (submitted as a group)
+
+- You all did great work in your previous report 
+- For this week I only ask you to create these two files and rewrite your report as a final product 
+
+</script>
+</section>
+</div>
+</div>
+
+<script src="js/reveal.js"></script>
+<script src="js/config.js"></script>
+<script>
+window.onload=function(){function a(a,b){var c=/^(?:file):/,d=new
+XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var
+b,c=document.getElementsByTagName("*");for(b in
+c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"))};
+</script>	
+</body>
+
+</html>
