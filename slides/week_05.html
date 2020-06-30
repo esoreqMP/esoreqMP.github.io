@@ -416,7 +416,7 @@ codes = pp.load_codes()
 df = pp.load_data(data_folder)
 df = pp.flag_outliers(df)
 df = pp.clean_data(df,'all')
-df = pp.recode_scores(df,codes.Q_id[codes.Key_direction=='-'])
+df = pp.recode_scores(df,codes.Q_id[codes.Key_direction=='-'],1,5)
 df = pp.lat_and_long_to_float(df)
 df = pp.dateload_to_datetime(df)
 df.shape
