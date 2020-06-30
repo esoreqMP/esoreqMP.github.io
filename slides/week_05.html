@@ -573,6 +573,7 @@ def freq_with_thr(x,thr):
 - We remap the input series with OTHER for any below threshold category 
 - And return a transposed table back 
 
+
 ```python
 def freq_with_thr(x,thr):
     df = freq(x).T.sort_values(by='Count', ascending=False)
