@@ -1,0 +1,553 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sysAI.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown data-separator-vertical="-VV-" data-separator="-s-">
+					<script type="text/template">
+<!-- .slide: id="intro_week_04"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<h1 style="text-align: center;font-size: 15vmin">WEEK 06 <br> Dimensionality reduction and Brain Age </h1>
+
+-VV-
+# Welcome to week six where we will be finally looking at some brains
+
+## Learning objectives
+- At the end of this session, you should be able to
+    - Understand how to apply previously touched concepts (such as thresholding and data mining) to brain-related data
+    - Write functions to load and extract data from MRI volumes
+    - Construct data frames to store mined information
+    - Create functions to visualy inspect MR volumes
+-VV-
+# before we dive in lets do a quick recap... 
+
+![](https://i.ya-webdesign.com/images/help-clipart-recap-4.jpg)
+
+-VV-
+
+# What is Data Mining?
+- Alternative names same meaning 
+    - knowledge extraction
+    - data/pattern analysis
+    - knowledge discovery from data
+- In other words:
+
+"Extraction of interesting/relevant patterns or knowledge from a large amount of data."
+-VV-
+
+# The process (simplified)
+    - Data aquisition
+    - Data pre-processing
+    - Data mining
+    - Data post-processing/modeling
+
+-VV-
+ # Data aquisition
+    - MR experiment
+    - Meta analysis
+    - Legacy data
+    - Data repositoryies
+
+-VV-
+# Data pre-processing
+- Quality control (Various ways dependant on specific metrics )
+- Normalization (transfer data to some comparable space)
+- Data cleaning (remove noise artefacts)
+
+
+-VV-
+# Data mining
+- Feature selection
+- Dimension reduction (aka feature engineering)
+- Outlier analysis (Flag problematic events)
+- Data visualization (eyeball data)
+
+-VV-
+# Data post-processing/modelling
+- Model comparison
+- Pattern evaluation
+- Pattern interpretation
+- Pattern visualization
+
+-VV-
+# What are features?
+Features, aka attributes are individual independent variables that act as the
+input in your system. Machine learning models use features to uncover patterns
+of interest. New features can also be obtained from old features utilising a method
+known as ‘feature engineering’ - a simple example is that of statistical interactions which are just the product between two features that construct
+a new feature. In terms of data structures, you would consider each column of your data set to be one feature. The number of features is referred to as feature space dimensionality. 
+
+
+-VV-
+# What is feature selection?
+Your ML system is as good as the data you feed it. 
+If the input is hugely relevant to the problem, we are trying to solve/answer
+the system will be useful. However, some times you have incredibly large
+feature spaces (can get to several million for complex models). 
+Using domain expertise to select only relevant features will reduce the noise
+in the system and simplify your models.
+
+
+-VV-
+# What is Dimension reduction?
+In the never-ending quest to reduce noise and improve the signal,
+we will try to eliminate redundant and irrelevant features. 
+One way to do that is to reduce the feature space dimensionality mathematically.
+One of the simplest way to do that is to use the mean: $$ \mu = 1/n* \sum^n_{i=1}{x_i}$$
+-VV-
+
+# What is outlier analysis?
+We already learned some ways to identify anomalies using common sense or domain expertise. 
+However, outlier analysis is a field of study in which we identify the anomalous
+events deviating from the standard. This is an essential branch of data mining,
+and is crucial in fraud detection, for example.
+
+
+-VV-
+
+# Last but not least - Data visualization
+We've visited this idea extensively, but for completeness, this is the means of
+visually understanding trends and patterns in your mined data.
+It requires some basic and advanced audience of various plots 
+we can use to detect problems with our data set, 
+and even more importantly communicate your insights regarding the data.
+
+
+-VV-
+# Today we will touch on aspects of the above using the Ageing brain dataset
+- The data is a subset of a larger dataset containing 2001 subjects
+- In our subset, we have 100 subjects each with both white matter and grey matter VBM
+- Data normalised onto MNI coordinate system. 
+- Demographics table with a unique ID and age group.
+
+ *Cole et al. Trends in Neurosciences (2017)
+-s-
+<!-- .slide: id="intro_week_05"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> Ageing and Structural VBM </p>
+
+-VV-
+# Basic questions to begin with
+- What is the type of data we are mining?
+- What is the experimental question?
+- How strong is the evidence to support that question?
+-VV-
+# Ageing and Structural VBM
+![](img/figures_VBM.png)
+
+- The basic idea is to map brains to a shared space and compare voxel-wise characteristics.
+- One volume has exactly 121 x 145 x 121 voxels each a potential feature. 
+- For more information see [Intro to VBM](http://www.neuro.uni-jena.de/pdf-files/Kurth-VBM.pdf)
+
+-VV-
+# Basic working hypothesis
+- Is there a strong association between age and grey matter intensity?
+![](img/figures_Demo.png)
+
+- In this session, we are using grey matter voxel-based morphometry volumes that were meticulously collected by Dr James Cole. (see Cole et al., 2015, Annals of Neurology).
+- We will use a carefully selected sample of 100 volumes from the much larger database. 
+- In the images above, we see that a strong association exists between grey matter decline and age.
+-VV-
+
+# Basic assumptions
+- The human brain changes throughout the lifespan, with well-characterised reductions in grey matter volume beginning in early adulthood. 
+- White matter volume follows a non-linear trajectory, increasing in volume until middle age, before decreasing into older age.
+- For more information about this well, researched phenomena read for example [Good et al.,2001, NeuroImage](http://www.sciencedirect.com/science/article/pii/S1053811901907864)
+
+-VV-
+
+# Before we can begin we need to know how to handle the data 
+
+-s-
+<!-- .slide: id="intro_week_05"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> Visual quality control </p>
+
+-VV-
+# Eyaball data 
+
+- Best practice dictates visualisation of all datasets before running any analysis
+- This step is of particular importance when using new data that someone else has pre-processed.
+- So before we proceed with any inspection, we will learn how to check our data quality.
+
+-VV-
+
+# NiBabel package for loading nifti files
+- We will be loading the mri volumes using NiBabel package
+- Importantly, these volumes are already in processed NIfTI (Neuroimaging Informatics Technology Initiative) format 
+- Howe this is not always the case, in most studies, initial data imaging will using the Dicom format 
+    - DICOM: - Digital Imaging and Communications in Medicine 
+- Accessing the neuro-imaging file format  is a crucial step that should not be taken lightly 
+
+-VV-
+# Installing NiBabel
+
+- This is a no brainer recipe intended for people that struggled with this step 
+- If you already have a working version of Nibabel skip this step 
+
+-VV-
+
+# Installing NiBabel (step one)
+- Add [conda-forge](https://conda-forge.org) to anaconda search space 
+- We need to make sure the max Planck VPN is on 
+- Then using our personal computer, we ssh to the cluster
+- Make sure we source ~/.bashrc on login to the cluster
+- And make sure anaconda is active (sys2020) 
+- Then run the following line: 
+```
+conda config --add channels conda-forge
+```
+
+-VV-
+# Installing NiBabel (step two)
+
+- If all went well, this line should install in your sys2020 environment a fresh NiBabel installation that is compatible with Python 3.8
+
+```python
+conda install nibable
+```
+
+-VV-
+# Installing NiBabel (step three)
+
+- Now we need to check if NiBabel was correctly installed and is accessible 
+- We need to go the Jupyter web hub 
+- Initialise a server 
+- And check if the following line works with no errors within a Jupyter notebook
+- If it does, great move on. 
+- If it doesn't, please let me know 
+
+```python
+import nibabel as nib
+import os, glob
+import matplotlib.pyplot as plt
+
+```
+
+-VV-
+# Using NiBabel to read a gzipped volume to the memory
+- The NiBabel load gives a wealth of information,
+- As you already know, the basic measurement unit is called a voxel 
+- vol.affine is the is an affine matrix that gives information about the shape of the voxel (the diagonal) and the relative position of the brain in some coordinate space in this case MNI
+
+
+```python
+filelist = glob.glob(os.path.join("wm/wm/*.gz"))
+vol = nib.load(filelist[0])
+display(vol.shape)
+print(vol.get_data_dtype() )
+vol.affine
+```
+
+
+
+-VV-
+
+# Let's extract one plane and visualise it
+
+```python
+data = vol.get_fdata()
+f, ax = plt.subplots(1,1,figsize=(6, 6)) 
+ax.imshow(data[:,50,:],cmap='gray');
+plt.show()
+```   
+
+-VV- 
+
+# what did we just do? 
+- 'get_fdata()'' extracts the volumetric data from the file and converts it to a numpy array
+- Create a canvas to plot on
+- And slice the 50 coronal plane 
+- Then view the image
+
+
+-VV- 
+
+# let's create a get_plane function
+
+```python
+def get_plane(M,ix,dim,rot=0):
+    d = M.shape
+    padding = [(x, x) for x in tuple(np.abs(d-np.max(d))//2)]
+    vol = np.pad(M,padding)
+    plane = vol.take(indices=ix, axis=dim)
+    if rot: 
+        plane = np.rot90(plane,rot)
+    return plane
+```
+
+-VV- 
+
+# With this function we can create montage images to examine all the data 
+
+
+```python
+d = np.max(data.shape)
+slices = np.round([d*0.35,d/2,d*0.65]).astype(int)
+tmp = np.concatenate([np.concatenate((get_plane(data,j,0,1),get_plane(data,j,1,1),get_plane(data,j,2,1)),axis=1) for j in  slices]) 
+f, ax = plt.subplots(1,1,figsize=(6, 6)) 
+ax.imshow(tmp,cmap='hot');
+plt.show()
+```
+
+
+-VV- 
+
+# Now let's create a list of images for each volume
+
+
+```python
+ims = []
+
+for file in filelist:
+    vol = nib.load(file).get_fdata()
+    tmp = np.concatenate([np.concatenate((get_plane(vol,j,0,1),get_plane(vol,j,1,1),get_plane(vol,j,2,1)),axis=1) for j in  slices]) 
+    ims.append([tmp])
+```
+
+-VV-
+# And plot them in a crude but effective animation
+```python
+%matplotlib notebook
+fig, ax = plt.subplots(1,1,figsize=(10, 10))
+
+for i in range(len(ims)):
+    # Clear the current plot
+    ax.clear()
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    ax.imshow(np.squeeze(ims[i]))
+    plt.pause(0.2)
+    # Draw the figure
+    fig.canvas.draw()
+```
+
+-VV-
+# Mining dependable measures
+
+- We made sure our data looks like a brain
+- Now we can start by mining a global grey matter intensity measure.
+- lets start with creating a function that will simplify this process.
+    - Our function will do the following: 
+        - 1. load volume inside the file 
+        - 2. extract the identifier from the file name 
+        - 3. average the volume to one grand mean masure
+
+-VV-
+# Mining dependable measures (step 1)
+- We load the file and get the data as array
+
+```python
+def mine_mu(fn):
+    tmp = nib.load(fn)
+    vol = tmp.get_fdata()
+```
+
+
+-VV-
+# Mining dependable measures (step 2)
+- We convert the data to vector format 
+
+
+```python
+def mine_mu(fn):
+    ....
+    vol = vol.reshape(-1)
+```
+
+-VV-
+# Mining dependable measures (step 3)
+- return the mean value of the volumes
+
+
+```python
+def mine_mu(fn):
+    ....
+    return np.mean(vol)
+```
+
+-VV-
+# Mining dependable measures (step 4)
+- In one line 
+
+
+```python
+def mine_mu(fn):
+    return np.mean(nib.load(fn).get_fdata().reshape(-1))
+```
+
+
+
+-VV-
+# Now we can go over the data and mine it  (step 5)
+
+```python
+g_mu = []
+
+for file in filelist:
+    mine_mu(file)
+    g_mu.append(mine_mu(file))
+```
+
+
+-VV-
+# And examine the distribution of age groups using any of the many ways we learned 
+
+```python
+df = pd.read_csv('AgeGroup.csv')
+import seaborn as sns
+sns.set(style="darkgrid")
+ax = sns.violinplot(x=df.Class, y=g_mu)
+```
+- It seems that even this simplistic measure the distributions are different.
+- However, this crude approach has a major flaw
+
+
+-VV-
+# Try to think what the flaw is? 
+- Hint plot the VBM magnitude distribution
+
+
+-s-
+
+<!-- .slide: id="intro_week_05"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin"> Constrained mining  </p>
+
+-VV-
+
+# Using a template to construct a constrained threshold
+
+- The VBM approuch aproximates the density of specific tissues 
+- If we take the grand mean we are adding alot of noise that isn't related to the signal we are after
+- The DARTEL template represents the probability of a voxel to be associated with a specific tissue type.
+
+![ ](img/figures_DARTEL.png)
+
+-VV-
+
+# load the template
+- and seprate the two 3d maps 
+
+
+```python
+vol = nib.load('Template_6.nii.gz').get_fdata()
+print(vol.shape)
+d1 = vol[:,:,:,0]
+d2 = vol[:,:,:,1]
+```
+
+-VV-
+
+# plot them to identify the grey matter mask
+
+```python
+f, ax = plt.subplots(1,2,figsize=(10, 10)) 
+ax[0].imshow(m1,cmap='gray',vmin=0,vmax=0.8);
+ax[1].imshow(m2,cmap='gray',vmin=0,vmax=0.8);
+plt.show()
+```
+
+
+-VV-
+
+# We can use it to create a mask
+
+- How do we select the "right" threshold?
+- There isn't a simple answer to this 
+
+
+```python
+f, ax = plt.subplots(1,1,figsize=(10, 10)) 
+tmp = np.concatenate((get_plane(d1>0.1,60,0,2),get_plane(d1>0.25,60,0,2),get_plane(d1>0.5,60,0,2),get_plane(d1>0.8,60,0,2)))
+ax.imshow(tmp.T,cmap='gray',vmin=0,vmax=0.8);
+```
+
+-VV-
+
+# We can use the ribbon mask to different levels of grey matter density.
+
+
+```python
+def mine_mu_with_mask(fn,mask):
+    vol = nib.load(fn).get_fdata().reshape(-1)
+    return np.mean(vol[mask.reshape(-1)])
+```
+
+
+-VV-
+
+
+# Different thresholds will generate more or less aggressive constrains
+- this will have dramatic effects on the mean and standard deviation
+
+```python
+g_masked_mu = []
+for file in filelist:
+    g_masked_mu.append(mine_mu_with_mask(file,d1>0.5))
+```
+
+```
+ax = sns.violinplot(x=df.Class, y=g_masked_mu)
+```
+
+
+
+-VV-
+# What else can we do ?
+
+-VV-
+# Spatial specificity ?
+The solution would be to parcellate the brain i.e.
+“To divide into separate parcels, parts, or portions”
+
+![](img/figures_ROI.png)
+
+
+-VV-
+
+# Next week we will use different ROI maps to mine data
+- And Cluster, reduce and inspect brain data using unsupervised data 
+
+
+
+</script>
+</section>
+</div>
+</div>
+
+<script src="js/reveal.js"></script>
+<script src="js/config.js"></script>
+<script>
+window.onload=function(){function a(a,b){var c=/^(?:file):/,d=new
+XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var
+b,c=document.getElementsByTagName("*");for(b in
+c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"))};
+</script>	
+</body>
+
+</html>
