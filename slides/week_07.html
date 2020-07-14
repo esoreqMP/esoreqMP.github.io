@@ -1,0 +1,641 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sysAI.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown data-separator-vertical="-VV-" data-separator="-s-">
+					<script type="text/template">
+<!-- .slide: id="intro_week_07"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">WEEK 07 <br> Brain Age and unsupervised learning</p>
+
+-VV-
+# Welcome to week seven (outline)
+
+- Last week recap 
+- Unsupervised learning  - Clustering
+- Unsupervised learning  - Dimensionality reduction 
+- Unsupervised learning  - Applied to Brain Age
+- Summary and group assignment 
+
+-VV-
+# Learning objectives
+- At the end of this session, you should be able to
+    - Understand what unsupervised learning is
+    - Understand when and why we use unsupervised learning for
+    - Apply unsupervised learning algorithems in Python to simulated data-sets 
+
+-VV-
+# group home assignment   
+- Use the mining function to mine VBM ROI data 
+- Use at least two clustering algorithms to examine the natural separation of age groups in the data 
+- Reduce the dimensionality of the data to inspect the results visually 
+- Submit a Jupyter notebook report 
+
+-s-
+<!-- .slide: id="Recap"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Last week recap</p>
+
+-VV-
+
+# Last week we:
+- Used NiBabel to read brain grey matter volumes
+- Using these volumes, we learned:
+    - How to generate a vanilla multi-plane multi-dimensional viewing function
+    - And how to create a crude animation within Jupyter to eye-ball our data before mining
+- We then learned how to mine the VBM signal intensity with and without a mask 
+- As expected the magnitude of the masked data was higher than without the mask 
+- Do you understand why this is what we would expect?
+
+    
+-VV-
+# Last week functions with some extras
+- This additional functionality allows extracting ROI data 
+- It is explained below in detail 
+- However, if you don't want to dive in you can copy the function and move right to the next section
+
+```python 
+def mine_vbm(file,mask=False):
+    vol = nib.load(file).get_fdata()                
+    vox = vol.reshape(-1) # reshape the 3d volume to 1d vector  
+    if np.all(mask):
+        return np.mean(vox)
+    elif len(np.unique(mask))==2:
+        return np.mean(vox[mask.reshape(-1)]) 
+    else:
+        mask = mask.astype(int)
+        roi = np.squeeze(np.eye(mask.max()+1)[mask.reshape(-1)])                
+        mag_sum =  vox.reshape(1,-1) @  roi  
+        mag_mean = mag_sum/np.sum(roi,axis=0) 
+        return mag_mean[0,1::]                  
+```
+
+-VV-
+
+# Using spatial information to reduce dimensionality? 
+- Last week session we used a template mask to minimise redundant information 
+- We ended the session with a suggestion to use an atlas to independently mine signals from different parts of the brain 
+- This can be achieved with a label map which replaces the binary mask with a label map that clusters together voxels that share some common features 
+- Today we will be using a label map that is spatially constrained 
+
+-VV-
+
+# load the ROI map 
+
+```python 
+Temp = nib.load('Template_6.nii.gz').get_fdata()
+GM_temp = Temp[:,:,:,0]
+ROI = nib.load('GM_ROI.nii.gz').get_fdata()
+```
+
+-VV-
+
+# Visually examine the label map 
+- We will be using `get_plane` from last week
+
+```python
+def get_plane(M,ix,dim,rot=0):
+    d = M.shape
+    padding = [(x, x) for x in tuple(np.abs(d-np.max(d))//2)]
+    vol = np.pad(M,padding)
+    plane = vol.take(indices=ix, axis=dim)
+    if rot: 
+        plane = np.rot90(plane,rot)
+    return plane
+```
+
+-VV-
+
+# Overlay onto the template
+
+- It is always good practice to confirm alignment between the template/data and the atlas/label map
+
+
+```python
+d = np.max(GM_temp.shape)
+f, ax = plt.subplots(1,1,figsize=(20, 6)) 
+ax.imshow(get_plane(GM_temp,60,2,1), cmap='gray');
+ax.imshow(get_plane(ROI,60,2,1), cmap='jet', alpha=0.5);
+plt.show()
+```
+
+-VV-
+
+# We are now ready to mine the data 
+
+- There are many ways to extract values from imaging data using a label map 
+- Most will start with a loop for all subjects and an inner loop for all cluster 
+- While there is nothing wrong with this approach, it is extremely slow compared to the vectorized alternative 
+
+-VV-
+
+# But what is vectorization?
+- Using NumPy arrays, we can avoid loops (Which are slow in Python) for various elementwise arithmetic operations on the data. 
+- This process is usually called vectorization. 
+- For those interested [here is an excellent overview with examples](https://www.geeksforgeeks.org/vectorization-in-python/)
+- We used vectorization to speed-up the mapping process in our us_to_states function 
+- In this case, we will use vectorization for two essential reasons 
+    - Converting our label map to dummy (boolean) variables 
+    - Using our dummy ROI set to extract mean values for each subject 
+
+-VV-
+
+# label to dummy space vectorized (in steps)
+
+- In linear algebra, the identity matrix is the n × n square matrix with ones on the leading diagonal and zeros elsewhere. 
+- In NumPy (and Matlab) we create such matrices using the np.eye command
+
+```python
+eye = np.eye(10)
+f, ax = plt.subplots(1,1,figsize=(20, 6)) 
+ax.imshow(eye, cmap='gray');
+```
+
+-VV-
+
+# label to dummy space vectorized (step 2)
+- In the context of dummy variables, the identity matrix we previously created is equivalent to dummy form of 0:9 vector
+```python
+label_with_eye = np.concatenate([np.arange(10).reshape(-1,1),eye.astype(int)],axis=1)
+f, ax = plt.subplots(1,1,figsize=(20, 6)) 
+ax.imshow(label_with_eye, cmap='jet');
+```
+
+-VV-
+
+# label to dummy space vectorized (step 3)
+- We can use integer indices to map the eye to a more complex vector 
+- In the below toy example we have 10 classes and 100 events that map to these classes 
+```python
+index = np.random.randint(0, high=10, size=100)
+f, ax = plt.subplots(1,1,figsize=(20, 6)) 
+ax.imshow(np.concatenate([index.reshape(-1,1),np.eye(10)[index].astype(int)],axis=1), cmap='jet',aspect=0.1);
+```
+
+-VV-
+
+# label to dummy space vectorized (step 4)
+- In the case of our brain data we have $121 x 145 x 121 = 2,122,945$ voxels 
+- And we have `ROI.max() = 157` classes 
+- looping over this would have required at least 157 steps for each subject and would take forever 
+- Using the vectorized form takes approximately 1.5 seconds 
+
+```python
+ROI = nib.load('../GM_ROI.nii.gz').get_fdata().astype(int)
+roi = np.eye(ROI.max()+1)[ROI.reshape(-1)]
+roi.shape
+```
+
+-VV-
+
+# How do we use the labels to mine local VBM values?
+- We want to be able to extract the mean density for each of our regions of interest 
+- A simple way to achieve that would require matrix multiplication 
+- For those without any prior background in linear algebra, [here is an excellent intuitive explanation on matrix multiplication](https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:matrices/x9e81a4f98389efdf:multiplying-matrices-by-matrices/v/matrix-multiplication-intro)  
+- However, simply put, matrix multiplication is the process of creating a new matrix where each cell is the sum of row by column multiplication
+
+
+
+-VV-
+
+# Just to make sure this vital concept is understood 
+
+- The matrix multiplication of matrix A with m rows and n columns and matrix B with n rows and p columns results in matrix C with m rows and p columns 
+
+$$ \underset{m \times n}{\mathrm{A}} \cdotp \underset{n \times p}{\mathrm{B}} = \begin{bmatrix} a_{11} & \dots & a_{1n} \\\\ \vdots & \ddots & \vdots \\\\ a_{m1} &  \dots & a_{mn} \end{bmatrix} 
+\cdotp \begin{bmatrix} b_{11} & \dots & b_{1p} \\\\ \vdots & \ddots & \vdots \\\\ b_{n1} &  \dots & b_{np} \end{bmatrix} =
+\begin{bmatrix} c_{11} & \dots & c_{1p} \\\\ \vdots & \ddots & \vdots \\\\ c_{m1} &  \dots & c_{mp} \end{bmatrix} =  \underset{m \times p}{\mathrm{C}}$$
+
+- Where cell (i,j) in C is the sum of products of the corresponding ith row in A and jth column in B.
+
+$$ A_{i \cdot} \cdotp B_{\cdot j} = \begin{bmatrix} a_{i1} & \dots & a_{in} \end{bmatrix} \cdotp  
+\begin{bmatrix} b_{11} \\\\ \vdots \\\\ b_{n1} \end{bmatrix}
+= \sum\limits_{k=1}^{n} a_{ik} b_{kj} = C_{ij} $$
+
+
+-VV-
+# How does this help us?
+
+- In our case, we have the VBM magnitude (for one subject) as a vector (with the shape of (2122945,1))
+- And the dummy ROI matrix we just created (with the shape of (2122945,158))
+- The essential rule in matrix multiplication is that the inner dimensions have to match 
+- In other words, if we multiply the magnitude transposed, we get the sum of magnitude voxels within each ROI
+- As our ROI have very different shapes and volumes, we divide by the number of voxels for each ROI 
+- Finally, we remove the first value as it corresponds to ROI=0 which are all the voxels that are not within our ROI set
+ 
+
+```python 
+mag_sum = vox.T @ roi
+mag_mean = mag_sum/np.sum(roi,axis=0) 
+mag_mean = mag_mean[0,1::]
+```
+
+-VV-
+# Here is the final mining function we started with
+
+```python 
+def mine_vbm(file,mask=False):
+    vol = nib.load(file).get_fdata()                
+    vox = vol.reshape(-1) # reshape the 3d volume to 1d vector  
+    if np.all(mask):
+        return np.mean(vox)
+    elif len(np.unique(mask))==2:
+        return np.mean(vox[mask.reshape(-1)]) 
+    else:
+        mask = mask.astype(int)
+        roi = np.squeeze(np.eye(mask.max()+1)[mask.reshape(-1)])                
+        mag_sum =  vox.reshape(1,-1) @  roi  
+        mag_mean = mag_sum/np.sum(roi,axis=0) 
+        return mag_mean[0,1::]         
+```
+
+
+
+-s-
+<!-- .slide: id="UML Clustering"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Unsupervised learning <br> Clustering background</p>
+
+-VV-
+# What is Unsupervised Learning?
+- Unsupervised learning (UML) is the process of learning/identifying some structure in **unlabelled** data. 
+- In other words, we are interested solely in attributes of the feature space itself. 
+- Here I am listing the key concepts in this field 
+
+-VV-
+# What is cluster analysis?
+
+- One of the most common question UML tries to solve is whether the features form specific clusters or sub-groups in feature space.
+- This essential unsupervised learning technique is known as cluster analysis.
+
+-VV-
+# Clustering analysis objective
+
+- For a set of elements with a common feature space, we want to group similar events based on some **distance** measure.
+- Practically we need to assign a cluster label to elements that share some pattern across a feature space to partition them into groupings or clusters. 
+
+-VV-
+# Clustering open questions
+
+- What do we mean by “similar”? 
+- How do we quantify similarity?
+- What is a good grouping? 
+- How do we choose the number of clusters? 
+- Flat or hierarchical clustering?
+
+
+-VV-
+# Major General types of clustering
+- “Soft” versus “hard.” 
+    - Soft = each event cluster assignment is distributed across several groups
+    - Hard = each event is only assigned to one label
+- Flat versus hierarchical 
+    - No nested clusters
+    - Clusters form a hierarchy 
+- Agglomerative versus Divisive 
+    - Agglomerative =  Bottom-up creation of clusters, beginning with the pairing of single events together until the final groups are formed 
+    - Divisive =  Top-down formation of clusters beginning with the entire sample and dividing it to groups  based on some criteria 
+
+-VV- 
+# Non-distributional Distance measures
+- The heart and soul of any clustering process lies in how we measure distance or (dis)similarity between events
+- When dealing with continuous measures, two of the most common ways to measure magnitude differences between multivariate events are: 
+    - l1-Norm (aka Manhatten distance) $d_1(x,y)= \sum^n_{i=1}|x_i-y_i|$ 
+    - l2-Norm (aka Euclidean distance) $d_2(x,y) = \sqrt{\sum^n_{i=1} (x_i-y_i)^2} $
+- Where **Norm** refers to the a nonnegative value quantifying the vector’s magnitude (across the n-dimensional space).
+- This can be generalized to the Minkowski distance metric $d_p(x,y) = (\sum^n_{i=1} |x_i-y_i|^p)^{1/p}$ 
+- The range here is 0 (no distance) and +inf 
+
+
+-VV- 
+# Correlation as the distance between angles 
+- The choice of similarity measure can shape how your data is interpreted 
+- In contrast to the magnitude distance measures, the distance between angles gives a different complementary measure 
+- As expected this measure is not sensitive to magnitude differences but instead compares the shape similarity  
+    - Pearson correlation $r_{xy} = \frac{\sum^n_{i=1}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum^n_{i=1}(x_i-\bar{x})^2}\sqrt{\sum^n_{i=1}(y_i-\bar{y})^2}}$
+    - Cosine distance $\frac{\sum x_i y_i}{\sqrt{\sum^n_{i=1}x_i^2}\sqrt{\sum^n_{i=1}y_i^2}}$
+- It is easy to see that the Cosine distance is a special case of Pearson correlation when both means are zero 
+
+-VV- 
+# Let's compare these with a toy example 
+- We start by generating three events with 50 features that have some predefined similarity between them
+
+```python
+from numpy.random import multivariate_normal as mrnd
+import matplotlib.pyplot as plt
+np.random.seed(2020)
+v1,v2,v3,c1,c2 = 1,2,3,1.2,0.2
+X = mrnd([1,25,10],[[v1,c1,c2],[c1,v2,c1],[c2,c1,v3]],size=50)
+h = plt.plot(X);
+plt.legend(h,bbox_to_anchor=(0.85, 0,0.5, 1));
+```
+
+-VV- 
+# compare angle similarity and distance to magnitude distance
+
+The correlation is a measure of similarity, to convert it to one of distance we can invert it using subtraction. 
+It is immediately apparent that the correlation metric is sensitive to the shape similarity across dimensions. In contrast, the euclidean distance amplifies on the differences in magnitude. 
+
+```python 
+from scipy.spatial.distance import squareform,pdist
+display(np.corrcoef(X.T))
+display(squareform(pdist(X.T,metric='euclidean')))
+display(1-np.corrcoef(X.T))
+```
+
+-VV- 
+# Importance of normalisation 
+- Some of these measures assume normalised data (i.e. mean=0 and unit variance) 
+- As a result, it is important to know which metric you use and the processing associated with it 
+
+```python 
+from sklearn import preprocessing
+x_normelized = preprocessing.scale(X)
+f, ax = plt.subplots(1,2,figsize=(12, 6)) 
+h = ax[0].plot(X);
+ax[0].legend(h,('l-01','l-02','l-03'),bbox_to_anchor=(0,1.02),loc="lower left",  ncol=3);
+h = ax[1].plot(x_normelized);
+ax[1].legend(h,('l-01','l-02','l-03'),bbox_to_anchor=(0,1.02),loc="lower left", ncol=3);
+```
+
+-VV- 
+# effect of normalisation on distance
+
+- Just compare the differences and think how easy it is to miss interpret these findings if you failed to normalise the data 
+```python 
+display(squareform(pdist(X.T,metric='cosine')))
+display(squareform(pdist(x_normelized.T,metric='cosine')))
+display(squareform(pdist(X.T,metric='euclidean')))
+display(squareform(pdist(x_normelized.T,metric='euclidean')))
+```
+
+-VV- 
+# Three common clustering algorithms (but there are many more) we will examine 
+
+- K-means - hard clustering of events based on distance from centers ([in-depth](https://towardsdatascience.com/machine-learning-algorithms-part-9-k-means-example-in-python-f2ad05ed5203#:~:text=K%2DMeans%20Clustering%20is%20an,been%20trained%20with%20labeled%20data))
+- GaussianMixture - soft clustering of events based on per cluster gaussian distribution ([in-depth](https://towardsdatascience.com/gaussian-mixture-models-explained-6986aaf5a95))
+- Hierarchical Clustering - hard clustering of events to multiple levels of hierarchy ([in-depth](https://towardsdatascience.com/machine-learning-algorithms-part-12-hierarchical-agglomerative-clustering-example-in-python-1e18e0075019))
+
+-VV- 
+
+# Consider the following toy data-set
+
+- We have three clusters 
+- Within one of them we have a nested structure of three clusters 
+
+
+```python 
+from sklearn.datasets import make_blobs
+import seaborn as sns;
+X, y = make_blobs(centers=5,n_samples=300,n_features=2, random_state=2020)
+ax = sns.scatterplot(x=X[:,0], y=X[:,1], hue=y)
+```
+
+-VV- 
+
+#  Let's fit some models 
+- We are using sklearn structure to solve this simple problem 
+
+```python 
+from sklearn.cluster import KMeans,AgglomerativeClustering
+import scipy.cluster.hierarchy as sch
+from sklearn.mixture import GaussianMixture
+kmn = KMeans(n_clusters=5).fit(X)
+gmm = GaussianMixture(n_components=5).fit(X)
+hcl = AgglomerativeClustering(n_clusters=5, affinity='euclidean', linkage='ward').fit(X)
+```
+
+-VV-
+
+#  Inspect the results 
+- As you can visually see all models do a good job 
+
+
+```python 
+f, ax = plt.subplots(1,4,figsize=(15, 3)) 
+sns.scatterplot(x=X[:,0], y=X[:,1], hue=y,ax=ax[0])
+sns.scatterplot(x=X[:,0], y=X[:,1], hue=kmn.labels_,ax=ax[1])
+sns.scatterplot(x=X[:,0], y=X[:,1], hue=np.argmax(gmm.predict_proba(X),axis=1),ax=ax[2])
+sns.scatterplot(x=X[:,0], y=X[:,1], hue=hcl.labels_,ax=ax[3])
+```
+
+-VV- 
+
+# What about more complex data sets? 
+
+- We have three classes 
+- However we now have 50 features not two 
+
+
+```python 
+from sklearn.datasets import make_classification
+import seaborn as sns;
+X, y = make_classification(n_samples=300,n_features=50, n_informative=6, random_state=2020,n_redundant=10, n_repeated=0, n_classes=3, n_clusters_per_class=1)
+ax = sns.scatterplot(x=X[:,0], y=X[:,1], hue=y)
+```
+-VV- 
+
+# Let's examine the similarity pattern 
+- Can we see a pattern in the paired similarity? 
+
+```python 
+f, ax = plt.subplots(1,1,figsize=(10, 10)) 
+ax.imshow(np.corrcoef(X))
+```
+
+-VV- 
+
+# Let's use hcl to sort the data 
+- Now the pattern is clear 
+
+```python 
+hcl = AgglomerativeClustering(n_clusters=3, affinity='euclidean', linkage='ward').fit(X)
+ix = np.argsort(hcl.labels_)
+f, ax = plt.subplots(1,1,figsize=(10, 10)) 
+ax.imshow(np.corrcoef(X[ix,:]))
+```
+
+-VV- 
+
+# Can we simplify the data 
+- This is a job for dimensionality reduction 
+
+-s-
+<!-- .slide: id="UML Dimensionality"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Unsupervised learning <br> Dimensionality reduction </p>
+
+
+-VV-
+# What is Dimensionality reduction
+- Dimensionality reduction is the process of reducing the number of features under consideration by compressing dimensionality with minimal loss of information.
+
+
+-VV- 
+
+#  The Curse of Dimensionality
+- The curse of dimensionality refers to problems that arise when working with data in the higher dimensions.
+- This is also called the small m large n problem i.e. any situation where you have more features than events 
+- Here is a (nice article)[https://towardsdatascience.com/the-curse-of-dimensionality-50dc6e49aa1e] presenting the problem intuitivly 
+
+
+-VV- 
+
+# neuro-based data suffers from the Curse of Dimensionality but is also 
+- Always noisy  
+- With many redundant features
+- Almost always with more features than independent events 
+- And each independent sample (e.g. subject) is known to have strong individual patterns 
+
+
+
+-VV- 
+
+# One possible solution is to reduce the dimensionality
+- This is useful in reducing the complexity of models 
+- Speeding up computational processes 
+- Visualizing reduced feature space 
+
+-VV- 
+
+# Principal components of data
+- Principal components analysis is the primary method used for linear dimension reduction.
+- The idea is to find the 𝐾 principal components directions (called the loadings) that capture the variation
+in the data as much as possible.
+- Simply put, we want to compress our feature space as much as possible.
+- [Here is a 10-minute read that explains the idea further](https://towardsdatascience.com/understanding-pca-fae3e243731d) 
+
+
+-VV- 
+
+# Continuing with our previous example set 
+
+- If we examine the fake data creation process, we can see that there are only six informative features 
+- However, we don't know which features are of value 
+- If we use PCA to model the data and visualize the first two components, we can see that we can identify the three clusters  
+
+```python 
+from sklearn.decomposition import PCA
+mdl = PCA().fit(X)
+PC = mdl.transform(X)
+ax = sns.scatterplot(x=PC[:,0], y=PC[:,1], hue=y)
+```
+
+
+-VV- 
+
+# How well is the information preserved 
+
+- Examining the magnitude of explained variance the first ten components capture is a good way to estimate the usefulness of the process 
+
+```python 
+plt.bar(range(10),mdl.explained_variance_ratio_[0:10])
+```
+
+-VV- 
+
+# What about non-linear cases 
+- PCA is a linear method, and it requires some linear separation of the data 
+- Furthermore, even in our toy example, we needed more than two features to capture around 75% of the variance 
+- Manifold learning is an umbrella term for the various ways that allow us to reduce dimensionality for non-linear cases  
+- We will examine t-distributed Stochastic Neighbor Embedding ([TSNE](https://towardsdatascience.com/t-sne-clearly-explained-d84c537f53a)) as a test case 
+- The idea is to iteratively reduce dimensionality while preserving strong neighbourhood relationships (that are not necessarily linear)
+```python
+from sklearn.manifold import TSNE
+TC = TSNE().fit_transform(X)
+ax = sns.scatterplot(x=TC[:,0], y=TC[:,1], hue=y)
+```
+
+-VV- 
+
+# Let's move to the last section and do the same for our Brain data
+
+-s-
+<!-- .slide: id="UML Brain Age"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Unsupervised learning <br>Home Group Assignment <br>Applied to Brain Age dataset</p>
+
+-VV-
+# Start by Mining the ROI data 
+
+```python 
+import os, glob
+os.chdir('~/jupyterhub-gwdg/learning/course_2020/data/week_06')
+ROI = nib.load('GM_ROI.nii.gz').get_fdata()    
+filelist = glob.glob(os.path.join("gm/gm/*.gz"))
+df = {}
+for ix,file in enumerate(filelist):
+    name = file.split('.nii.gz')[0].split('/')[-1].split('_')[0].split('smwc1')[-1]
+    df[name] = mine_vbm(file,ROI)
+    if (ix+1)%50:
+        print('*',end='')
+    else: 
+        print(f'-{ix+1}')
+df = pd.DataFrame(df)
+```        
+
+-VV-
+# Now merge the AgeGroup information with the mined data 
+
+
+```
+df_age = pd.read_csv('AgeGroup.csv')
+df_age = df_age.set_index('AgeID')
+merged = pd.merge(df_age,df.T,left_index=True, right_index=True)
+merged
+```
+
+-VV-
+# Now as part of the group home assignment do the following:
+
+- Extract the values as a NumPy array called X
+- Extract the age groups as a response vector called y
+- Use two different clustering methods to examine the natural separation of the data
+- Use both linear and non-linear dimensionality reduction methods to examine the separation 
+- Try to interpret your findings in a Jupyter report 
+
+-s-
+<!-- .slide: id="Summary"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Summary and group assignment</p>
+
+</script>
+</section>
+</div>
+</div>
+
+<script src="js/reveal.js"></script>
+<script src="js/config.js"></script>
+<script>
+window.onload=function(){function a(a,b){var c=/^(?:file):/,d=new
+XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var
+b,c=document.getElementsByTagName("*");for(b in
+c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"))};
+</script>	
+</body>
+
+</html>
