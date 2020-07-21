@@ -1,0 +1,821 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sysAI.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown data-separator-vertical="-VV-" data-separator="-s-">
+					<script type="text/template">
+<!-- .slide: id="intro_week_07"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">WEEK 08 <br> Brain Age and Classification Algorithems</p>
+
+-VV-
+# Welcome to week eight (outline)
+
+- Supervised learning - From clustering to classification 
+    - What is classification?
+    - Basic prinicipals 
+    - Different Types of approches 
+        - Decison tree 
+        - Logistic regression 
+        - Support vector machines 
+        - Ensamble methods 
+            - Boosting 
+            - Bagging                       
+- Supervised learning - classification perfomance metrics 
+        - ROC curve 
+        - Confusion matrix 
+        - Accuracy 
+        - F1 
+        - mcc                 
+        - cohens kappa 
+- Supervised learning - Permutation analyisis and perfomance approximation 
+- Summary and final group assignment 
+
+-VV-
+# Learning objectives
+- At the end of this session, you should be able to
+    - Understand what supervised learning is and how it is different from unsupervised learning
+    - Understand when and why we use supervised learning
+    - Apply classification supervised learning algorithems in Python to simulated data-sets 
+    - Understand how to quantify the perfomance of classification algorithems
+
+-VV-
+# group home assignment   
+- Use the mined VBM ROI data to
+    - Approximate the classification accuracy of age group classification using k-fold cross-validation 
+    - Compare to the accuracy of gender classification using k-fold cross-validation                         
+    - Compare the perfomance of at least two classification algorithms and explain the differneces   
+- Submit a Jupyter notebook report 
+
+-s-
+<!-- .slide: id="Recap"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Last week recap</p>
+
+-VV-
+# What is Supervised Learning?
+- Supervised Learning is all about learning from examples.
+- The basic idea is to identify meaningful patterns assoicated with some target label or value.
+- Then use these patterns to create a mapping function that is able to map unseen data to the trained value or label.
+
+-VV-
+# Two common procedures
+| | Classification |	Regression|
+|:--|:--|:--|
+| dependent variables | categorical	| continuous|
+| Output | predicted Class |	predicted value |
+| Performance |	Accuracy |	Deviation| 
+
+-VV-
+# Classification and Regression
+- In machine learning, both classification and regression are almost always static models. 
+- In static models a distinction exists between two indpendnet stages: 
+    1. The learning stage, when learners are trained on a training set 
+    2. The performance stage where the model is tested using an independent test set.
+- This week we will cover classification models 
+- Next week (and the last week of this course), we will cover regression methods
+
+
+-VV-
+# What is classification?
+- Classification belongs to the category of supervised learning where matching targets (y) and input data (X) are used to train the model.
+- The goal of classification algorithms is to uncover a perfect relationship $f(X)=y$ 
+- However, in reality data is noisy... therefore $f(X)=y +\epsilon$
+- In Classification we use some computational method to train a model $\hat f(X) \approx f(X)$:
+    - Which means we try to find a mapping function (f)
+    - Based on some input dataset (X)
+    - To create discrete output labels (y)
+    - That is close as possible to the hypothetical model $f(X)$
+
+-VV-
+# Types of classification tasks 
+- Binary Classification: Classification task with two possible outcomes. Eg: Young/Old or Male/Female
+- Multi-class classification: Classification with more than two classes. Eg: Visual/Auditory/Motor
+- Multi-label classification: Classification task where each sample is mapped to a set of target labels (more than one class).  
+Eg: Attention/Working memory AND Object/Spatial/Number AND Patient/HC 
+
+-VV-
+# Standard steps involved in building a classification model
+- Initialize a classifier. Initialization commonly involves defining initial parameters specific to the type of classifier.
+- Train the classifier. All classifiers in scikit-learn are trained using the same fit(X, y) method. That fits the model to the training data (X) and the matching label (y).
+- Predict the target: Given an unseen observation X, the predict(X) returns the predicted label y.
+- Evaluate the classifier model using different strategies 
+
+-VV-
+
+# Many different classification algorithems    
+- Here is a nice image that tries to summerise important features of the key algorithms 
+![](https://images.squarespace-cdn.com/content/v1/57293859b09f959325ac2e33/1464650254743-RY0XYAXGTGXE6D272GP0/ke17ZwdGBToddI8pDm48kI_M_FaKP2xpKp_nzCM6x8pZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVGc--iCZzbu_gOYg5h7sZLz57G8SSlq1jK_2eFlAwuSjm0nsU3dfn6w--du8-EjPUE/image-asset.png?format=500w)
+- [Source: EMILY BARRY](https://www.emilyinamillion.me/blog?offset=1465434478038)
+
+-VV-
+
+# let's get to know the different algorithms using toy data
+
+- We will start by creating the simplest 2D data-set 
+- Look at several methods 
+- Then make the data more complex 
+
+```python 
+X, y = make_classification(n_samples=500,n_classes=2,n_redundant=0,n_repeated=0,n_informative=1
+                           ,n_clusters_per_class=1,n_features=2,random_state=2020)
+f, ax = plt.subplots(1,2,figsize=(10, 4))
+ax[0].scatter(X[:,0],y,c=y);
+ax[1].scatter(X[:,0],X[:,1],c=y);
+```
+
+
+-VV-
+
+# The benefits of using sklearn tools are their simplicity and consistency 
+- We will explore the following methods (however feel free to expand further)
+    - [Decision trees](https://scikit-learn.org/stable/modules/tree.html#classification):  Find usefull points in the feature space to generate seperation rules 
+    - KNN: store training data to create [neighborhood based model](https://scikit-learn.org/stable/modules/neighbors.html#nearest-neighbors-classification) 
+    - LDA: Use class conditional distribution to create [discriminant based model](https://scikit-learn.org/stable/modules/lda_qda.html#mathematical-formulation-of-the-lda-and-qda-classifiers)
+    - SVM: Find useful subset of the data [support vectors](https://scikit-learn.org/stable/modules/svm.html#classification) to define a gap between classes 
+    - [Logistic regression](https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression): identify a minimal a straight smooth plane that seperates between classes  
+    
+
+
+-VV-
+
+# The players     
+```python 
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+```
+
+-VV-
+
+# The container
+```python 
+models = {"KNN":KNeighborsClassifier()
+    ,"LDA":LinearDiscriminantAnalysis()
+    ,"TREE":DecisionTreeClassifier()
+    ,"SVC":SVC()
+    ,"LOGC":LogisticRegression()}
+```
+
+-VV-
+
+# Why do we need to approximate classifiers perfomance?
+- Estimating classifiers performance is an essential tool for answering some of the following questions:
+    - Is there any useful information that can be used to classify events above random chance
+    - Compare between information sources. I.e. which subsets of the data are more informative  
+    - Identify/rank important sources of information. I.e. are there individual features that contribute more information than other
+    - Distinguish between global or local effects
+    - Are the natural separations in the data linear, polynomial or non-linear                      
+
+
+
+-VV-
+
+# How do we estimate classifiers perfomance 
+- There are several [ways](https://scikit-learn.org/stable/modules/model_evaluation.html#metrics-and-scoring-quantifying-the-quality-of-predictions) 
+the simplest is using some metric that evaluates the perfomance of each method
+- Among the many different metrics, the easiest to understand is classification accuracy
+- This measure simply counts the amount of accuratly predicted labels and divids them by the total number of events 
+
+
+-VV-
+
+# The wrong way to measure classification accuracy
+- Let's take the naive approach and understand the problems with it?
+
+```python 
+from sklearn.metrics import accuracy_score
+bad_perfomance = [None]*5
+for i,(name,mdl) in enumerate(models.items()):
+    bad_perfomance[i] = accuracy_score(y,mdl.fit(X,y).predict(X))
+f, ax = plt.subplots(1,1,figsize=(6, 4))
+ax.bar(range(5),height=bad_perfomance);  
+ax.set_xticks(range(5))
+ax.set_xticklabels(list(models.keys()));
+for i,rect in enumerate(ax.patches):
+    height = rect.get_height()
+    ax.text(rect.get_x() + rect.get_width() / 2, height,
+        f'{bad_perfomance[i]:.2f}',ha='center', va='bottom');                
+```
+
+-VV-
+
+# We were measuring the method tendency to overfit 
+- When we are creating a classification model, we aim to identify general/global patterns 
+that describe some real phenomena that differentiate between the two groups  
+- Overfitting describes the situation where the model is uncovering local noise patterns that 
+are specific to the data-set but do not reflect a real effect 
+- As a result, the model will be extremely accurate in the training stage but will fail when tested on unseen data 
+- This example also highlights the sensitivity of non-parametric models (decision trees) to overfit data 
+
+
+-VV-
+# Another problem the previous example had 
+- We performed another mistake in the last example
+- A model is trained by maximizing its accuracy on the training dataset
+- However, performance is determined on its ability to perform well on unseen data.
+- In this case, overfitting reflects our model attempt to memorize the training data as opposed 
+to uncovering generalized patterns existing in the training data.
+
+-VV-
+# overfitting causes 
+- High dimensional data is susceptible to [overfitting](https://en.wikipedia.org/wiki/Overfitting) 
+- The larger the feature space, the more it is affected by local noise patterns 
+- This problem of higher dimension is known as the Curse of Dimensionality.
+- To avoid overfitting, the needed data will need to grow exponentially as you increase the number of dimensions.
+- Also, small datasets are more sensitive to the effects of noise 
+- Unfortunatly we don’t usually have the luxury of gathering an extensive database in neuroscience. 
+- We need a way to approximate real perfomance 
+
+   
+-VV-
+# [Cross-validation](https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-evaluating-estimator-performance) as a solution 
+- Cross-validation is a set of techniques for assessing how the results of a statistical analysis will generalize to an independent data set.
+- The simplest way to cross-validate is to split the dataset into two parts (training and testing) and approximate performance only on the test-set 
+
+-VV-
+
+# Let's update (increase dimensionality) our example and estimate performance 
+- The first plot shows the association between samples, and the square pattern is evidence for clustering 
+- The second shows the association between features
+- Based on what we now know we would expect near-perfect classification on training set now 
+
+```python 
+X, y = make_classification(n_samples=500,n_classes=2,n_redundant=5,flip_y=0,n_repeated=2,
+                    n_informative=10,n_clusters_per_class=1,n_features=20,random_state=2020)
+f, ax = plt.subplots(1,2,figsize=(10, 4))
+ax[0].imshow(np.corrcoef(X));
+ax[1].imshow(np.corrcoef(X.T));
+```
+-VV-
+
+# Let us test this assumption 
+
+```python 
+bad_perfomance = [None]*5
+for i,(name,mdl) in enumerate(models.items()):
+    bad_perfomance[i] = accuracy_score(y,mdl.fit(X,y).predict(X))
+f, ax = plt.subplots(1,1,figsize=(6, 4))
+ax.bar(range(5),height=bad_perfomance);  
+ax.set_xticks(range(5))
+ax.set_xticklabels(list(models.keys()));
+for i,rect in enumerate(ax.patches):
+    height = rect.get_height()
+    ax.text(rect.get_x() + rect.get_width() / 2, height,
+        f'{bad_perfomance[i]:.2f}',ha='center', va='bottom');    
+```
+
+
+-VV-
+
+# The data is both high-dimensional and very clean, let's add some noise  
+- flip_y controls the fraction of samples whose class is assigned randomly.
+- Larger values introduce noise in the labels and make the classification task harder.
+
+```python 
+X, y = make_classification(n_samples=500,n_classes=2,n_redundant=5,flip_y=0.5,n_repeated=2,
+                    n_informative=10,n_clusters_per_class=1,n_features=20,random_state=2020)
+f, ax = plt.subplots(1,2,figsize=(10, 4))
+ax[0].imshow(np.corrcoef(X));
+ax[1].imshow(np.corrcoef(X.T));
+```
+
+-VV-
+
+# Let's create a plot function to clean our code 
+```python
+def plot_bar(perfomance,labels):
+    n = perfomance.shape[0]
+    f, ax = plt.subplots(1,1,figsize=(6, 4))
+    x,width = np.arange(n),0.35
+    ax.bar(x-width/2,perfomance[:,0],width, label='train');   
+    ax.bar(x+width/2,perfomance[:,1],width, label='test');   
+    for i in range(n):
+        r1,r2 = ax.patches[i],ax.patches[i+5]
+        h1,h2 = r1.get_height(),r2.get_height()
+        ax.text(r1.get_x() + r1.get_width() / 2, h1,
+            f'{perfomance[i,0]:.2f}',ha='center', va='bottom')
+        ax.text(r2.get_x() + r2.get_width() / 2, h2,
+            f'{perfomance[i,1]:.2f}',ha='center', va='bottom')
+    ax.set_xticks(range(n));
+    ax.set_xticklabels(labels);
+    plt.show() 
+```
+
+-VV-
+
+# Now we will Compare perfomance on train vs test parts
+
+- Lets split the data to two parts and examine the model perfomance on the unseen part compared to the trained subset
+
+
+```python
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=2020, shuffle=True,stratify=y)
+perfomance = np.zeros((5,2))
+for i,(name,mdl) in enumerate(models.items()):
+    perfomance[i,0] = accuracy_score(y_train,mdl.fit(X_train,y_train).predict(X_train))
+    perfomance[i,1] = accuracy_score(y_test,mdl.fit(X_train,y_train).predict(X_test))
+    
+labels = list(models.keys())    
+plot_bar(perfomance,labels)
+```
+
+-VV-
+
+# Some methods are much more sensitive to overfitting
+- It is clear that all models have a substantial decrease in accuracy when applied to the unseen subset 
+- Each type of model has different ways of dealing with overfitting 
+- For example in KNN increasing the number neighbors forces the model to take into account more points 
+when assigning a label to unseen data and as a result the learned pattern is less specific 
+
+```python
+perfomance = np.zeros((5,2))
+for i,k in enumerate(np.arange(2,12,2)):
+    tmp = KNeighborsClassifier(n_neighbors=k).fit(X_train,y_train)
+    perfomance[i,0] = accuracy_score(y_train,tmp.predict(X_train))
+    perfomance[i,1] = accuracy_score(y_test,tmp.predict(X_test))
+labels = [f'KNN-k={x}' for x in np.arange(2,12,2)]
+plot_bar(perfomance,labels)
+```
+
+-VV-
+
+# Reducing dimensionality in decision trees 
+
+- We saw that decision trees are susceptive to overfitting 
+- One reason for that is that unless told otherwise, the algorithm will find some rule to split all leaves (samples)
+- We can constrain this behaviour by forcing depth threshold  
+- This will result in a tree that only has the most informative dimensions
+- Examine the dramatic effect pruning (restricting the depth of the tree) the tree has  
+
+
+```python
+perfomance = np.zeros((5,2))
+for i,k in enumerate(np.arange(1,6,1)):
+    tmp = DecisionTreeClassifier(max_depth=k).fit(X_train,y_train)
+    perfomance[i,0] = accuracy_score(y_train,tmp.predict(X_train))
+    perfomance[i,1] = accuracy_score(y_test,tmp.predict(X_test))
+labels = [f'depth={x}' for x in np.arange(1,6,1)]
+plot_bar(perfomance,labels)
+```
+
+-VV-
+
+# We can also control the number of leaves each rule has 
+- By default, each leaf is equivalent to one sample 
+- In this context, a split rule can separate between two samples 
+- This behaviour is precisely opposite to converging on general split points 
+- And unsurprisingly it has a similar effect 
+
+```python
+perfomance = np.zeros((5,2))
+for i,k in enumerate(np.arange(5,55,10)):
+    tmp = DecisionTreeClassifier(min_samples_leaf=k).fit(X_train,y_train)
+    perfomance[i,0] = accuracy_score(y_train,tmp.predict(X_train))
+    perfomance[i,1] = accuracy_score(y_test,tmp.predict(X_test))
+labels = [f'min_s={x}' for x in np.arange(5,26,5)]
+plot_bar(perfomance,labels)
+```
+-VV-
+
+# Limitations of the train test split approach 
+
+- Requires big datasets 
+- Wasteful (a significant portion of the data is not used)
+- Is simple to manipulate (aka cherry-picking a random sample that is not representative of the reality)
+- Suffers from knowledge leakage (happens when the method's parameters are optimised to the test set)
+- One solution calls for a 3-way splitting instead of the 2-way train/test 
+    - Separating data into training, validation and test
+    - Using the validation set for Parameter tweaking
+    - Reporting performance based on the test set 
+- However, this method solves one problem but intensifies the rest.
+
+-s-
+<!-- .slide: id="CV"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Cross-validation</p>
+
+-VV-
+
+# Cross-validation is one possible solution
+- Cross-validation is a family of splitting concepts used to reduce overfitting effects 
+while leaning patterns from all the training data
+- The most basic approach is called k-fold where the k validation/training subsets of the data are created 
+- Importantly, when using k-fold CV we need to make sure each test fold has enough samples 
+- Let's explore this visually 
+
+```python
+k = 10
+n = len(y)
+split = n//k
+```
+
+
+-VV-
+
+# K-fold 
+- Examining the plot below should persuade you that each fold captures both positive and negative classes 
+- However, this is only true for cases when events are unsorted and randomly sampled
+- This method will fail for sorted events as can be seen in the bottom panel 
+
+
+```python
+import matplotlib.gridspec as gridspec
+tick_args = {"axis" : "both", "which" : "both", "bottom" : False,
+       "top" : False,"labelbottom":False, "right":False, "left":False, "labelleft":False}
+folds = np.eye(10)[np.repeat(np.arange(0,10), split)].astype(bool)
+f = plt.figure(figsize=(10, 4))
+gs = gridspec.GridSpec(5, 1,hspace=1)
+ax = (plt.subplot(gs[0, 0]),plt.subplot(gs[1:4, 0]),plt.subplot(gs[4, 0]))
+ax[0].imshow(np.eye(2)[y].T, interpolation='nearest',aspect='auto');
+ax[0].set_title('Response vector')
+ax[0].set_yticks(np.arange(2))
+ax[0].tick_params(axis= "x", which= "both", bottom= False,labelbottom=False)
+ax[0].set_yticklabels(["Negative","Positive"])
+ax[1].imshow(folds.T, interpolation='nearest',aspect='auto');
+ax[1].tick_params(**tick_args)
+ax[1].set_title('10-folds index matrix')
+ax[1].set_ylabel(f"Folds (K={k})")
+ax[2].imshow(np.eye(2)[np.sort(y)].T.T, interpolation='nearest',aspect='auto');
+ax[2].set_title('Sorted response vector (Negative/Positive)')
+ax[2].tick_params(**tick_args)
+ax[2].set_xlabel(f"Samples (N={n})");
+```
+
+
+-VV-
+
+# K-fold (cont.)
+- The solution is simple, instead of troubling ourselves we can just shuffle the fold matrix  
+
+```python
+rng = np.random.RandomState(2020)
+f, ax = plt.subplots(1,1,figsize=(10, 4))
+v = np.repeat(np.arange(0,10), split)
+rng.shuffle(v)
+folds = np.eye(10)[v].astype(bool)
+ax.imshow(folds.T, interpolation='nearest',aspect='auto');
+ax.tick_params(**tick_args)
+ax.set_title('10-folds index matrix')
+ax.set_ylabel(f"Folds (K={k})");
+```
+
+-VV-
+
+# K-fold (using sklearn)
+- The previous examples were intended to explain the concept graphically 
+- Instead of using your own function it is better to use sklearn internal cross-validation functions 
+- Let's visually confirm that this is the same
+
+```python
+from sklearn.model_selection import KFold
+cv = KFold(n_splits=k,random_state=2020, shuffle=True)
+folds = np.zeros((len(y),k)).astype(bool)
+for i,(train_index, test_index) in enumerate(cv.split(y)):
+    folds[test_index,i] = True   
+f, ax = plt.subplots(1,1,figsize=(10, 4)) 
+ax.imshow(folds.T, interpolation='nearest',aspect='auto');
+ax.tick_params(**tick_args)
+ax.set_title('10-folds index matrix')
+ax.set_ylabel(f"Folds (K={k})");                    
+```
+
+
+-VV-
+
+# Before we move on lets make a barplot function with error bars 
+
+```python
+def plot_error_bar(perfomance,labels):
+    n = perfomance.shape[0]
+    f, ax = plt.subplots(1,1,figsize=(6, 4))
+    x,width = np.arange(n),0.8
+    mu = np.mean(perfomance,axis=1)
+    sd = np.std(perfomance,axis=1)
+    ax.bar(x,mu,width,yerr=sd,align='center',alpha=0.5,ecolor='black',capsize=10);   
+    for i in range(n):
+        r = ax.patches[i]
+        h = r.get_height()
+        ax.text(r.get_x() + r.get_width() / 2, h+sd[i]*1.2,
+            r'$%.2f\pm%.2f$'%(mu[i],sd[i]),ha='center', va='bottom')
+    ax.set_xticks(range(n));
+    ax.set_xticklabels(labels);
+    ax.set_ylim(0,1)
+    plt.show() 
+```
+
+-VV-
+
+# Let's use CV to generate some error bars  
+- One of the benefits of using CV is that it is the fastest way to estimate some idea regarding the boundaries of your method's performance 
+```python
+cv = KFold(n_splits=k,random_state=2020, shuffle=True)
+perfomance = np.zeros((5,10))
+for i,(name,mdl) in enumerate(models.items()):
+    for j,(ix_train, ix_test) in enumerate(cv.split(y)):
+        perfomance[i,j] = accuracy_score(y[ix_test],mdl.fit(X[ix_train],y[ix_train]).predict(X[ix_test]))
+labels = list(models.keys())    
+plot_error_bar(perfomance,labels)
+```
+
+-VV-
+
+# What are we missing? 
+- We have some error around the accuracy 
+- However, we are oblivious to how the models are performing internally 
+- More specifically the accuracy measure we use is not providing us with any per class insight 
+- Let's dig deeper and examine (in the next section) the [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix)
+
+
+-s-
+<!-- .slide: id="CV"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Confusion Matrix</p>
+
+-VV-
+
+# Confusion matrix 
+- The Confusion matrix allows visualization of the performance of classification methods
+- To understand this better let us take a step back and return to the train test split 
+- The central part of the confusion matrix is composed of counting performance per class 
+- In the case of the 2-way classification problem (i.e. binary) it is a 2 x 2 matrix 
+- The diagonal represents samples classified correctly and the anti-diagonal those that were misclassified 
+![](https://prod-images-static.radiopaedia.org/images/49024440/0f59a975b60e83f5309a5f59075e7f_jumbo.jpeg)
+
+-VV-
+
+# Confusion matrix 
+- let's create this ourselves 
+- It is immediately apparent that KNN is biased towards the negative class 
+- However, we would like to have more info to capture the different aspects of the performance of the method 
+
+```python 
+from sklearn.metrics import confusion_matrix
+f, ax = plt.subplots(2,5,figsize=(12, 5))
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=2020, shuffle=True,stratify=y)
+perfomance = np.zeros((5,2))
+for i,(name,mdl) in enumerate(models.items()):
+    cm_train = confusion_matrix(y_train,mdl.fit(X_train,y_train).predict(X_train))
+    cm_test = confusion_matrix(y_test,mdl.fit(X_train,y_train).predict(X_test))
+    ax[0,i].imshow(cm_train,  interpolation='nearest',cmap='Greens')
+    ax[0,i].tick_params(**tick_args)
+    ax[0,i].set_xlabel(f'{name}(train)')
+    ax[1,i].imshow(cm_train,  interpolation='nearest',cmap='Greens')
+    ax[1,i].tick_params(**tick_args)
+    ax[1,i].set_xlabel(f'{name}(test)')
+```
+
+-VV-
+
+# Confusion matrix (cont.) 
+- The confusion_matrix function is extracting the core information comparing the true labels and the predicted ones 
+- The actual numbers are important (as they immediately give an understanding of how the model performed)
+- But using these it is also possible to derive some more sophisticated performance metrics 
+
+```python 
+yhat = mdl.fit(X_train,y_train).predict(X_test)
+C = np.unique(y_test)
+ix_0 = y_test==C[0]
+ix_1 = y_test==C[1]
+TP  = np.sum(y_test[ix_1]==yhat[ix_1])
+TN  = np.sum(y_test[ix_0]==yhat[ix_0])
+FN  = np.sum(y_test[ix_1]!=yhat[ix_1])
+FP  = np.sum(y_test[ix_0]!=yhat[ix_0])
+print(f"{TN}|{FN}\n{FP}|{TP}")
+print(confusion_matrix(y_test,yhat))
+```
+-VV-
+
+# Beyond accuracy 
+- [Precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall) 
+    - Precision is the fraction of true positives divided by the total number of samples classified as positive (i.e. $TP/(TP+FP)$)
+    - Recall (also known as sensitivity) is the fraction of true positives divided by the total number of actual positive samples.  (i.e. $TP/(TP+FN)$)
+- [The F1 score](https://en.wikipedia.org/wiki/F1_score) is the harmonic mean of the Precision and recall 
+- Matthews correlation coefficient [MCC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.matthews_corrcoef.html#sklearn-metrics-matthews-corrcoef) takes into account true and false positives and negatives. It is generally regarded as a balanced measure which can be used even if the classes are of very different sizes. 
+
+
+-VV-
+
+# Let's extend the current confusion_matrix to be more informative 
+
+```python 
+def calc_confusion_matrix(y,yh):
+    from sklearn.metrics import confusion_matrix,matthews_corrcoef
+    from sklearn.metrics import f1_score,accuracy_score
+    tp,fp,fn,tn = tuple(confusion_matrix(y,yh).reshape(-1))
+    acc = accuracy_score(y,yh)
+    f1 = f1_score(y,yh)
+    mcc = matthews_corrcoef(y,yh)
+    N,P = np.sum(np.eye(2)[y.reshape(-1)],axis=0)
+    T = N+P
+    PPV = tp/(tp+fp) # Positive Precision
+    NPV = tn/(tn+fn) # Negative Precision
+    TPR = tp/(tp+fn) # Recall/Sensitivity
+    SPC = tn/(tn+fp) # Specificity
+    CM = np.zeros((4,4))
+    CM[0,:] = [T,P,N,acc]
+    CM[1,:] = [tp+fp,tp,fp,PPV]
+    CM[2,:] = [tn+fn,fn,tn,NPV]
+    CM[3,:] = [mcc,TPR,SPC,f1]
+    return CM
+```
+
+-VV-
+# What next?
+
+- Our new and improved calc_confusion_matrix can be used as is but we should visualize this 
+- You guessed it we will now create a plot confusion matrix function 
+
+
+```python 
+def plot_confusion_matrix(ax,cm,fs=10):
+    extent = -0.5, 3.5, -0.5, 3.5
+    mask = 1.0*(cm>1)
+    im1 = ax.imshow(cm*mask,  interpolation='nearest',cmap='Greens',
+                     extent=extent,alpha=mask,vmin=1, vmax=cm.max())
+    mask = 1.0*(cm<=1)
+    im2 = ax.imshow(cm*mask,alpha=mask, cmap='coolwarm_r', 
+                     interpolation='nearest',extent=extent,
+                     vmin=0,vmax=1)
+    ax.set_xticks(np.arange(cm.shape[1]))
+    ax.set_yticks(np.arange(cm.shape[0]))    
+    ax.set_xticks(np.arange(cm.shape[1]+1)-.5, minor=True)
+    ax.set_yticks(np.arange(cm.shape[0]+1)-.5, minor=True)
+    ax.grid(axis = "both",which="minor", color="k", linestyle='-', linewidth=0.5,clip_on=False)
+    ax.tick_params(axis = "both", which = "both", bottom = False,
+                   top = False,labelbottom=False, right=False, left=False, labelleft=False)
+    textcolors=["k", "w"]
+    thr1 = cm.max()/1.5
+    kw = dict(horizontalalignment="center",verticalalignment="center",size=fs)
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            kw.update(color=textcolors[int(im2.norm(cm[i, j]) > thr1)])
+            if cm[i, j]>1:
+                im2.axes.text(j, cm.shape[0]-i-1, f'{cm[i, j]:.0f}', **kw)
+            else:    
+                im2.axes.text(j, cm.shape[0]-i-1, f'{cm[i, j]:.2f}', **kw)       
+```
+
+
+-VV-
+
+# Armed with our new tools we can finally compare the methods properly 
+
+```python 
+f, ax = plt.subplots(2,5,figsize=(20, 8))
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=2020, shuffle=True,stratify=y)
+perfomance = np.zeros((5,2))
+for i,(name,mdl) in enumerate(models.items()):
+    cm_train = calc_confusion_matrix(y_train,mdl.fit(X_train,y_train).predict(X_train))
+    cm_test = calc_confusion_matrix(y_test,mdl.fit(X_train,y_train).predict(X_test))
+    plot_confusion_matrix(ax[0,i],cm_train,fs=10)
+    ax[0,i].set_xlabel(f'{name}(train)')
+    plot_confusion_matrix(ax[1,i],cm_test,fs=10)
+    ax[1,i].set_xlabel(f'{name}(test)')
+```
+
+-VV-
+
+# All of these tools allow us to understand and compare classification 
+- However... we are still missing one big thing 
+- We want some way to gain insights about performance confidence interval 
+- In the next and final section this week we will learn how to extract some statistics using Shuffle and Split
+
+-s-
+<!-- .slide: id="UML Clustering"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Shuffle and Split</p>
+
+-VV-
+# What is Random permutation cross-validation
+- Essentially, the permutation test procedure measures how likely the observed accuracy would be obtained by chance. 
+- A p-value represents the fraction of random data sets under a certain null hypothesis where the classifier behaved as well as or better than in the original data.
+- The assumption here is that the original data (X) contains some real dependency between data points and labels. 
+- To test that we need to create a situation where we break that dependency
+
+-VV-
+# A Simple Permutation example 
+- We will create two null models 
+    - In the first, we will permute the order of the labels - thus breaking the dependency between labels and data 
+    - In the second we permute the data 
+    - Importantly these are two simple examples - this is an active research field                        
+
+```python 
+f, ax = plt.subplots(1,3,figsize=(20, 8))
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=2020, shuffle=True,stratify=y)
+cm_true = calc_confusion_matrix(y_test,mdl.fit(X_train,y_train).predict(X_test))
+cm_null_y = calc_confusion_matrix(y_test,mdl.fit(X_train,np.random.permutation(y_train)).predict(X_test))
+cm_null_X = calc_confusion_matrix(y_test,mdl.fit(np.random.permutation(X_train),y_train).predict(X_test))
+plot_confusion_matrix(ax[0],cm_true,fs=10)
+ax[0].set_xlabel('True model')
+plot_confusion_matrix(ax[1],cm_null_y,fs=10)
+ax[1].set_xlabel('Shuffle lables')
+plot_confusion_matrix(ax[2],cm_null_X,fs=10)
+ax[2].set_xlabel('Shuffle Data')
+```
+
+
+-VV-
+# Now lets create a null distribution of f1-score 
+
+```python 
+from sklearn.metrics import f1_score
+f, ax = plt.subplots(1,3,figsize=(20, 8))
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=2020, shuffle=True,stratify=y)
+n_perms = 1e4
+F1_True = f1_score(y_test,mdl.fit(X_train,y_train).predict(X_test))
+F1_Null = np.zeros((n_perms,2))
+for i in range(n_perms):
+    F1_Null[i,0]= f1_score(y_test,mdl.fit(X_train,np.random.permutation(y_train)).predict(X_test))                         
+    F1_Null[i,1]= f1_score(y_test,mdl.fit(np.random.permutation(X_train),y_train).predict(X_test))                         
+```
+
+-VV-
+# And visualize it
+
+```python 
+plt.hist(F1_Null[:,0], 50, density=True, facecolor='g', alpha=0.25);
+plt.hist(F1_Null[:,1], 50, density=True, facecolor='r', alpha=0.25);
+ylim = plt.ylim()
+plt.plot(2 * [F1_True], ylim, '--k', linewidth=3, label='True Model')
+plt.plot(2 * [np.mean(F1_Null[:,0])], ylim, '--g', linewidth=3, label='Chance (y)')
+plt.plot(2 * [np.mean(F1_Null[:,1])], ylim, '--r', linewidth=3, label='Chance (X)')
+
+plt.ylim(ylim)
+plt.legend()
+plt.xlabel('Score')
+plt.show()
+```
+
+
+-VV-
+# What about significance ? 
+
+- We can calculate a p-value, which approximates the probability that the score would be obtained by chance. 
+- This is calculated as $(C+1)/(n_permutations + 1)$, Where C is the number of permutations whose score >= the true score.
+- And as you can see both are significant 
+```python 
+   p0 = (np.sum(F1_Null[:,0]>F1_True)+1)/(n_perms+1)
+   p1 = (np.sum(F1_Null[:,1]>F1_True)+1)/(n_perms+1)                     
+```
+
+-s-
+<!-- .slide: id="UML Brain Age"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Home Group Assignment <br>Applied to Brain Age dataset</p>
+
+-VV-
+# The last group assignment is to use the VBM dataset 
+- Define ROI values as a NumPy array called X
+- Define the age groups as a response vector called y
+- Compare two different classification methods 
+- Try to interpret your findings in a Jupyter report 
+
+-s-
+<!-- .slide: id="Summary"  -->
+<!-- .slide: data-background="#ffffff" data-transition="zoom" -->
+<p style="text-align: center;font-size: 15vmin">Summary and group assignment</p>
+
+</script>
+</section>
+</div>
+</div>
+
+<script src="js/reveal.js"></script>
+<script src="js/config.js"></script>
+<script>
+window.onload=function(){function a(a,b){var c=/^(?:file):/,d=new
+XMLHttpRequest,e=0;d.onreadystatechange=function(){4==d.readyState&&(e=d.status),c.test(location.href)&&d.responseText&&(e=200),4==d.readyState&&200==e&&(a.outerHTML=d.responseText)};try{d.open("GET",b,!0),d.send()}catch(f){}}var
+b,c=document.getElementsByTagName("*");for(b in
+c)c[b].hasAttribute&&c[b].hasAttribute("data-include")&&a(c[b],c[b].getAttribute("data-include"))};
+</script>	
+</body>
+
+</html>

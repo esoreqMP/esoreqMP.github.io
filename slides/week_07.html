@@ -337,8 +337,8 @@ def mine_vbm(file,mask=False):
 - In contrast to the magnitude distance measures, the distance between angles gives a different complementary measure 
 - As expected this measure is not sensitive to magnitude differences but instead compares the shape similarity  
     - Pearson correlation $r_{xy} = \frac{\sum^n_{i=1}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum^n_{i=1}(x_i-\bar{x})^2}\sqrt{\sum^n_{i=1}(y_i-\bar{y})^2}}$
-    - Cosine distance $\frac{\sum x_i y_i}{\sqrt{\sum^n_{i=1}x_i^2}\sqrt{\sum^n_{i=1}y_i^2}}$
-- It is easy to see that the Cosine distance is a special case of Pearson correlation when both means are zero 
+    - Cosine similarity $\frac{\sum x_i y_i}{\sqrt{\sum^n_{i=1}x_i^2}\sqrt{\sum^n_{i=1}y_i^2}}$
+- It is easy to see that the Cosine similarity is a special case of Pearson correlation when both means are zero 
 
 -VV- 
 # Let's compare these with a toy example 
